@@ -117,7 +117,8 @@
 														<td>${modProj.projectName}</td>
 														<td>${modProj.moduleName}</td>
 														<td><a
-															href="${pageContext.request.contextPath}/showAddNewForm/${modProj.projectId}/${modProj.projectName}"
+															href="${pageContext.request.contextPath}/showAddNewForm/${modProj.projectId}/
+															${modProj.projectName}/${modProj.moduleName}/${modProj.moduleId}"
 															class="btn bnt-primary"> <i class="fa fa-list"></i></a> </td>
 														
 													</tr>

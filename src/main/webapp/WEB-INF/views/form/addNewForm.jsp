@@ -41,18 +41,43 @@
 					<div class="col-md-12">
 						<div class="box">
 							<div class="box-title">
+
 								<h3>
-									<i class="fa fa-bars"></i>Form Details
+									<i class="fa fa-bars"></i>Add Form Details for Project
+
 								</h3>
 								<div class="box-tool">
 									<!-- <a href="">Back to List</a> <a data-action="collapse" href="#"><i
 									class="fa fa-chevron-up"></i></a> -->
 								</div>
 							</div>
+							<br>
+							<div class="box-title" align="center">
+								<h4>Project :${projName}</h4>
+								<h4>Module :${modName}</h4>
+							</div>
 							<div>
 								<div class="box-content">
-									<form action="postForm" method="post"
-										class="form-horizontal" id="validation-form" method="post">
+									<form action="${pageContext.request.contextPath}/postForm" class="form-horizontal"
+										id="validation-form" method="post">
+
+										<input type="hidden" name="projId" value="${projId}">
+										<input type="hidden" name="modId" value="${modId}"> 
+										<input type="hidden" name="projName" value="${projName}"> 
+										<input	type="hidden" name="modName" value="${modName}">
+
+
+										<input type="hidden" name="projId" value="${projId}">
+										<input type="hidden" name="modId" value="${modId}"> 
+										<input type="hidden" name="projName" value="${projName}"> 
+										<input	type="hidden" name="modName" value="${modName}">
+
+										<input	type="hidden" name="uicname" id="uicname" value="5">
+										<input	type="hidden" name="webcomname" id="webcomname">
+										<input	type="hidden" name="conscompname" id="conscompname">
+										<input	type="hidden" name="testcomname" id="testcomname">
+										<input	type="hidden" name="spcompname" id="spcompname">
+										
 
 										<div class="form-group">
 											<label class="col-sm-3 col-lg-2 control-label"> Form
@@ -62,9 +87,9 @@
 													placeholder="Project" data-rule-required="true">
 													<option value="0">Form Type</option>
 													<c:forEach items="${formTypeList}" var="formType"
-												varStatus="count">
-												<option value="${formType.formTypeId}"><c:out value="${formType.formTypeName}"/></option>
-											</c:forEach>
+														varStatus="count">
+														<option value="${formType.formTypeId}"><c:out value="${formType.formTypeName}"/></option>
+													</c:forEach>
 												</select>
 											</div>
 
@@ -85,93 +110,117 @@
 													style="width: 1000px;"></textarea>
 											</div>
 										</div>
-										
-										
+
+
 										<div class="form-group">
-											<label class="col-sm-3 col-lg-2 control-label"> UI Complexity
-												Type</label>
+											<label class="col-sm-3 col-lg-2 control-label"> UI
+												Complexity Type</label>
 											<div class="col-sm-6 col-lg-4 controls">
 												<select name="ui_comp" id="ui_comp" class="form-control"
-													placeholder="UI Complexity" data-rule-required="true">
+													placeholder="UI Complexity" data-rule-required="true"
+													onchange="getValue(1)">
 													<option value="0">UI Type</option>
 													<c:forEach items="${taskTypeList}" var="taskType"
-												varStatus="count">
-												<option value="${taskType.taskTypeId}"><c:out value="${taskType.taskTypeName}"/></option>
-											</c:forEach>
+														varStatus="count">
+														<c:choose>
+															<c:when test="${taskType.taskType==1}">
+																<option value="${taskType.taskTypeId}"><c:out value="${taskType.taskTypeName}"/></option>
+															</c:when>
+														</c:choose>
+													</c:forEach>
 												</select>
 											</div>
 
 											<div class="form-group">
-												<label class="col-sm-3 col-lg-2 control-label"> Web Service Complexity
-												Type</label>
-											<div class="col-sm-6 col-lg-4 controls">
-												<select name="web_serv_comp" id="web_serv_comp" class="form-control"
-													placeholder="Web Service" data-rule-required="true">
-													<option value="0">Web Service Type</option>
-													<c:forEach items="${taskTypeList}" var="taskType"
-												varStatus="count">
-												<option value="${taskType.taskTypeId}"><c:out value="${taskType.taskTypeName}"/></option>
-											</c:forEach>
-												</select>
-											</div>
+												<label class="col-sm-3 col-lg-2 control-label"> Web
+													Service Complexity Type</label>
+												<div class="col-sm-6 col-lg-4 controls">
+													<select name="web_serv_comp" id="web_serv_comp"
+														onchange="getValue(2)" class="form-control"
+														placeholder="Web Service" data-rule-required="true">
+														<option value="0">Web Service Type</option>
+														<c:forEach items="${taskTypeList}" var="taskType"
+															varStatus="count">
+															<c:choose>
+																<c:when test="${taskType.taskType==2}">
+																	<option value="${taskType.taskTypeId}"><c:out value="${taskType.taskTypeName}"/></option>
+																</c:when>
+															</c:choose>
+														</c:forEach>
+													</select>
+												</div>
 
 											</div>
 										</div>
-										
-										
+
 										<div class="form-group">
-											<label class="col-sm-3 col-lg-2 control-label"> Consumption Complexity
-												Type</label>
+											<label class="col-sm-3 col-lg-2 control-label">
+												Consumption Complexity Type</label>
 											<div class="col-sm-6 col-lg-4 controls">
-												<select name="consume_comp" id="consume_comp" class="form-control"
-													placeholder="UI Complexity" data-rule-required="true">
+												<select name="consume_comp" id="consume_comp"
+													class="form-control" placeholder="UI Complexity"
+													onchange="getValue(3)" data-rule-required="true">
 													<option value="0">Consumption Type</option>
 													<c:forEach items="${taskTypeList}" var="taskType"
-												varStatus="count">
-												<option value="${taskType.taskTypeId}"><c:out value="${taskType.taskTypeName}"/></option>
-											</c:forEach>
+														varStatus="count">
+														<c:choose>
+															<c:when test="${taskType.taskType==3}">
+																<option value="${taskType.taskTypeId}"><c:out value="${taskType.taskTypeName}"/></option>
+															</c:when>
+														</c:choose>
+													</c:forEach>
 												</select>
 											</div>
 
 											<div class="form-group">
-												<label class="col-sm-3 col-lg-2 control-label"> Unit Testing Complexity
-												Type</label>
-											<div class="col-sm-6 col-lg-4 controls">
-												<select name="unit_test_comp" id="unit_test_comp" class="form-control"
-													placeholder="Web Service" data-rule-required="true">
-													<option value="0">Unit Testing Type</option>
-													<c:forEach items="${taskTypeList}" var="taskType"
-												varStatus="count">
-												<option value="${taskType.taskTypeId}"><c:out value="${taskType.taskTypeName}"/></option>
-											</c:forEach>
-												</select>
-											</div>
+												<label class="col-sm-3 col-lg-2 control-label"> Unit
+													Testing Complexity Type</label>
+												<div class="col-sm-6 col-lg-4 controls">
+													<select name="unit_test_comp" id="unit_test_comp"
+														onchange="getValue(4)" class="form-control"
+														placeholder="Web Service" data-rule-required="true">
+														<option value="0">Unit Testing Type</option>
+														<c:forEach items="${taskTypeList}" var="taskType"
+															varStatus="count">
+															<c:choose>
+																<c:when test="${taskType.taskType==1}">
+																	<option value="${taskType.taskTypeId}"><c:out value="${taskType.taskTypeName}"/></option>
+																</c:when>
+															</c:choose>
+														</c:forEach>
+													</select>
+												</div>
 
 											</div>
 										</div>
-										
-										
+
+
 										<div class="form-group">
-											<label class="col-sm-3 col-lg-2 control-label"> Special Function
-												Type</label>
+											<label class="col-sm-3 col-lg-2 control-label">
+												Special Function Type</label>
 											<div class="col-sm-6 col-lg-4 controls">
-												<select name="sp_func" id="sp_func" class="form-control"
+												<select name="sp_func_comp" id="sp_func_comp"
+													class="form-control" onchange="getValue(5)"
 													placeholder="Special Function" data-rule-required="true">
 													<option value="0">Special Function Type</option>
 													<c:forEach items="${taskTypeList}" var="taskType"
-												varStatus="count">
-												<option value="${taskType.taskTypeId}"><c:out value="${taskType.taskTypeName}"/></option>
-											</c:forEach>
+														varStatus="count">
+														<c:choose>
+															<c:when test="${taskType.taskType==1}">
+																<option value="${taskType.taskTypeId}"><c:out value="${taskType.taskTypeName}"/></option>
+															</c:when>
+														</c:choose>
+													</c:forEach>
 												</select>
+											</div>
 										</div>
-										</div>
-										
+
 										<div style="text-align: center;">
 
-										<input type="submit" onclick="validateQty()"
-											class="btn btn-info" value="Add Task">
-									</div>
-										
+											<input type="submit" 
+												class="btn btn-info" value="Add Task">
+										</div>
+
 									</form>
 								</div>
 
@@ -182,147 +231,151 @@
 									placeholder="Search.." title="Type in a name">
 								</label> <br>
  -->
-								                            <div class="box-content">
-                               
-                                <br/><br/>
-                                <div class="clearfix"></div>
-<div class="table-responsive" style="border:0">
-    <table class="table table-advance" id="table1">
-        <thead>
-            <tr>
-                <th style="width:18px"><input type="checkbox" /></th>
-                <th>Rendering engine</th>
-                <th>Browser</th>
-                <th>Platform(s)</th>
-                <th class="text-center">Engine version</th>
-                <th>CSS grade</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr class="table-flag-blue">
-                <td><input type="checkbox" /></td>
-                <td>Trident</td>
-                <td>Internet Explorer 7</td>
-                <td>Win XP SP2+</td>
-                <td class="text-center">7</td>
-                <td><span class="label label-success">A</span></td>
-            </tr>
-            <tr>
-                <td><input type="checkbox" /></td>
-                <td>Trident</td>
-                <td><a href="#">AOL browser (AOL desktop)</a></td>
-                <td>Win XP</td>
-                <td class="text-center">6</td>
-                <td><span class="label label-success">A</span></td>
-            </tr>
-            <tr class="table-flag-orange">
-                <td><input type="checkbox" /></td>
-                <td>Gecko</td>
-                <td><span class="label label-success">Not Bad</span> Firefox 1.5</td>
-                <td>Win 98+ / OSX.2+</td>
-                <td class="text-center">1.8</td>
-                <td><span class="label label-success">A</span></td>
-            </tr>
-            <tr>
-                <td><input type="checkbox" /></td>
-                <td>Gecko</td>
-                <td>Netscape Navigator 9</td>
-                <td>Win 98+ / OSX.2+</td>
-                <td class="text-center">1.8</td>
-                <td><span class="label label-success">A</span></td>
-            </tr>
-            <tr>
-                <td><input type="checkbox" /></td>
-                <td>Gecko</td>
-                <td>Seamonkey 1.1</td>
-                <td>Win 98+ / OSX.2+</td>
-                <td class="text-center">1.8</td>
-                <td><span class="label label-warning">B</span></td>
-            </tr>
-            <tr>
-                <td><input type="checkbox" /></td>
-                <td>Gecko</td>
-                <td>Mozilla 1.8</td>
-                <td>Win 98+ / OSX.1+</td>
-                <td class="text-center">1.8</td>
-                <td><span class="label label-success">A</span></td>
-            </tr>
-            <tr class="table-flag-blue">
-                <td><input type="checkbox" /></td>
-                <td>Trident</td>
-                <td><span class="label label-warning">So crazy!</span> <a href="#">Internet Explorer 6</a></td>
-                <td>Win 98+</td>
-                <td class="text-center">6</td>
-                <td><span class="label label-important">C</span></td>
-            </tr>
-            <tr class="table-flag-red">
-                <td><input type="checkbox" /></td>
-                <td>Presto</td>
-                <td>Opera 7.5</td>
-                <td>Win 95+ / OSX.2+</td>
-                <td class="text-center">-</td>
-                <td><span class="label label-success">A</span></td>
-            </tr>
-            <tr class="table-flag-red">
-                <td><input type="checkbox" /></td>
-                <td>Presto</td>
-                <td><span class="label label-info">It's Opera!</span> Opera 8.0</td>
-                <td>Win 95+ / OSX.2+</td>
-                <td class="text-center">-</td>
-                <td><span class="label label-success">A</span></td>
-            </tr>
-            <tr>
-                <td><input type="checkbox" /></td>
-                <td>Gecko</td>
-                <td><a href="#">Mozilla 1.0</a></td>
-                <td>Win 95+ / OSX.1+</td>
-                <td class="text-center">1</td>
-                <td><span class="label label-warning">B</span></td>
-            </tr>
-            <tr>
-                <td><input type="checkbox" /></td>
-                <td>Gecko</td>
-                <td>Mozilla 1.1</td>
-                <td>Win 95+ / OSX.1+</td>
-                <td class="text-center">1.1</td>
-                <td><span class="label label-success">A</span></td>
-            </tr>
-            <tr class="table-flag-blue">
-                <td><input type="checkbox" /></td>
-                <td>Misc</td>
-                <td>IE Mobile</td>
-                <td>Windows Mobile 6</td>
-                <td class="text-center">-</td>
-                <td><span class="label label-important">C</span></td>
-            </tr>
-            <tr>
-                <td><input type="checkbox" /></td>
-                <td>Gecko</td>
-                <td><a href="#">Mozilla 1.2</a></td>
-                <td>Win 95+ / OSX.1+</td>
-                <td class="text-center">1</td>
-                <td><span class="label label-warning">B</span></td>
-            </tr>
-            <tr class="table-flag-red">
-                <td><input type="checkbox" /></td>
-                <td>Presto</td>
-                <td>Opera 7.7</td>
-                <td>Win 95+ / OSX.2+</td>
-                <td class="text-center">-</td>
-                <td><span class="label label-success">A</span></td>
-            </tr>
-            <tr>
-                <td><input type="checkbox" /></td>
-                <td>Gecko</td>
-                <td>Mozilla 1.7</td>
-                <td>Win 98+ / OSX.1+</td>
-                <td class="text-center">1.8</td>
-                <td><span class="label label-success">A</span></td>
-            </tr>
-        </tbody>
-    </table>
-</div>
-                            </div>							</div>
+								<div class="box-content">
+
+									<br /> <br />
+									<div class="clearfix"></div>
+									<div class="table-responsive" style="border: 0">
+										<table class="table table-advance" id="table1">
+											<thead>
+												<tr>
+													<th style="width: 18px"><input type="checkbox" /></th>
+													<th>Rendering engine</th>
+													<th>Browser</th>
+													<th>Platform(s)</th>
+													<th class="text-center">Engine version</th>
+													<th>CSS grade</th>
+												</tr>
+											</thead>
+											<tbody>
+												<tr class="table-flag-blue">
+													<td><input type="checkbox" /></td>
+													<td>Trident</td>
+													<td>Internet Explorer 7</td>
+													<td>Win XP SP2+</td>
+													<td class="text-center">7</td>
+													<td><span class="label label-success">A</span></td>
+												</tr>
+												<tr>
+													<td><input type="checkbox" /></td>
+													<td>Trident</td>
+													<td><a href="#">AOL browser (AOL desktop)</a></td>
+													<td>Win XP</td>
+													<td class="text-center">6</td>
+													<td><span class="label label-success">A</span></td>
+												</tr>
+												<tr class="table-flag-orange">
+													<td><input type="checkbox" /></td>
+													<td>Gecko</td>
+													<td><span class="label label-success">Not Bad</span>
+														Firefox 1.5</td>
+													<td>Win 98+ / OSX.2+</td>
+													<td class="text-center">1.8</td>
+													<td><span class="label label-success">A</span></td>
+												</tr>
+												<tr>
+													<td><input type="checkbox" /></td>
+													<td>Gecko</td>
+													<td>Netscape Navigator 9</td>
+													<td>Win 98+ / OSX.2+</td>
+													<td class="text-center">1.8</td>
+													<td><span class="label label-success">A</span></td>
+												</tr>
+												<tr>
+													<td><input type="checkbox" /></td>
+													<td>Gecko</td>
+													<td>Seamonkey 1.1</td>
+													<td>Win 98+ / OSX.2+</td>
+													<td class="text-center">1.8</td>
+													<td><span class="label label-warning">B</span></td>
+												</tr>
+												<tr>
+													<td><input type="checkbox" /></td>
+													<td>Gecko</td>
+													<td>Mozilla 1.8</td>
+													<td>Win 98+ / OSX.1+</td>
+													<td class="text-center">1.8</td>
+													<td><span class="label label-success">A</span></td>
+												</tr>
+												<tr class="table-flag-blue">
+													<td><input type="checkbox" /></td>
+													<td>Trident</td>
+													<td><span class="label label-warning">So crazy!</span>
+														<a href="#">Internet Explorer 6</a></td>
+													<td>Win 98+</td>
+													<td class="text-center">6</td>
+													<td><span class="label label-important">C</span></td>
+												</tr>
+												<tr class="table-flag-red">
+													<td><input type="checkbox" /></td>
+													<td>Presto</td>
+													<td>Opera 7.5</td>
+													<td>Win 95+ / OSX.2+</td>
+													<td class="text-center">-</td>
+													<td><span class="label label-success">A</span></td>
+												</tr>
+												<tr class="table-flag-red">
+													<td><input type="checkbox" /></td>
+													<td>Presto</td>
+													<td><span class="label label-info">It's Opera!</span>
+														Opera 8.0</td>
+													<td>Win 95+ / OSX.2+</td>
+													<td class="text-center">-</td>
+													<td><span class="label label-success">A</span></td>
+												</tr>
+												<tr>
+													<td><input type="checkbox" /></td>
+													<td>Gecko</td>
+													<td><a href="#">Mozilla 1.0</a></td>
+													<td>Win 95+ / OSX.1+</td>
+													<td class="text-center">1</td>
+													<td><span class="label label-warning">B</span></td>
+												</tr>
+												<tr>
+													<td><input type="checkbox" /></td>
+													<td>Gecko</td>
+													<td>Mozilla 1.1</td>
+													<td>Win 95+ / OSX.1+</td>
+													<td class="text-center">1.1</td>
+													<td><span class="label label-success">A</span></td>
+												</tr>
+												<tr class="table-flag-blue">
+													<td><input type="checkbox" /></td>
+													<td>Misc</td>
+													<td>IE Mobile</td>
+													<td>Windows Mobile 6</td>
+													<td class="text-center">-</td>
+													<td><span class="label label-important">C</span></td>
+												</tr>
+												<tr>
+													<td><input type="checkbox" /></td>
+													<td>Gecko</td>
+													<td><a href="#">Mozilla 1.2</a></td>
+													<td>Win 95+ / OSX.1+</td>
+													<td class="text-center">1</td>
+													<td><span class="label label-warning">B</span></td>
+												</tr>
+												<tr class="table-flag-red">
+													<td><input type="checkbox" /></td>
+													<td>Presto</td>
+													<td>Opera 7.7</td>
+													<td>Win 95+ / OSX.2+</td>
+													<td class="text-center">-</td>
+													<td><span class="label label-success">A</span></td>
+												</tr>
+												<tr>
+													<td><input type="checkbox" /></td>
+													<td>Gecko</td>
+													<td>Mozilla 1.7</td>
+													<td>Win 98+ / OSX.1+</td>
+													<td class="text-center">1.8</td>
+													<td><span class="label label-success">A</span></td>
+												</tr>
+											</tbody>
+										</table>
+									</div>
+								</div>
+							</div>
 						</div>
 					</div>
 				</div>
@@ -372,12 +425,83 @@
 		src="${pageContext.request.contextPath}/resources/assets/bootstrap-daterangepicker/date.js"></script>
 	<script type="text/javascript"
 		src="${pageContext.request.contextPath}/resources/assets/bootstrap-daterangepicker/daterangepicker.js"></script>
-  <!--page specific plugin scripts-->
-        <script type="text/javascript" src="${pageContext.request.contextPath}/resources/assets/data-tables/jquery.dataTables.js"></script>
-        <script type="text/javascript" src="${pageContext.request.contextPath}/resources/assets/data-tables/bootstrap3/dataTables.bootstrap.js"></script>
+	<!--page specific plugin scripts-->
+	<script type="text/javascript"
+		src="${pageContext.request.contextPath}/resources/assets/data-tables/jquery.dataTables.js"></script>
+	<script type="text/javascript"
+		src="${pageContext.request.contextPath}/resources/assets/data-tables/bootstrap3/dataTables.bootstrap.js"></script>
 
-       
+	<script type="text/javascript">
+
+function getValue(value){
 	
+	/* 
+	<input	type="hidden" name="uicname" id="uicname" value="5">
+	<input	type="hidden" name="webcomname" id="webcomname">
+	<input	type="hidden" name="conscompname" id="conscompname">
+	<input	type="hidden" name="testcomname" id="testcomname">
+	<input	type="hidden" name="spcompname" id="spcompname">
+	 */
+	
+	if(value==1){
+		alert("value="+value);
+		
+		var uicompName=$("#ui_comp option:selected").html();
+		var prevValue=	document.getElementById("uicname").value;
+		//alert("prev Value " +prevValue);
+
+		document.getElementById("uicname").value=uicompName;
+		
+		//var newValue=	document.getElementById("uicname").value;
+		//alert("new Value " +newValue);
+	}
+	
+	if(value==2){
+		alert("value="+value);
+		
+		var uicompName=$("#web_serv_comp option:selected").html();
+		var prevValue=	document.getElementById("webcomname").value;
+		//alert("prev Value " +prevValue);
+
+		document.getElementById("webcomname").value=uicompName;
+		
+	}
+	
+	if(value==3){
+		alert("value="+value);
+		
+		var uicompName=$("#consume_comp option:selected").html();
+		var prevValue=	document.getElementById("testcomname").value;
+		//alert("prev Value " +prevValue);
+
+		document.getElementById("conscompname").value=uicompName;
+		
+	}
+	
+	if(value==4){
+		alert("value="+value);
+		var uicompName=$("#unit_test_comp option:selected").html();
+		var prevValue=	document.getElementById("testcomname").value;
+		//alert("prev Value " +prevValue);
+
+		document.getElementById("testcomname").value=uicompName;
+		
+	}
+	
+	if(value==5){
+		alert("value="+value);
+		
+		var uicompName=$("#sp_func_comp option:selected").html();
+		var prevValue=	document.getElementById("spcompname").value;
+		//alert("prev Value " +prevValue);
+		document.getElementById("spcompname").value=uicompName;
+		
+	}
+	
+}
+
+</script>
+
 </body>
 </html>
 
