@@ -147,8 +147,16 @@
 					<a href="${pageContext.request.contextPath}/addSupplier">Add Employee</a>
 					</li>
 					<li> 
-					<a href="${pageContext.request.contextPath}/addUom">Add Project</a>
+					<a href="${pageContext.request.contextPath}/showAddProject">Add Project</a>
 					</li>
+					
+					<li> 
+					<a href="${pageContext.request.contextPath}/showAddNewModule">Add Module</a>
+					</li>
+					<li> 
+					<a href="${pageContext.request.contextPath}/showAddNewForm">Add Form</a>
+					</li>
+					
 					<%-- <li> 
 					<a href="${pageContext.request.contextPath}/addGroup">Add Group</a>
 					</li>
