@@ -22,7 +22,6 @@
 				<!-- END Sidebar Collapse Button -->
 			</div>
 			<!-- END Sidebar -->
-			<div>
 
 			<!-- BEGIN Content -->
 			<div id="main-content">
@@ -96,44 +95,38 @@
 									</div>
 									</form>
 								</div>
-								
 
-													                           		<div class="box-content">
-
-									<br /> <br />
-									<div class="clearfix"></div>
-									<div class="table-responsive" style="border: 0">
-										<table class="table table-advance" id="table1">
-											<thead>
-												<tr>
-													<th style="width: 18px">Sr No</th>
-													<th>Project Name</th>
-													<th>Module Name</th>
-													<th>Action</th>
-												</tr>
-											</thead>
-											<tbody>
-												<c:forEach items="${projList}" var="proj" varStatus="count">
+													                            <div class="box-content">
+                               
+                                <br/><br/>
+                                <div class="clearfix"></div>
+<div class="table-responsive" style="border:0">
+    <table class="table table-advance" id="table1">
+        <thead>
+            <tr>
+                <th style="width:18px">Sr No</th>
+                <th>Project Name</th>
+                <th>Module Name</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+             <c:forEach items="${modAndProjList}" var="modProj" varStatus="count">
 													<tr class="table-flag-blue">
 														<td>${count.index+1}</td>
-														<td>${proj.projectName}</td>
-														<td>${proj.referenceBy}</td>
-														<td>${proj.projectCost}</td>
-														<td>${proj.empName}</td>
-														<td>${proj.projectStartDate}</td>
-														<td>${proj.devPer}</td>
-														<td>${proj.compPer}</td>
-														<td>${proj.status}</td>
-														<td>${proj.projectEndDate}</td>
-
+														<td>${modProj.projectName}</td>
+														<td>${modProj.moduleName}</td>
+														<td><a
+															href="${pageContext.request.contextPath}/showAddNewForm/${modProj.projectId}/${modProj.projectName}"
+															class="btn bnt-primary"> <i class="fa fa-list"></i></a> </td>
+														
 													</tr>
 												</c:forEach>
 
-
-											</tbody>
-										</table>
-									</div>
-								</div>
+           
+        </tbody>
+    </table>
+</div>
                             </div>	
 							</div>
 						</div>

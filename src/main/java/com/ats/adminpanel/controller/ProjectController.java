@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.client.RestTemplate;
@@ -15,6 +16,7 @@ import org.springframework.web.servlet.ModelAndView;
 import com.ats.adminpanel.common.Constants;
 import com.ats.adminpanel.model.Employee;
 import com.ats.adminpanel.model.FormType;
+import com.ats.adminpanel.model.GetModuleProject;
 import com.ats.adminpanel.model.GetProjects;
 import com.ats.adminpanel.model.Module;
 import com.ats.adminpanel.model.Project;
@@ -97,6 +99,8 @@ public class ProjectController {
 	public ModelAndView showAddNewModule(HttpServletRequest request, HttpServletResponse response) {
 
 		ModelAndView model = new ModelAndView("modules/addmodule");
+		
+		List<GetModuleProject> modAndProjList;
 
 		List<GetProjects> projList;
 
@@ -106,6 +110,14 @@ public class ProjectController {
 		projList = new ArrayList<GetProjects>(Arrays.asList(projArray));
 
 		model.addObject("projList", projList);
+		
+		
+		GetModuleProject[] modProjArray = restTemplate.getForObject(Constants.url + "masters/getModuleProject",
+				GetModuleProject[].class);
+
+		modAndProjList = new ArrayList<GetModuleProject>(Arrays.asList(modProjArray));
+
+		model.addObject("modAndProjList", modAndProjList);
 
 		return model;
 
@@ -117,8 +129,8 @@ public class ProjectController {
 		try {
 
 			String projId = request.getParameter("proj_name");
-			String modDesc = request.getParameter("desc");
-			String modName = request.getParameter("ref_by");
+			String modDesc = request.getParameter("module_desc");
+			String modName = request.getParameter("mod_name");
 			
 			int intProjId = Integer.parseInt((projId));
 			Module module=new Module();
@@ -141,8 +153,9 @@ public class ProjectController {
 		return "redirect:/showAddNewModule";
 	}
 
-	@RequestMapping(value = "/showAddNewForm", method = RequestMethod.GET)
-	public ModelAndView showAddNewForm(HttpServletRequest request, HttpServletResponse response) {
+	@RequestMapping(value = "/showAddNewForm/{projId}/{projName}", method = RequestMethod.GET)
+	public ModelAndView showAddNewForm(HttpServletRequest request, HttpServletResponse response,
+			@PathVariable int projId,@PathVariable String projName) {
 
 		ModelAndView model = new ModelAndView("form/addNewForm");
 		try {
@@ -164,6 +177,8 @@ public class ProjectController {
 		taskTypeList = new ArrayList<TaskType>(Arrays.asList(taskTypeArray));
 
 		model.addObject("taskTypeList", taskTypeList);
+		
+		model.addObject("projName", projName);
 		
 		
 		}catch (Exception e) {
