@@ -1,5 +1,7 @@
 package com.ats.adminpanel.controller;
 
+import static org.hamcrest.CoreMatchers.not;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -186,6 +188,9 @@ public class ProjectController {
 
 			model.addObject("modName", modName);
 			model.addObject("modId", modId);
+			
+			model.addObject("taskList", responseTaskList);
+			
 
 		} catch (Exception e) {
 
@@ -196,16 +201,22 @@ public class ProjectController {
 		return model;
 
 	}
+	List<Task> responseTaskList;
 
 	@RequestMapping(value = "/postForm", method = RequestMethod.POST)
-	public ModelAndView postNewFormAndTask(HttpServletRequest request, HttpServletResponse response) {
+	public String postNewFormAndTask(HttpServletRequest request, HttpServletResponse response) {
 System.err.println("Inside /postForm ");
+
+String projId = null ;
+String projName=null;
+String modName=null; 
+String modId=null;
 		try {
 
-			String projId = request.getParameter("projId");
-			String projName = request.getParameter("projName");
-			String modName = request.getParameter("modName");
-			String modId = request.getParameter("modId");
+			 projId = request.getParameter("projId");
+			 projName = request.getParameter("projName");
+			 modName = request.getParameter("modName");
+			 modId = request.getParameter("modId");
 
 			String formType = request.getParameter("form_type");
 			String formName = request.getParameter("form_name");
@@ -228,6 +239,8 @@ System.err.println("Inside /postForm ");
 			Forms formResponse = restTemplate
 					.postForObject(com.ats.adminpanel.common.Constants.url + "masters/saveForm", form, Forms.class);
 			List<Task> postTaskList = new ArrayList<Task>();
+			
+			
 			if (formResponse != null && formResponse.getFormId() > 0) {
 
 				if (Integer.parseInt(uiComp) != 0) {
@@ -237,7 +250,7 @@ System.err.println("Inside /postForm ");
 					task.setProjectId(Integer.parseInt(projId));
 					task.setModuleId(Integer.parseInt(modId));
 					task.setFormId(formResponse.getFormId());
-					task.setTaskName(formName + " " +taskName);
+					task.setTaskName(formName +" "+ "UI " +taskName);
 					
 					task.setTaskTypeId(Integer.parseInt(uiComp));
 
@@ -253,7 +266,7 @@ System.err.println("Inside /postForm ");
 					task.setProjectId(Integer.parseInt(projId));
 					task.setModuleId(Integer.parseInt(modId));
 					task.setFormId(formResponse.getFormId());
-					task.setTaskName(formName + " " +taskName);
+					task.setTaskName(formName +" "+ "WEB SERVICE " +taskName);
 					task.setTaskTypeId(Integer.parseInt(webSerComp));
 
 					postTaskList.add(task);
@@ -267,7 +280,7 @@ System.err.println("Inside /postForm ");
 					task.setProjectId(Integer.parseInt(projId));
 					task.setModuleId(Integer.parseInt(modId));
 					task.setFormId(formResponse.getFormId());
-					task.setTaskName(formName + " " +taskName);
+					task.setTaskName(formName + " " + "CONSUME " +taskName);
 					task.setTaskTypeId(Integer.parseInt(consumComp));
 
 					postTaskList.add(task);
@@ -282,7 +295,7 @@ System.err.println("Inside /postForm ");
 					task.setProjectId(Integer.parseInt(projId));
 					task.setModuleId(Integer.parseInt(modId));
 					task.setFormId(formResponse.getFormId());
-					task.setTaskName(formName + " " +taskName);
+					task.setTaskName(formName + " "+ "UNIT TESTING " +taskName);
 					task.setTaskTypeId(Integer.parseInt(unitTestComp));
 					postTaskList.add(task);
 
@@ -296,7 +309,7 @@ System.err.println("Inside /postForm ");
 					task.setProjectId(Integer.parseInt(projId));
 					task.setModuleId(Integer.parseInt(modId));
 					task.setFormId(formResponse.getFormId());
-					task.setTaskName(formName + " "+taskName);
+					task.setTaskName(formName +" "+ "SPECIAL FUNCTION "+taskName);
 					task.setTaskTypeId(Integer.parseInt(spFunComp));
 
 					postTaskList.add(task);
@@ -305,7 +318,7 @@ System.err.println("Inside /postForm ");
 
 			}
 			
-			String taskResponse = restTemplate.postForObject(com.ats.adminpanel.common.Constants.url + "masters/saveTask", postTaskList, String.class);
+			responseTaskList= restTemplate.postForObject(com.ats.adminpanel.common.Constants.url + "masters/saveTask", postTaskList, List.class);
 			
 			System.err.println("Task List " +postTaskList.toString());
 
@@ -315,7 +328,7 @@ System.err.println("Inside /postForm ");
 			e.printStackTrace();
 
 		}
-		return null;
+		return "redirect:/showAddNewForm/"+projId+"/"+projName+"/"+modName+"/"+modId;
 	}
 
 }
