@@ -1,0 +1,230 @@
+package com.ats.adminpanel.controller;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Controller;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.client.RestTemplate;
+import org.springframework.web.servlet.ModelAndView;
+
+import com.ats.adminpanel.common.Constants;
+import com.ats.adminpanel.model.Employee;
+import com.ats.adminpanel.model.GetFormList;
+import com.ats.adminpanel.model.GetProjects;
+import com.ats.adminpanel.model.Info;
+import com.ats.adminpanel.model.LoginResponse; 
+ 
+
+@Controller
+@Scope("session")
+public class MasterController {
+	
+	RestTemplate rest = new RestTemplate();
+	
+	@RequestMapping(value = "/addEmployee", method = RequestMethod.GET)
+	public ModelAndView addEmployee(HttpServletRequest request, HttpServletResponse response) {
+
+		ModelAndView model = new ModelAndView("masters/addEmployee");
+		try
+		{
+			HttpSession session = request.getSession();
+			LoginResponse login = (LoginResponse) session.getAttribute("UserDetail");
+			
+			System.out.println("user Id "+ login.getEmployee().getEmpId());
+			
+		}catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+
+		return model;
+	}
+	
+	@RequestMapping(value = "/insertEmployee", method = RequestMethod.POST)
+	public String insertEmployee(HttpServletRequest request, HttpServletResponse response) {
+
+	 
+		try
+		{
+			HttpSession session = request.getSession();
+			LoginResponse login = (LoginResponse) session.getAttribute("UserDetail"); 
+			System.out.println("user Id "+ login.getEmployee().getEmpId());
+			
+			String empName = request.getParameter("empName");
+			String empId = request.getParameter("empId");
+			String empMo = request.getParameter("empMo");
+			String empEdu = request.getParameter("empEdu");
+			String birthDate = request.getParameter("birthDate");
+			String empDesg = request.getParameter("empDesg");
+			String empExperience = request.getParameter("empExperience");
+			String joiningDate = request.getParameter("joiningDate");
+			float perHour = Float.parseFloat(request.getParameter("perHour"));
+			
+			int empType = Integer.parseInt(request.getParameter("empType"));
+			String password = request.getParameter("password");
+			
+			Employee employee = new Employee();
+			if(empId=="" || empId == null)
+				employee.setEmpId(0);
+			else
+				employee.setEmpId(Integer.parseInt(empId));
+			employee.setEmpName(empName);
+			employee.setEmpDesignation(empDesg);
+			employee.setEmpEdu(empEdu);
+			employee.setEmpMobile(empMo);
+			employee.setEmpBirthdate(birthDate);
+			employee.setEmpPrevExp(empExperience);
+			employee.setEmpJoiningDate(joiningDate);
+			employee.setEmpPerHrRate(perHour);
+			employee.setEmpType(empType);
+			employee.setEmpPwd(password);
+			
+			Employee res = rest.postForObject(Constants.url + "/masters/saveEmployee",employee,
+					Employee.class); 
+			
+			System.out.println("res " + res);
+			
+		}catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+
+		return "redirect:/allEmployeeList";
+	}
+	
+	@RequestMapping(value = "/allEmployeeList", method = RequestMethod.GET)
+	public ModelAndView allEmployeeList(HttpServletRequest request, HttpServletResponse response) {
+
+		ModelAndView model = new ModelAndView("masters/empList");
+		try
+		{
+			HttpSession session = request.getSession();
+			LoginResponse login = (LoginResponse) session.getAttribute("UserDetail");
+			
+			System.out.println("user Id "+ login.getEmployee().getEmpId());
+			
+			Employee[] Employee = rest.getForObject(Constants.url + "/masters/getAllEmpList", 
+					Employee[].class); 
+			List<Employee> empList = new ArrayList<Employee>(Arrays.asList(Employee));
+			
+			model.addObject("empList", empList);
+			
+		}catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+
+		return model;
+	}
+	
+	@RequestMapping(value = "/editEmp/{empId}", method = RequestMethod.GET)
+	public ModelAndView editEmp(@PathVariable int empId, HttpServletRequest request, HttpServletResponse response) {
+
+		ModelAndView model = new ModelAndView("masters/addEmployee");
+		try
+		{
+			HttpSession session = request.getSession();
+			LoginResponse login = (LoginResponse) session.getAttribute("UserDetail"); 
+			System.out.println("user Id "+ login.getEmployee().getEmpId());
+			
+			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+			map.add("empId", empId);
+			Employee editEmployee = rest.postForObject(Constants.url + "/masters/employeeByEmpId",map,
+					Employee.class); 
+			model.addObject("editEmployee", editEmployee);
+			
+		}catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+
+		return model;
+	}
+	
+	@RequestMapping(value = "/deleteEmp/{empId}", method = RequestMethod.GET)
+	public String deleteEmp(@PathVariable int empId, HttpServletRequest request, HttpServletResponse response) {
+
+	 
+		try
+		{
+			HttpSession session = request.getSession();
+			LoginResponse login = (LoginResponse) session.getAttribute("UserDetail"); 
+			System.out.println("user Id "+ login.getEmployee().getEmpId());
+			
+			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+			map.add("empId", empId);
+			Info info = rest.postForObject(Constants.url + "/masters/deleteEmployee",map,
+					Info.class); 
+			
+			System.out.println("info " + info);
+			
+		}catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+
+		return "redirect:/allEmployeeList";
+	}
+	
+	@RequestMapping(value = "/formListForAssignTask", method = RequestMethod.GET)
+	public ModelAndView formListForAssignTask(HttpServletRequest request, HttpServletResponse response) {
+
+		ModelAndView model = new ModelAndView("masters/formListForAssignTask");
+		try
+		{
+			 
+			GetProjects[] projArray = rest.getForObject(Constants.url + "masters/getProjectList",
+					GetProjects[].class);
+
+			List<GetProjects> projList = new ArrayList<GetProjects>(Arrays.asList(projArray));
+
+			model.addObject("projList", projList);
+			
+		}catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+
+		return model;
+	}
+	
+	
+	@RequestMapping(value = "/getFormListByProjectId", method = RequestMethod.GET)
+	@ResponseBody
+	public List<GetFormList> getFormListByProjectId(HttpServletRequest request, HttpServletResponse response) {
+
+		List<GetFormList> getFormList = new ArrayList<GetFormList>();
+		try
+		{
+			 
+			int projectId = Integer.parseInt(request.getParameter("projectId"));
+			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+			map.add("projectId", projectId);
+			GetFormList[] getForm = rest.postForObject(Constants.url + "masters/getFormListByProjectId",map,
+					GetFormList[].class);
+
+			 getFormList = new ArrayList<GetFormList>(Arrays.asList(getForm));
+
+		 
+			
+		}catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+
+		return getFormList;
+	}
+
+}

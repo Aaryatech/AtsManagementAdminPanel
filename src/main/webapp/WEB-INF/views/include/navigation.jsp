@@ -144,7 +144,10 @@
 				<ul class="submenu">
 					 
 					<li> 
-					<a href="${pageContext.request.contextPath}/addSupplier">Add Employee</a>
+					<a href="${pageContext.request.contextPath}/insertEmployee">Add Employee</a>
+					</li>
+					<li> 
+					<a href="${pageContext.request.contextPath}/allEmployeeList">Employee List</a>
 					</li>
 					<li> 
 					<a href="${pageContext.request.contextPath}/showAddProject">Add Project</a>
