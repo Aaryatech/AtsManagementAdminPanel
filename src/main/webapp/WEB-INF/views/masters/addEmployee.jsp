@@ -174,9 +174,9 @@
 								<c:when test="${editEmployee.empType==1}">
 								<c:set var="type" value="Developer"></c:set>
 								</c:when>
-								<c:otherwise>
+								<c:when test="${editEmployee.empType==2}">
 								<c:set var="type" value="Project Manager"></c:set>
-								</c:otherwise>
+								</c:when>
 							</c:choose>
 							
 							<div class="box-content">
@@ -318,8 +318,8 @@
 		 
 		var pass = document.getElementById("password").value;
 		var pass1 = document.getElementById("rePassword").value;
-		
-		if(pass!="" || pass1!="")
+		 
+		if(pass!="" && pass1!="")
 		{
 			if(pass!=pass1)
 				{

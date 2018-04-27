@@ -55,6 +55,8 @@
                             <i class="fa fa-clock-o"></i>
                             Logined From 20:45
                         </li>-->
+                        
+                        
 
 					<li>
 						<%-- <c:url value="/logout" var="logoutUser" />
@@ -62,7 +64,7 @@
 					<a href=""> <i
 							class="fa fa-off"></i> Logout
 					</a> --%> <a href="${pageContext.request.contextPath}/logout">Logout <c:out
-								value="${sessionScope['userName']}" />
+								value="${sessionScope.employee.empName}" />
 					</a>
 
 					</li>

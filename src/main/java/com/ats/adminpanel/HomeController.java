@@ -81,6 +81,8 @@ public class HomeController {
 				{ 
 					mav = new ModelAndView("home");
 					HttpSession session = request.getSession();
+					
+					session.setAttribute("employee", loginResponse.getEmployee());
 					session.setAttribute("UserDetail", loginResponse);
 					 
 				} else {
@@ -99,6 +101,14 @@ public class HomeController {
 
 		return mav;
 
+	}
+	
+	@RequestMapping(value = "/logout", method = RequestMethod.GET)
+	public String logout(HttpSession session) {
+		System.out.println("User Logout");
+
+		session.invalidate();
+		return "redirect:/";
 	}
 	
 }

@@ -136,7 +136,8 @@
 						<li>
 					</c:otherwise>
 				</c:choose>
-				
+			<c:choose>
+						<c:when test="${sessionScope.employee.empType==2}">	
 				<a href="#" class="dropdown-toggle"> <i class="fa fa-list"></i>
 					<span>Masters</span> <b class="arrow fa fa-angle-right"></b>
 				</a>
@@ -144,7 +145,7 @@
 				<ul class="submenu">
 					 
 					<li> 
-					<a href="${pageContext.request.contextPath}/insertEmployee">Add Employee</a>
+					<a href="${pageContext.request.contextPath}/addEmployee">Add Employee</a>
 					</li>
 					<li> 
 					<a href="${pageContext.request.contextPath}/allEmployeeList">Employee List</a>
@@ -177,6 +178,7 @@
 					</li> --%>
  
 				</ul>
+				
 					 <a href="#" class="dropdown-toggle"> <i class="fa fa-list"></i>
 					<span>Task Transaction</span> <b class="arrow fa fa-angle-right"></b>
 				</a>
@@ -197,8 +199,9 @@
 					
 				
 					</ul>
+					</c:when>
+				</c:choose> 
 					
-					 
 					
 				<%--	<a href="#" class="dropdown-toggle"> <i class="fa fa-list"></i>
 					<span>Bill Transaction</span> <b class="arrow fa fa-angle-right"></b>
@@ -303,6 +306,8 @@
 					
 					
 					</ul> --%>
+					
+					 
 				<a href="#" class="dropdown-toggle"> <i class="fa fa-list"></i>
 					<span>Logout</span> <b class="arrow fa fa-angle-right"></b>
 				</a>
@@ -316,12 +321,14 @@
 							<li>
 						</c:otherwise>
 					</c:choose>
+					 
 					<a href="${pageContext.request.contextPath}/logout">Logout</a>
 					</li>
-
+						
 
 
 				</ul>
+				 
 				<!-- END Submenu -->
 				</li>
 				

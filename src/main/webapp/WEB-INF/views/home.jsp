@@ -80,7 +80,7 @@
 					
 		 
 						<div class="box-content">
-							 
+							
 							</div><br>
 						 
 					</div>
