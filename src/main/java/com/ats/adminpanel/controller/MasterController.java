@@ -327,12 +327,107 @@ public class MasterController {
 
 			model.addObject("projList", projList);
 			
+			Employee[] Employee = rest.getForObject(Constants.url + "/masters/getAllEmpList", 
+					Employee[].class); 
+			List<Employee> empList = new ArrayList<Employee>(Arrays.asList(Employee));
+			
+			model.addObject("empList", empList);
+			
 		}catch(Exception e)
 		{
 			e.printStackTrace();
 		}
 
 		return model;
+	}
+	
+	@RequestMapping(value = "/viewAllSpecialTask", method = RequestMethod.GET)
+	public ModelAndView viewAllSpecialTask(HttpServletRequest request, HttpServletResponse response) {
+
+		ModelAndView model = new ModelAndView("masters/viewAllSpecialTask");
+		try
+		{
+			 
+			GetProjects[] projArray = rest.getForObject(Constants.url + "masters/getProjectList",
+					GetProjects[].class);
+
+			List<GetProjects> projList = new ArrayList<GetProjects>(Arrays.asList(projArray));
+
+			model.addObject("projList", projList);
+			
+			 
+			
+		}catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+
+		return model;
+	}
+	
+	@RequestMapping(value = "/getSpecialTaskList", method = RequestMethod.GET)
+	@ResponseBody
+	public List<Task> getSpecialTaskList(HttpServletRequest request, HttpServletResponse response) {
+
+		List<Task> getTaskList = new ArrayList<Task>();
+		try
+		{
+			 
+			int projectId = Integer.parseInt(request.getParameter("projectId"));
+			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+			map.add("projectId", projectId);
+			Task[] getTask = rest.postForObject(Constants.url + "masters/getSpecialTaskList",map,
+					Task[].class);
+
+			getTaskList = new ArrayList<Task>(Arrays.asList(getTask));
+
+		 
+			
+		}catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+
+		return getTaskList;
+	}
+	
+	@RequestMapping(value = "/submitAssignSpecialTask", method = RequestMethod.POST)
+	public String submitAssignSpecialTask( HttpServletRequest request, HttpServletResponse response) {
+
+	 
+		try
+		{
+			HttpSession session = request.getSession();
+			LoginResponse login = (LoginResponse) session.getAttribute("UserDetail"); 
+			System.out.println("user Id "+ login.getEmployee().getEmpId());
+			
+			int projectId = Integer.parseInt(request.getParameter("projectId"));
+			String  taskName = request.getParameter("taskName");
+			String  taskDisc = request.getParameter("taskDisc");
+			String  taskHours = request.getParameter("taskHours");
+			int devlprId = Integer.parseInt(request.getParameter("devlprId"));
+			List<Task> insertList = new ArrayList<Task>();
+			
+			Task insert = new Task();
+			insert.setProjectId(projectId);
+			insert.setTaskName(taskName);
+			insert.setTaskDescription(taskDisc);
+			insert.setTaskPlannedHrs(taskHours);
+			insert.setDeveloperId(devlprId);
+			insert.setTaskTypeId(10);
+			insert.setAssignedBy(login.getEmployee().getEmpId());
+			insertList.add(insert);
+			
+			
+			List<Task>  assign = rest.postForObject(Constants.url + "masters/saveTask",insertList,
+					List.class);
+			
+		}catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+
+		return "redirect:/assignSpecialTask";
 	}
 
 }

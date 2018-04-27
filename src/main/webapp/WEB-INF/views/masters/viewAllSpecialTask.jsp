@@ -8,7 +8,7 @@
 	<body>
 	
 	 
-<c:url var="getFormListByProjectId" value="/getFormListByProjectId"></c:url> 
+<c:url var="getSpecialTaskList" value="/getSpecialTaskList"></c:url> 
 
 
 	<!-- BEGIN Sidebar -->
@@ -31,7 +31,7 @@
 		<div class="page-title">
 			<div>
 				<h1>
-					<i class="fa fa-file-o"></i>Assign Special Task
+					<i class="fa fa-file-o"></i>Form List
 				</h1>
 				
 				<!-- <h4>Bill for franchises</h4> -->
@@ -44,88 +44,36 @@
 		<div class="box" id="pending">
 			<div class="box-title">
 				<h3>
-					<i class="fa fa-bars"></i>Assign Special Task
+					<i class="fa fa-bars"></i>Form List
 				</h3>
 				<div class="box-tool">
-				<a href="${pageContext.request.contextPath}/viewAllSpecialTask">View All Special Task</a> <a data-action="collapse" href="#"><i
+				<a href="${pageContext.request.contextPath}/assignSpecialTask">Assign Special Task</a> <a data-action="collapse" href="#"><i
 									class="fa fa-chevron-up"></i></a>
 				</div>
 
 			</div> 
 			
-			<form  id="validation-form" class="form-horizontal"
-						action="${pageContext.request.contextPath}/submitAssignSpecialTask" method="post">
+			
 				<div class=" box-content">
 				
 				<div class="box-content">
 							
 								<div class="col-md-2">Select Project*</div>
 									<div class="col-md-3">
-									 <select id="projectId" name="projectId" class="form-control chosen" required>
+									 <select id="projectId" name="projectId" onchange="getSpecialTaskListByProjectId();"  class="form-control chosen" required>
 									 <option value=""></option>
 										<c:forEach items="${projList}" var="projList" varStatus="count">
 													 <option value="${projList.projectId}">${projList.projectName}</option>
 												</c:forEach>
 									 </select>
 									</div>
-									<div class="col-md-1"></div>
+									
 								 
 								
 				 
 							</div><br>
-							
-							<div class="box-content">
-							
-								<div class="col-md-2">Task Name*</div>
-									<div class="col-md-3">
-									<input type="text" id="taskName" name="taskName" class="form-control"   placeholder=" Task Name " required/>
-									</div>
-									<div class="col-md-1"></div>
-									
-								 <div class="col-md-2">Select Developer*</div>
-									<div class="col-md-3">
-									 <select id="devlprId" name="devlprId" class="form-control chosen" required>
-									 <option value=""></option>
-										<c:forEach items="${empList}" var="empList" varStatus="count">
-													 <option value="${empList.empId}">${empList.empName}</option>
-												</c:forEach>
-									 </select>
-									</div>
-								
 				 
-							</div><br>
-							
-							<div class="box-content">
-							
-								<div class="col-md-2">Task Description*</div>
-									<div class="col-md-3">
-									<input type="text" id="taskDisc" name="taskDisc" class="form-control"   placeholder="Task Description " required/>
-									</div>
-									<div class="col-md-1"></div>
-									
-								<div class="col-md-2">Task Hours*</div>
-									<div class="col-md-3">
-									<input type="text" id="taskHours" name="taskHours" class="form-control"   placeholder=" Task Hours " required/>
-									</div>
-								
-				 
-							</div><br>
-							
-							
-							<div class=" box-content">
-					<div class="col-md-12" style="text-align: center">
-						<input type="submit" class="btn btn-info" value="Assign Task" id="submit"  >
-					 
-
-
-					</div>
-				</div>
-							<div class="box-content">
-							</div>
-							<div class="box-content">
-							</div>
-				 
-					<!--  <div class="box-content">
+					 <div class="box-content">
 
 									<br /> <br />
 									<div class="clearfix"></div>
@@ -147,13 +95,11 @@
 											</tbody>
 										</table>
 									</div>
-								</div> -->
-								
-								  
+								</div>
 
 		</div>
 		
-				 </form>
+				 
 	 
 	</div>
 	 
@@ -229,13 +175,13 @@
 		
 		<script type="text/javascript">
 		
-		function getFormListByProjectId()
+		function getSpecialTaskListByProjectId()
 		{
 			var projectId = $("#projectId").val(); 
 			
 		 
 
-			$ .getJSON( '${getFormListByProjectId}',
+			$ .getJSON( '${getSpecialTaskList}',
 
 							{
 								 
