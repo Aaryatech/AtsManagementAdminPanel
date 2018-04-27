@@ -23,8 +23,11 @@ import com.ats.adminpanel.common.Constants;
 import com.ats.adminpanel.model.Employee;
 import com.ats.adminpanel.model.GetFormList;
 import com.ats.adminpanel.model.GetProjects;
+import com.ats.adminpanel.model.GetTask;
 import com.ats.adminpanel.model.Info;
-import com.ats.adminpanel.model.LoginResponse; 
+import com.ats.adminpanel.model.LoginResponse;
+import com.ats.adminpanel.model.Task;
+import com.ats.adminpanel.model.TaskType; 
  
 
 @Controller
@@ -32,6 +35,7 @@ import com.ats.adminpanel.model.LoginResponse;
 public class MasterController {
 	
 	RestTemplate rest = new RestTemplate();
+	List<GetTask> taskList = new ArrayList<GetTask>();
 	
 	@RequestMapping(value = "/addEmployee", method = RequestMethod.GET)
 	public ModelAndView addEmployee(HttpServletRequest request, HttpServletResponse response) {
@@ -225,6 +229,110 @@ public class MasterController {
 		}
 
 		return getFormList;
+	}
+	
+	@RequestMapping(value = "/assignTask/{formId}", method = RequestMethod.GET)
+	public ModelAndView assignTask(@PathVariable int formId, HttpServletRequest request, HttpServletResponse response) {
+
+		ModelAndView model = new ModelAndView("masters/assignTask");
+		try
+		{
+			 MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+			 map.add("formId", formId);
+			 GetTask[] task = rest.postForObject(Constants.url + "masters/taskByFormId",map,
+					 GetTask[].class); 
+			 taskList = new ArrayList<GetTask>(Arrays.asList(task)); 
+			model.addObject("taskList", taskList);
+			
+			TaskType[] taskTypeArray = rest.getForObject(Constants.url + "masters/getAllTaskTypeList",
+					TaskType[].class); 
+			List<TaskType> taskTypeList = new ArrayList<TaskType>(Arrays.asList(taskTypeArray)); 
+			model.addObject("taskTypeList", taskTypeList);
+			
+			Employee[] Employee = rest.getForObject(Constants.url + "/masters/getAllEmpList", 
+					Employee[].class); 
+			List<Employee> empList = new ArrayList<Employee>(Arrays.asList(Employee));
+			
+			model.addObject("empList", empList);
+			
+		}catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+
+		return model;
+	}
+	
+	
+	@RequestMapping(value = "/submitAssignTask", method = RequestMethod.POST)
+	public String submitAssignTask( HttpServletRequest request, HttpServletResponse response) {
+
+	 
+		try
+		{
+			HttpSession session = request.getSession();
+			LoginResponse login = (LoginResponse) session.getAttribute("UserDetail"); 
+			System.out.println("user Id "+ login.getEmployee().getEmpId());
+			
+			String[] checkbox=request.getParameterValues("select_to_approve");
+			
+			for(int i = 0 ; i<taskList.size();i++)
+			{
+				for(int j = 0; j<checkbox.length;j++)
+				{
+					if(Integer.parseInt(checkbox[j])==taskList.get(i).getTaskId())
+					{
+						taskList.get(i).setTaskDescription(request.getParameter("desc"+taskList.get(i).getTaskId()));
+						taskList.get(i).setTaskSpRemarks(request.getParameter("remark"+taskList.get(i).getTaskId()));
+						taskList.get(i).setTaskPlannedHrs(request.getParameter("planHours"+taskList.get(i).getTaskId()));
+						taskList.get(i).setDeveloperId(Integer.parseInt(request.getParameter("devlpr"+taskList.get(i).getTaskId())));
+						 String  testerId = request.getParameter("tester"+taskList.get(i).getTaskId());
+						 if(testerId=="" || testerId==null)
+							 taskList.get(i).setTesterId(0);
+						 else
+							 taskList.get(i).setTesterId(Integer.parseInt(testerId));
+						 taskList.get(i).setDevStatus(1); 
+						 taskList.get(i).setAssignedBy(login.getEmployee().getEmpId());
+					}
+				}
+			}
+			 
+			System.out.println("taskList " + taskList);
+			
+			List<Task>  assign = rest.postForObject(Constants.url + "masters/saveTask",taskList,
+					List.class);
+			
+			System.out.println("assign " + assign);
+			
+		}catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+
+		return "redirect:/assignTask/"+taskList.get(0).getFormId();
+	}
+	
+	
+	@RequestMapping(value = "/assignSpecialTask", method = RequestMethod.GET)
+	public ModelAndView assignSpecialTask(HttpServletRequest request, HttpServletResponse response) {
+
+		ModelAndView model = new ModelAndView("masters/assignSpecialTask");
+		try
+		{
+			 
+			GetProjects[] projArray = rest.getForObject(Constants.url + "masters/getProjectList",
+					GetProjects[].class);
+
+			List<GetProjects> projList = new ArrayList<GetProjects>(Arrays.asList(projArray));
+
+			model.addObject("projList", projList);
+			
+		}catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+
+		return model;
 	}
 
 }

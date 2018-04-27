@@ -31,7 +31,7 @@
 		<div class="page-title">
 			<div>
 				<h1>
-					<i class="fa fa-file-o"></i>Assign Task
+					<i class="fa fa-file-o"></i>Form List
 				</h1>
 				
 				<!-- <h4>Bill for franchises</h4> -->
@@ -44,7 +44,7 @@
 		<div class="box" id="pending">
 			<div class="box-title">
 				<h3>
-					<i class="fa fa-bars"></i>Form Name
+					<i class="fa fa-bars"></i>Form List
 				</h3>
 				<div class="box-tool">
 				<a href="${pageContext.request.contextPath}/addEmployee">Add Employee</a> <a data-action="collapse" href="#"><i
@@ -208,7 +208,7 @@
 												tr.append($('<td></td>').html(itemList.moduleName));
 											  	tr.append($('<td></td>').html(itemList.formName));
 											  	tr.append($('<td></td>').html(itemList.formTypeName)) 
-											  	tr.append($('<td></td>').html(' <a href="${pageContext.request.contextPath}/showAddNewForm/'+itemList.projectId+'" class="btn bnt-primary"> <i class="fa fa-list"></i></a> ')); 
+											  	tr.append($('<td></td>').html(' <a href="${pageContext.request.contextPath}/assignTask/'+itemList.formId+'" class="btn bnt-primary"> <i class="fa fa-list"></i></a> ')); 
 												$('#table1 tbody').append(tr);
 											 
 
