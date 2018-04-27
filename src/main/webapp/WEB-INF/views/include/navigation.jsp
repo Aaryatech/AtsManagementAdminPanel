@@ -177,21 +177,21 @@
 					</li> --%>
  
 				</ul>
-					<%-- <a href="#" class="dropdown-toggle"> <i class="fa fa-list"></i>
-					<span>Purchase Transaction</span> <b class="arrow fa fa-angle-right"></b>
+					 <a href="#" class="dropdown-toggle"> <i class="fa fa-list"></i>
+					<span>Task Transaction</span> <b class="arrow fa fa-angle-right"></b>
 				</a>
 				<!-- BEGIN Submenu -->
 				<ul class="submenu">
 				
 					<li> 
-					<a href="${pageContext.request.contextPath}/purchaseBill">Add Purchase Bill</a>
+					<a href="${pageContext.request.contextPath}/formListForAssignTask">Assign Task</a>
 					</li>
 					<li> 
-					<a href="${pageContext.request.contextPath}/purchaseBillList">Purchase Bill List</a>
+					<a href="${pageContext.request.contextPath}/assignSpecialTask">Assign Special Task</a>
 					</li>
 					
 				    <li>
-				  	<a href="${pageContext.request.contextPath}/unpaidPurchaseBillList">Pending Payment Of Purchase Bills</a>
+				  	<a href="${pageContext.request.contextPath}/viewAllSpecialTask">View Special Task</a>
 					</li>
 					 
 					
@@ -200,7 +200,7 @@
 					
 					 
 					
-					<a href="#" class="dropdown-toggle"> <i class="fa fa-list"></i>
+				<%--	<a href="#" class="dropdown-toggle"> <i class="fa fa-list"></i>
 					<span>Bill Transaction</span> <b class="arrow fa fa-angle-right"></b>
 				</a>
 				<!-- BEGIN Submenu -->

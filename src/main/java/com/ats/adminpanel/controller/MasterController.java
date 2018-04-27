@@ -401,6 +401,7 @@ public class MasterController {
 			LoginResponse login = (LoginResponse) session.getAttribute("UserDetail"); 
 			System.out.println("user Id "+ login.getEmployee().getEmpId());
 			
+			String  taskId = request.getParameter("taskId");
 			int projectId = Integer.parseInt(request.getParameter("projectId"));
 			String  taskName = request.getParameter("taskName");
 			String  taskDisc = request.getParameter("taskDisc");
@@ -409,6 +410,10 @@ public class MasterController {
 			List<Task> insertList = new ArrayList<Task>();
 			
 			Task insert = new Task();
+			if(taskId=="" || taskId==null)
+				insert.setTaskId(0);
+			else
+				insert.setTaskId(Integer.parseInt(taskId));
 			insert.setProjectId(projectId);
 			insert.setTaskName(taskName);
 			insert.setTaskDescription(taskDisc);
@@ -416,6 +421,7 @@ public class MasterController {
 			insert.setDeveloperId(devlprId);
 			insert.setTaskTypeId(10);
 			insert.setAssignedBy(login.getEmployee().getEmpId());
+			insert.setDevStatus(1);
 			insertList.add(insert);
 			
 			
@@ -428,6 +434,41 @@ public class MasterController {
 		}
 
 		return "redirect:/assignSpecialTask";
+	}
+	
+	@RequestMapping(value = "/editSpecialTask/{taskId}", method = RequestMethod.GET)
+	public ModelAndView editSpecialTask(@PathVariable int taskId, HttpServletRequest request, HttpServletResponse response) {
+
+		ModelAndView model = new ModelAndView("masters/assignSpecialTask");
+		try
+		{
+			
+			MultiValueMap<String , Object> map = new LinkedMultiValueMap<String, Object>();
+			map.add("taskId", taskId);
+			
+			Task  task = rest.postForObject(Constants.url + "masters/getTaskById",map,
+					Task .class);
+			model.addObject("task", task);
+			 
+			GetProjects[] projArray = rest.getForObject(Constants.url + "masters/getProjectList",
+					GetProjects[].class);
+
+			List<GetProjects> projList = new ArrayList<GetProjects>(Arrays.asList(projArray));
+
+			model.addObject("projList", projList);
+			
+			Employee[] Employee = rest.getForObject(Constants.url + "/masters/getAllEmpList", 
+					Employee[].class); 
+			List<Employee> empList = new ArrayList<Employee>(Arrays.asList(Employee));
+			
+			model.addObject("empList", empList);
+			
+		}catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+
+		return model;
 	}
 
 }

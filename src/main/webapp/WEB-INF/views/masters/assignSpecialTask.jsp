@@ -63,6 +63,14 @@
 									<div class="col-md-3">
 									 <select id="projectId" name="projectId" class="form-control chosen" required>
 									 <option value=""></option>
+									 
+											 <c:forEach items="${projList}" var="projList" varStatus="count">
+													 <c:choose>
+													 	<c:when test="${projList.projectId==task.projectId}">
+													 		 <option value="${projList.projectId}" selected>${projList.projectName}</option>
+													 	</c:when>
+													 </c:choose> 
+											</c:forEach>
 										<c:forEach items="${projList}" var="projList" varStatus="count">
 													 <option value="${projList.projectId}">${projList.projectName}</option>
 												</c:forEach>
@@ -78,7 +86,8 @@
 							
 								<div class="col-md-2">Task Name*</div>
 									<div class="col-md-3">
-									<input type="text" id="taskName" name="taskName" class="form-control"   placeholder=" Task Name " required/>
+									<input type="text" id="taskName" value="${task.taskName}" name="taskName" class="form-control"   placeholder=" Task Name " required/>
+									<input type="hidden" id="taskId" value="${task.taskId}" name="taskId" />
 									</div>
 									<div class="col-md-1"></div>
 									
@@ -86,6 +95,14 @@
 									<div class="col-md-3">
 									 <select id="devlprId" name="devlprId" class="form-control chosen" required>
 									 <option value=""></option>
+									 
+									 <c:forEach items="${empList}" var="empList" varStatus="count">
+													 <c:choose>
+													 	<c:when test="${empList.empId==task.developerId}">
+													 		 <option value="${empList.empId}" selected>${empList.empName}</option>
+													 	</c:when>
+													 </c:choose> 
+											</c:forEach>
 										<c:forEach items="${empList}" var="empList" varStatus="count">
 													 <option value="${empList.empId}">${empList.empName}</option>
 												</c:forEach>
@@ -99,13 +116,13 @@
 							
 								<div class="col-md-2">Task Description*</div>
 									<div class="col-md-3">
-									<input type="text" id="taskDisc" name="taskDisc" class="form-control"   placeholder="Task Description " required/>
+									<input type="text" id="taskDisc" value="${task.taskDescription}" name="taskDisc" class="form-control"   placeholder="Task Description " required/>
 									</div>
 									<div class="col-md-1"></div>
 									
 								<div class="col-md-2">Task Hours*</div>
 									<div class="col-md-3">
-									<input type="text" id="taskHours" name="taskHours" class="form-control"   placeholder=" Task Hours " required/>
+									<input type="text" id="taskHours" value="${task.taskPlannedHrs}" name="taskHours" class="form-control"   placeholder=" Task Hours " required/>
 									</div>
 								
 				 

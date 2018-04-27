@@ -31,7 +31,7 @@
 		<div class="page-title">
 			<div>
 				<h1>
-					<i class="fa fa-file-o"></i>Form List
+					<i class="fa fa-file-o"></i>Special Task List
 				</h1>
 				
 				<!-- <h4>Bill for franchises</h4> -->
@@ -44,7 +44,7 @@
 		<div class="box" id="pending">
 			<div class="box-title">
 				<h3>
-					<i class="fa fa-bars"></i>Form List
+					<i class="fa fa-bars"></i>Special Task List
 				</h3>
 				<div class="box-tool">
 				<a href="${pageContext.request.contextPath}/assignSpecialTask">Assign Special Task</a> <a data-action="collapse" href="#"><i
@@ -82,10 +82,12 @@
 											<thead>
 												<tr>
 													<th style="width: 18px">Sr No</th>
-													<th>Module Name</th>
-													<th>Form Name</th>
-													<th>Type</th> 
-													<th>Action</th>  
+													<th>Task Name</th>
+													<th>Task Description</th>
+													<th>Task Hours</th> 
+													<th>Assign To</th> 
+													<th>Status</th>   
+													<th>Action</th> 
 												</tr>
 											</thead>
 											<tbody>
@@ -202,13 +204,22 @@
 										data,
 										function(key, itemList) {
 											
-											 
+											 var sts;
 											var tr = $('<tr></tr>');
 												tr.append($('<td></td>').html(key+1));
-												tr.append($('<td></td>').html(itemList.moduleName));
-											  	tr.append($('<td></td>').html(itemList.formName));
-											  	tr.append($('<td></td>').html(itemList.formTypeName)) 
-											  	tr.append($('<td></td>').html(' <a href="${pageContext.request.contextPath}/assignTask/'+itemList.formId+'" class="btn bnt-primary"> <i class="fa fa-list"></i></a> ')); 
+												tr.append($('<td></td>').html(itemList.taskName));
+											  	tr.append($('<td></td>').html(itemList.taskDescription));
+											  	tr.append($('<td></td>').html(itemList.taskPlannedHrs)) ;
+											  	tr.append($('<td></td>').html(itemList.remarksByDev)) ;
+											  	if(itemList.devStatus==1)
+											  		sts="Assign";
+											  	else if(itemList.devStatus==2)
+											  		sts="Start";
+											  	else if(itemList.devStatus==3)
+											  		sts="Complete";
+											  	tr.append($('<td></td>').html(sts));
+											  	tr.append($('<td></td>').html(' <a href="${pageContext.request.contextPath}/editSpecialTask/'+itemList.taskId+'"><span class="glyphicon glyphicon-edit" ></span></a>')); 
+												
 												$('#table1 tbody').append(tr);
 											 
 
