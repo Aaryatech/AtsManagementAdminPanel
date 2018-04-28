@@ -117,7 +117,7 @@ public class HomeController {
 
 			// int developerId = Integer.parseInt(request.getParameter("developerId"));
 			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
-			map.add("developerId", "1");
+			map.add("developerId", "2");
 			GetTask[] taskList = rest.postForObject(Constants.url + "masters/allTaskByDeveloperId", map,
 					GetTask[].class);
 
@@ -202,13 +202,14 @@ public class HomeController {
 	@RequestMapping(value = "/inprogressTaskDetails/{taskId}", method = RequestMethod.GET)
 	public ModelAndView inprogressTaskDetails(@PathVariable int taskId) {
 		ModelAndView model = new ModelAndView("project/inprogressTaskDetails");
+		
 		RestTemplate restTemplate = new RestTemplate();
 		MultiValueMap<String, Object> vars = new LinkedMultiValueMap<String, Object>();
 
 		vars.add("taskId", taskId);
 
-		GetTask taskList = restTemplate.postForObject(Constants.url + "/masters/getTaskDetailsByTaskId", vars,
-				GetTask.class);
+		GetTaskList taskList = restTemplate.postForObject(Constants.url + "/masters/getTaskDetailsByTaskId", vars,
+				GetTaskList.class);
 		// masters/getTaskDetailsByTaskId
 		model.addObject("taskList", taskList);
 		return model;
