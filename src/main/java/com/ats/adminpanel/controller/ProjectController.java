@@ -6,7 +6,8 @@ import java.util.Arrays;
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
- 
+import javax.servlet.http.HttpSession;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
@@ -22,6 +23,7 @@ import com.ats.adminpanel.model.FormType;
 import com.ats.adminpanel.model.Forms;
 import com.ats.adminpanel.model.GetModuleProject;
 import com.ats.adminpanel.model.GetProjects;
+import com.ats.adminpanel.model.LoginResponse;
 import com.ats.adminpanel.model.Module;
 import com.ats.adminpanel.model.Project;
 import com.ats.adminpanel.model.Task;
@@ -80,8 +82,7 @@ public class ProjectController {
 			proj.setDevPer("");
 			proj.setProjectAllocatedTo(empAlloc);
 			proj.setProjectCost(cost);
-			proj.setProjectDescription(projDesc);
-			proj.setProjectEndDate("");
+			proj.setProjectDescription(projDesc); 
 			proj.setProjectName(projName);
 			proj.setProjectStartDate(DateConvertor.convertToYMD(startDate));
 			proj.setReferenceBy(refBy);
@@ -328,6 +329,36 @@ String modId=null;
 
 		}
 		return "redirect:/showAddNewForm/"+projId+"/"+projName+"/"+modName+"/"+modId;
+	}
+	
+	
+	@RequestMapping(value = "/projectManagementTask/{projectId}", method = RequestMethod.GET)
+	public ModelAndView editEmp(@PathVariable int projectId, HttpServletRequest request, HttpServletResponse response) {
+
+		ModelAndView model = new ModelAndView("project/projectManagementTask");
+		try
+		{
+			HttpSession session = request.getSession();
+			LoginResponse login = (LoginResponse) session.getAttribute("UserDetail"); 
+			System.out.println("user Id "+ login.getEmployee().getEmpId());
+			
+			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+			map.add("projectId", projectId);
+			/*Employee editEmployee = rest.postForObject(Constants.url + "/masters/employeeByEmpId",map,
+					Employee.class); 
+			model.addObject("editEmployee", editEmployee);*/
+			
+			Employee[] Employee = restTemplate.getForObject(Constants.url + "/masters/getAllEmpList", 
+					Employee[].class); 
+			List<Employee> empList = new ArrayList<Employee>(Arrays.asList(Employee)); 
+			model.addObject("empList", empList);
+			
+		}catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+
+		return model;
 	}
 
 }

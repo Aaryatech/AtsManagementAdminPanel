@@ -94,6 +94,7 @@ public class MasterController {
 			employee.setEmpPerHrRate(perHour);
 			employee.setEmpType(empType);
 			employee.setEmpPwd(password);
+			employee.setIsUsed(1);
 			
 			Employee res = rest.postForObject(Constants.url + "/masters/saveEmployee",employee,
 					Employee.class); 
