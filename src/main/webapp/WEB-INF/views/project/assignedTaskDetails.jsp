@@ -102,9 +102,7 @@
 						</div>
 
 						<div class=" box-content">
-							<form id="addSupplier"
-								action="${pageContext.request.contextPath}/insertEmployee"
-								method="post">
+							
 
 								<div class="box-content">
 
@@ -175,23 +173,21 @@
 									<div class="col-md-2">Assigned By</div>
 									<div class="col-md-3">
 										<input type="text" name="joiningDate"
-											value="${taskList.empName}"
-											placeholder="Assigned By" id="joiningDate"
-											class="form-control" readonly />
+											value="${taskList.empName}" placeholder="Assigned By"
+											id="joiningDate" class="form-control" readonly />
 									</div>
 								</div>
 								<br>
 
 								<div class=" box-content">
 									<div class="col-md-12" style="text-align: center">
-										<input type="submit" class="btn btn-info" value="Start"
-											id="submit">
 
-
-
+										<a href="${pageContext.request.contextPath}/startAssignTask/${assignTask.taskId}">
+											<input type="submit" class="btn btn-info" value="Start"
+											id="submit"></a>
 									</div>
 								</div>
-							</form>
+						
 
 
 						</div>
