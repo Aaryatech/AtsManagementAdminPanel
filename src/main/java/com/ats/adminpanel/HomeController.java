@@ -3,8 +3,10 @@ package com.ats.adminpanel;
 import java.io.IOException;
 
 import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -117,7 +119,7 @@ public class HomeController {
 
 			// int developerId = Integer.parseInt(request.getParameter("developerId"));
 			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
-			map.add("developerId", "2");
+			map.add("developerId", "1");
 			GetTask[] taskList = rest.postForObject(Constants.url + "masters/allTaskByDeveloperId", map,
 					GetTask[].class);
 
@@ -166,6 +168,41 @@ public class HomeController {
 
 	}
 
+	@RequestMapping(value = "/startAssignTask/{taskId}", method = RequestMethod.GET)
+	public ModelAndView startAssignTask(@PathVariable int taskId) {
+
+		ModelAndView model = new ModelAndView("project/homePage");
+
+		Date date = Calendar.getInstance().getTime();
+
+		DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+
+		DateFormat dateTimeFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+		String strDate = dateFormat.format(date);
+		String strDateTime = dateTimeFormat.format(date);
+		System.out.println(" str date " + strDate);
+
+		System.out.println(" str date time " + strDateTime);
+		GetTaskList getTaskList =new GetTaskList();
+		
+		RestTemplate restTemplate = new RestTemplate();
+		MultiValueMap<String, Object> vars = new LinkedMultiValueMap<String, Object>();
+
+		vars.add("taskId", taskId);
+		
+		GetTaskList taskList = restTemplate.postForObject(Constants.url + "/masters/getTaskDetailsByTaskId", vars,
+				GetTaskList.class);
+		
+		getTaskList.setStartDate(strDate);
+		getTaskList.setStartDatetime(strDateTime);
+		getTaskList.setDevStatus(2);
+		
+		
+
+		return model;
+
+	}
+
 	@RequestMapping(value = "/assignedTaskDetails/{taskId}", method = RequestMethod.GET)
 	public ModelAndView assignedTaskDetails(@PathVariable int taskId) {
 		ModelAndView model = new ModelAndView("project/assignedTaskDetails");
@@ -181,13 +218,15 @@ public class HomeController {
 		return model;
 	}
 
-	@RequestMapping(value = "/showTaskDeatils", method = RequestMethod.GET)
-	public ModelAndView showtaskDeatils(HttpServletRequest request, HttpServletResponse response) {
-
-		ModelAndView model = new ModelAndView("project/taskDetails");
-		return model;
-
-	}
+	/*
+	 * @RequestMapping(value = "/showTaskDeatils", method = RequestMethod.GET)
+	 * public ModelAndView showtaskDeatils(HttpServletRequest request,
+	 * HttpServletResponse response) {
+	 * 
+	 * ModelAndView model = new ModelAndView("project/taskDetails"); return model;
+	 * 
+	 * }
+	 */
 
 	@RequestMapping(value = "/showInprogessPage", method = RequestMethod.GET)
 	public ModelAndView showInprogessPage(HttpServletRequest request, HttpServletResponse response) {
@@ -202,7 +241,7 @@ public class HomeController {
 	@RequestMapping(value = "/inprogressTaskDetails/{taskId}", method = RequestMethod.GET)
 	public ModelAndView inprogressTaskDetails(@PathVariable int taskId) {
 		ModelAndView model = new ModelAndView("project/inprogressTaskDetails");
-		
+
 		RestTemplate restTemplate = new RestTemplate();
 		MultiValueMap<String, Object> vars = new LinkedMultiValueMap<String, Object>();
 
