@@ -139,6 +139,7 @@
 													<th>Com. Per</th>
 													<th class="text-center">Status</th>
 													<th>End Date</th>
+													<th>Action</th>
 												</tr>
 											</thead>
 											<tbody>
@@ -154,7 +155,8 @@
 														<td>${proj.compPer}</td>
 														<td>${proj.status}</td>
 														<td>${proj.projectEndDate}</td>
-
+<td><a href="${pageContext.request.contextPath}/projectManagementTask/${proj.projectId}" class="action_btn" >
+						<abbr title="Detail"><i class="fa fa-list"></i></abbr></a></td>
 													</tr>
 												</c:forEach>
 
