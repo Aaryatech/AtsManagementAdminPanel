@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.ModelAndView;
 import com.ats.adminpanel.common.Constants;
+import com.ats.adminpanel.common.DateConvertor;
 import com.ats.adminpanel.model.Employee;
 import com.ats.adminpanel.model.FormType;
 import com.ats.adminpanel.model.Forms;
@@ -82,7 +83,7 @@ public class ProjectController {
 			proj.setProjectDescription(projDesc);
 			proj.setProjectEndDate("");
 			proj.setProjectName(projName);
-			proj.setProjectStartDate(startDate);
+			proj.setProjectStartDate(DateConvertor.convertToYMD(startDate));
 			proj.setReferenceBy(refBy);
 			proj.setStatus(0);
 
@@ -257,7 +258,7 @@ String modId=null;
 				}
 
 				if (Integer.parseInt(webSerComp) != 0) {
-					String taskName = request.getParameter("uicname");
+					String taskName = request.getParameter("webcomname");
 
 					Task task = new Task();
 
@@ -271,7 +272,7 @@ String modId=null;
 
 				}
 				if (Integer.parseInt(consumComp) != 0) {
-					String taskName = request.getParameter("uicname");
+					String taskName = request.getParameter("conscompname");
 
 					Task task = new Task();
 
@@ -286,7 +287,7 @@ String modId=null;
 				}
 
 				if (Integer.parseInt(unitTestComp) != 0) {
-					String taskName = request.getParameter("uicname");
+					String taskName = request.getParameter("testcomname");
 
 					Task task = new Task();
 
@@ -300,7 +301,7 @@ String modId=null;
 				}
 
 				if (Integer.parseInt(spFunComp) != 0) {
-					String taskName = request.getParameter("uicname");
+					String taskName = request.getParameter("spcompname");
 
 					Task task = new Task();
 
