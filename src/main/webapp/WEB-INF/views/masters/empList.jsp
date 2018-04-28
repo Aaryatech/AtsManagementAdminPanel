@@ -2,13 +2,13 @@
 	pageEncoding="UTF-8"%><%@ taglib
 	uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
-	 
 
-	<jsp:include page="/WEB-INF/views/include/header.jsp"></jsp:include>
-	<body>
-	
-	 
-<c:url var="allRecordwithDate" value="/allRecordwithDate"></c:url> 
+
+<jsp:include page="/WEB-INF/views/include/header.jsp"></jsp:include>
+<body>
+
+
+	<c:url var="allRecordwithDate" value="/allRecordwithDate"></c:url>
 
 
 	<!-- BEGIN Sidebar -->
@@ -33,13 +33,13 @@
 				<h1>
 					<i class="fa fa-file-o"></i>Employee List
 				</h1>
-				
+
 				<!-- <h4>Bill for franchises</h4> -->
 			</div>
 		</div>
 		<!-- END Page Title -->
 
-		
+
 		<!-- BEGIN Main Content -->
 		<div class="box" id="pending">
 			<div class="box-title">
@@ -47,70 +47,72 @@
 					<i class="fa fa-bars"></i>Employee List
 				</h3>
 				<div class="box-tool">
-				<a href="${pageContext.request.contextPath}/addEmployee">Add Employee</a> <a data-action="collapse" href="#"><i
-									class="fa fa-chevron-up"></i></a>
+					<a href="${pageContext.request.contextPath}/addEmployee">Add
+						Employee</a> <a data-action="collapse" href="#"><i
+						class="fa fa-chevron-up"></i></a>
 				</div>
 
-			</div> 
-				<div class=" box-content">
-				 
-					 <div class="box-content">
+			</div>
+			<div class=" box-content">
 
-									<br /> <br />
-									<div class="clearfix"></div>
-									<div class="table-responsive" style="border: 0">
-										<table class="table table-advance" id="table1">
-											<thead>
-												<tr>
-													<th style="width: 18px">Sr No</th>
-													<th>Employee Name</th>
-													<th>Education</th>
-													<th>Mobile No</th> 
-													<th>Joining Date</th> 
-													<th>Action</th>
-												</tr>
-											</thead>
-											<tbody>
-												<c:forEach items="${empList}" var="empList" varStatus="count">
-													<tr class="table-flag-blue">
-														<td>${count.index+1}</td>
-														<td>${empList.empName}</td>
-														<td>${empList.empEdu}</td>
-														<td>${empList.empMobile}</td>
-														<td>${empList.empJoiningDate}</td>  
-														<td><a href="${pageContext.request.contextPath}/editEmp/${empList.empId}"><span class="glyphicon glyphicon-edit" ></span></a>
-							
-							<a href="${pageContext.request.contextPath}/deleteEmp/${empList.empId}"
-													    onClick="return confirm('Are you sure want to delete this record');"><span
-														class="glyphicon glyphicon-remove"></span></a></td>
-													</tr>
-												</c:forEach>
+				<div class="box-content">
+
+					<br /> <br />
+					<div class="clearfix"></div>
+					<div class="table-responsive" style="border: 0">
+						<table class="table table-advance" id="table1">
+							<thead>
+								<tr>
+									<th style="width: 18px">Sr No</th>
+									<th>Employee Name</th>
+									<th>Education</th>
+									<th>Mobile No</th>
+									<th>Joining Date</th>
+									<th>Action</th>
+								</tr>
+							</thead>
+							<tbody>
+								<c:forEach items="${empList}" var="empList" varStatus="count">
+									<tr class="table-flag-blue">
+										<td>${count.index+1}</td>
+										<td>${empList.empName}</td>
+										<td>${empList.empEdu}</td>
+										<td>${empList.empMobile}</td>
+										<td>${empList.empJoiningDate}</td>
+										<td><a
+											href="${pageContext.request.contextPath}/editEmp/${empList.empId}"><span
+												class="glyphicon glyphicon-edit"></span></a> <a
+											href="${pageContext.request.contextPath}/deleteEmp/${empList.empId}"
+											onClick="return confirm('Are you sure want to delete this record');"><span
+												class="glyphicon glyphicon-remove"></span></a></td>
+									</tr>
+								</c:forEach>
 
 
-											</tbody>
-										</table>
-									</div>
-								</div>
+							</tbody>
+						</table>
+					</div>
+				</div>
+
+			</div>
+
+
 
 		</div>
-		
-				 
-	 
-	</div>
-	 
+
 	</div>
 	<!-- END Main Content -->
 
 	<footer>
-	<p>2018 © SONA ELECTRICALS.</p>
+		<p>2018 © SONA ELECTRICALS.</p>
 	</footer>
 
 	<a id="btn-scrollup" class="btn btn-circle btn-lg" href="#"><i
 		class="fa fa-chevron-up"></i></a>
 
- 
 
-	
+
+
 
 	<!--basic scripts-->
 	<script
@@ -165,10 +167,12 @@
 
 	<!--flaty scripts-->
 	<script src="${pageContext.request.contextPath}/resources/js/flaty.js"></script>
-	 <script type="text/javascript" src="${pageContext.request.contextPath}/resources/assets/data-tables/jquery.dataTables.js"></script>
-        <script type="text/javascript" src="${pageContext.request.contextPath}/resources/assets/data-tables/bootstrap3/dataTables.bootstrap.js"></script>
-		
-		
-		
+	<script type="text/javascript"
+		src="${pageContext.request.contextPath}/resources/assets/data-tables/jquery.dataTables.js"></script>
+	<script type="text/javascript"
+		src="${pageContext.request.contextPath}/resources/assets/data-tables/bootstrap3/dataTables.bootstrap.js"></script>
+
+
+
 </body>
 </html>
