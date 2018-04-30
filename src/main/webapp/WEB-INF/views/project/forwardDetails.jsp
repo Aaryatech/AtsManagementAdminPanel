@@ -100,7 +100,8 @@
 							</div>
 
 						</div>
-
+			<form id="addSupplier" action="${pageContext.request.contextPath}/forwordTaskToOtherDevloper"
+								method="post">
 						<div class=" box-content">
 
 
@@ -110,8 +111,7 @@
 								<div class="col-md-3">
 									<input type="text" id="empName" name="empName"
 										class="form-control" value="${taskList.projectName}"
-										placeholder=" Project Name " readonly /> <input type="hidden"
-										name="empId" value="${editEmployee.empId}" />
+										placeholder=" Project Name " readonly />  
 								</div>
 
 								<div class="col-md-1"></div>
@@ -182,39 +182,39 @@
 							<div class="box-content">
 								<div class="col-md-2">Forwarded To</div>
 								<div class="col-md-3">
-									<select id="devlpr${taskList.taskId}"
-										name="devlpr${taskList.taskId}" class="form-control chosen">
+									<select id="empId"
+										name="empId" class="form-control chosen" required>  
+										<option value="" selected></option>
 										<c:forEach items="${empList}" var="empList" varStatus="count">
 											<c:choose>
-												<c:when test="${empList.empId==taskList.developerId}">
+												<c:when test="${taskList.developerId==empList.empId}">
 													<option value="${empList.empId}" selected>${empList.empName}</option>
 												</c:when>
+												<c:otherwise>
+													<option value="${empList.empId}">${empList.empName}</option>
+												</c:otherwise>
 											</c:choose>
-										</c:forEach>
-
-										<option value=""></option>
-										<c:forEach items="${empList}" var="empList" varStatus="count">
-											<option value="${empList.empId}">${empList.empName}</option>
+											 
 										</c:forEach>
 									</select>
 								</div>
-							</div>
+							</div><br>
 
 
 							<div class=" box-content">
 								<div class="col-md-12" style="text-align: center">
 
-									<a
-										href="${pageContext.request.contextPath}/forwardToEmployee/${assignTask.taskId}">
+									 
 										<input type="submit" class="btn btn-info" value="Forward"
 										id="submit">
-									</a>
+									 
 								</div>
 							</div>
 
 
 
 						</div>
+						</form>
 					</div>
 
 

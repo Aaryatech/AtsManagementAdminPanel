@@ -51,7 +51,7 @@ public class HomeController {
 	GetTaskList assignedTaskDetails = new GetTaskList();
 	GetTaskList inprogressTaskDetails = new GetTaskList();
 	List<GetTask> getTaskList = new ArrayList<GetTask>();
-
+	GetTaskList forwardTaskDetails = new GetTaskList();
 	
 	@RequestMapping(value = "/", method = RequestMethod.GET)
 	public String home(Locale locale, Model model) {
@@ -132,9 +132,11 @@ public class HomeController {
 		getTaskList = new ArrayList<GetTask>();
 		try {
 
-			// int developerId = Integer.parseInt(request.getParameter("developerId"));
+			HttpSession session = request.getSession();
+			LoginResponse login = (LoginResponse) session.getAttribute("UserDetail"); 
+			System.out.println("user Id "+ login.getEmployee().getEmpId());
 			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
-			map.add("developerId", "1");
+			map.add("developerId", login.getEmployee().getEmpId());
 			GetTask[] taskList = rest.postForObject(Constants.url + "masters/allTaskByDeveloperId", map,
 					GetTask[].class);
 
@@ -352,15 +354,56 @@ public class HomeController {
 
 		vars.add("taskId", taskId);
 
-		GetTaskList taskList = restTemplate.postForObject(Constants.url + "/masters/getTaskDetailsByTaskId", vars,
+		 forwardTaskDetails = restTemplate.postForObject(Constants.url + "/masters/getTaskDetailsByTaskId", vars,
 				GetTaskList.class);
 		Employee[] Employee = rest.getForObject(Constants.url + "/masters/getAllEmpList", 
 				Employee[].class); 
 		List<Employee> empList = new ArrayList<Employee>(Arrays.asList(Employee));
 		// masters/getTaskDetailsByTaskId
-		model.addObject("taskList", taskList);
+		model.addObject("taskList", forwardTaskDetails);
 		model.addObject("empList", empList);
 		return model;
+	}
+	
+	@RequestMapping(value = "/forwordTaskToOtherDevloper", method = RequestMethod.POST)
+	public String forwordTaskToOtherDevloper(HttpServletRequest request, HttpServletResponse response) {
+		
+		try {
+			int empId = Integer.parseInt(request.getParameter("empId"));
+			 
+			
+			Date date = new Date();
+
+			DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+
+			DateFormat dateTimeFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+			String endDate = dateFormat.format(date);
+			String endDateTime = dateTimeFormat.format(date);
+			System.out.println(" endDate " + endDate);
+
+			System.out.println(" endDateTime " + endDateTime);
+			 
+			
+			RestTemplate restTemplate = new RestTemplate();
+			
+			forwardTaskDetails.setStartDate(DateConvertor.convertToYMD(forwardTaskDetails.getStartDate()));
+			forwardTaskDetails.setDeveloperId(empId); 
+			
+			List<GetTaskList> updateForword = new ArrayList<GetTaskList>();
+			updateForword.add(forwardTaskDetails);
+		 
+			List<Task> res = restTemplate.postForObject(Constants.url + "/masters/saveTask", updateForword,
+					List.class);
+			
+			System.out.println("res " + res);
+		}catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+
+		 
+		return "redirect:/homePage";
+
 	}
 
 

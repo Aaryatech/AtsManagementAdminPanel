@@ -62,10 +62,10 @@
 
 
 	<div class="container" id="main-container">
-
+<jsp:include page="/WEB-INF/views/include/header.jsp"></jsp:include>
 		<!-- BEGIN Sidebar -->
 		<div id="sidebar" class="navbar-collapse collapse">
-
+<jsp:include page="/WEB-INF/views/include/navigation.jsp"></jsp:include>
 
 			<div id="sidebar-collapse" class="visible-lg">
 				<i class="fa fa-angle-double-left"></i>
