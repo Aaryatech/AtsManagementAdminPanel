@@ -157,9 +157,9 @@
 					<li> 
 					<a href="${pageContext.request.contextPath}/showAddNewModule">Add Module</a>
 					</li>
-					<li> 
+					<%-- <li> 
 					<a href="${pageContext.request.contextPath}/showAddNewForm">Add Form</a>
-					</li>
+					</li> --%>
 					
 					<%-- <li> 
 					<a href="${pageContext.request.contextPath}/addGroup">Add Group</a>
