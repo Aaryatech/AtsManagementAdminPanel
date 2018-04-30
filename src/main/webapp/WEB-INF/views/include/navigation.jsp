@@ -136,8 +136,8 @@
 						<li>
 					</c:otherwise>
 				</c:choose>
-			<%-- <c:choose>
-						<c:when test="${sessionScope.employee.empType==2}">	 --%>
+		  <c:choose>
+						<c:when test="${sessionScope.employee.empType==2}"> 
 				<a href="#" class="dropdown-toggle"> <i class="fa fa-list"></i>
 					<span>Masters</span> <b class="arrow fa fa-angle-right"></b>
 				</a>
@@ -199,8 +199,8 @@
 					
 				
 					</ul>
-					<%-- </c:when>
-				</c:choose>  --%>
+					  </c:when>
+				</c:choose>   
 					
 					
 				<%--	<a href="#" class="dropdown-toggle"> <i class="fa fa-list"></i>
