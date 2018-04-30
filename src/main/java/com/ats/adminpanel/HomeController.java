@@ -29,6 +29,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.ats.adminpanel.common.Constants;
 import com.ats.adminpanel.common.DateConvertor;
+import com.ats.adminpanel.model.Employee;
 import com.ats.adminpanel.model.GetTask;
 import com.ats.adminpanel.model.GetTaskList;
 import com.ats.adminpanel.model.LoginResponse;
@@ -49,6 +50,8 @@ public class HomeController {
 	List<GetTask> completed = new ArrayList<GetTask>();
 	GetTaskList assignedTaskDetails = new GetTaskList();
 	GetTaskList inprogressTaskDetails = new GetTaskList();
+	List<GetTask> getTaskList = new ArrayList<GetTask>();
+
 	
 	@RequestMapping(value = "/", method = RequestMethod.GET)
 	public String home(Locale locale, Model model) {
@@ -126,7 +129,7 @@ public class HomeController {
 	public ModelAndView viewBill(HttpServletRequest request, HttpServletResponse response) {
 
 		ModelAndView model = new ModelAndView("project/homePage");
-		List<GetTask> getTaskList = new ArrayList<GetTask>();
+		getTaskList = new ArrayList<GetTask>();
 		try {
 
 			// int developerId = Integer.parseInt(request.getParameter("developerId"));
@@ -332,17 +335,17 @@ public class HomeController {
 	public ModelAndView showForwardPage(HttpServletRequest request, HttpServletResponse response) {
 
 		ModelAndView model = new ModelAndView("project/forwardList");
+	 
+		System.out.println("getTaskList" + getTaskList.size());
+		model.addObject("forward", getTaskList);
 
-		model.addObject("inprogress", inprogress);
 		return model;
 
 	}
 
-
-
 	@RequestMapping(value = "/forwardTaskDetails/{taskId}", method = RequestMethod.GET)
 	public ModelAndView forwardTaskDetails(@PathVariable int taskId) {
-		ModelAndView model = new ModelAndView("project/inprogressTaskDetails");
+		ModelAndView model = new ModelAndView("project/forwardDetails");
 
 		RestTemplate restTemplate = new RestTemplate();
 		MultiValueMap<String, Object> vars = new LinkedMultiValueMap<String, Object>();
@@ -351,10 +354,16 @@ public class HomeController {
 
 		GetTaskList taskList = restTemplate.postForObject(Constants.url + "/masters/getTaskDetailsByTaskId", vars,
 				GetTaskList.class);
+		Employee[] Employee = rest.getForObject(Constants.url + "/masters/getAllEmpList", 
+				Employee[].class); 
+		List<Employee> empList = new ArrayList<Employee>(Arrays.asList(Employee));
 		// masters/getTaskDetailsByTaskId
 		model.addObject("taskList", taskList);
+		model.addObject("empList", empList);
 		return model;
 	}
+
+
 
 	@RequestMapping(value = "/showCompletedPage", method = RequestMethod.GET)
 	public ModelAndView showCompletedPage(HttpServletRequest request, HttpServletResponse response) {
