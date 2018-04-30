@@ -46,7 +46,7 @@ public class HomeController {
 	List<GetTask> assignedTask = new ArrayList<GetTask>();
 	List<GetTask> inprogress = new ArrayList<GetTask>();
 	List<GetTask> completed = new ArrayList<GetTask>();
-
+	GetTaskList assignedTaskDetails = new GetTaskList();
 	@RequestMapping(value = "/", method = RequestMethod.GET)
 	public String home(Locale locale, Model model) {
 		logger.info("Welcome home! The client locale is {}.", locale);
@@ -192,19 +192,20 @@ public class HomeController {
 		System.out.println(" str date " + strDate);
 
 		System.out.println(" str date time " + strDateTime);
-		GetTaskList getTaskList =new GetTaskList();
+		 
 		
 		RestTemplate restTemplate = new RestTemplate();
-		MultiValueMap<String, Object> vars = new LinkedMultiValueMap<String, Object>();
+	 
 
-		vars.add("taskId", taskId);
+		assignedTaskDetails.setStartDate(strDate);
+		assignedTaskDetails.setStartDatetime(strDateTime);
+		assignedTaskDetails.setDevStatus(2);
+		List<GetTaskList> update = new ArrayList<GetTaskList>();
+		update.add(assignedTaskDetails);
+		List<Task> res = restTemplate.postForObject(Constants.url + "/masters/saveTask", update,
+				List.class);
 		
-		GetTaskList taskList = restTemplate.postForObject(Constants.url + "/masters/getTaskDetailsByTaskId", vars,
-				GetTaskList.class);
-		
-		getTaskList.setStartDate(strDate);
-		getTaskList.setStartDatetime(strDateTime);
-		getTaskList.setDevStatus(2);
+		System.out.println("res " + res);
 		
 		
 
@@ -220,10 +221,10 @@ public class HomeController {
 
 		vars.add("taskId", taskId);
 
-		GetTaskList taskList = restTemplate.postForObject(Constants.url + "/masters/getTaskDetailsByTaskId", vars,
+		  assignedTaskDetails = restTemplate.postForObject(Constants.url + "/masters/getTaskDetailsByTaskId", vars,
 				GetTaskList.class);
 		// masters/getTaskDetailsByTaskId
-		model.addObject("taskList", taskList);
+		model.addObject("taskList", assignedTaskDetails);
 		return model;
 	}
 
