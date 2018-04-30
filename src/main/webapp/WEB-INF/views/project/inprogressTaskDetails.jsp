@@ -189,7 +189,7 @@
 									<div class="col-md-3">
 										<input type="text" name="dstatus"
 											 value="${taskList.devComplPer}"
-											placeholder="Status in %" id="dstatus"
+											placeholder="Status in %" id="dstatus" onchange="requiredActualHours()"
 											class="form-control" required>
 									</div>
 								</div>
@@ -208,7 +208,15 @@
 											class="form-control" value="${taskList.remarksByDev}"
 											placeholder=" Remark " >  
 									</div>
-</div>
+									<div class="col-md-1"> </div>
+									<div class="col-md-2">Actual Required Hours</div>
+									<div class="col-md-3">
+										<input type="text" name="actualReqHours"
+										 
+											placeholder="Actual Required Hours" id="actualReqHours"
+											class="form-control" disabled required/> 
+									</div>
+								</div>
 
 								<br>
 								<div class=" box-content">
@@ -301,7 +309,20 @@
 	<script type="text/javascript"
 		src="${pageContext.request.contextPath}/resources/assets/bootstrap-daterangepicker/daterangepicker.js"></script>
 
+<script type="text/javascript">
+function requiredActualHours()
+{
+	var dstatus = document.getElementById("dstatus").value;
+	
+	if(dstatus=="100")
+		document.getElementById("actualReqHours").disabled = false;
+	else
+		document.getElementById("actualReqHours").disabled = true;
+	}
+	
+ 
 
+</script>
 
 
 </body>

@@ -416,6 +416,8 @@ public class MasterController {
 			else
 				insert.setTaskId(Integer.parseInt(taskId));
 			insert.setProjectId(projectId);
+			insert.setModuleId(1);
+			insert.setFormId(1);
 			insert.setTaskName(taskName);
 			insert.setTaskDescription(taskDisc);
 			insert.setTaskPlannedHrs(taskHours);
