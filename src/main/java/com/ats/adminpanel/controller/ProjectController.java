@@ -22,9 +22,12 @@ import com.ats.adminpanel.model.Employee;
 import com.ats.adminpanel.model.FormType;
 import com.ats.adminpanel.model.Forms;
 import com.ats.adminpanel.model.GetModuleProject;
+import com.ats.adminpanel.model.GetPhaseTask;
 import com.ats.adminpanel.model.GetProjects;
 import com.ats.adminpanel.model.LoginResponse;
 import com.ats.adminpanel.model.Module;
+import com.ats.adminpanel.model.PhaseTask;
+import com.ats.adminpanel.model.PhaseType;
 import com.ats.adminpanel.model.Project;
 import com.ats.adminpanel.model.Task;
 import com.ats.adminpanel.model.TaskType;
@@ -33,6 +36,7 @@ import com.ats.adminpanel.model.TaskType;
 public class ProjectController {
 	RestTemplate restTemplate = new RestTemplate();
 	MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+	List<GetProjects> projList = new ArrayList<GetProjects>();
 
 	@RequestMapping(value = "/showAddProject", method = RequestMethod.GET)
 	public ModelAndView showAddProject(HttpServletRequest request, HttpServletResponse response) {
@@ -45,7 +49,7 @@ public class ProjectController {
 
 		empList = new ArrayList<Employee>(Arrays.asList(empArray));
 
-		List<GetProjects> projList;
+		projList = new ArrayList<GetProjects>();
 
 		GetProjects[] projArray = restTemplate.getForObject(Constants.url + "masters/getProjectList",
 				GetProjects[].class);
@@ -341,17 +345,137 @@ String modId=null;
 			HttpSession session = request.getSession();
 			LoginResponse login = (LoginResponse) session.getAttribute("UserDetail"); 
 			System.out.println("user Id "+ login.getEmployee().getEmpId());
+			String projectName=null;
+			
+			for(int i = 0 ; i<projList.size();i++)
+			{
+				if(projList.get(i).getProjectId()==projectId)
+					projectName = projList.get(i).getProjectName();
+			}
+			model.addObject("projectName", projectName); 
+			model.addObject("projectId", projectId);
 			
 			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
 			map.add("projectId", projectId);
-			/*Employee editEmployee = rest.postForObject(Constants.url + "/masters/employeeByEmpId",map,
-					Employee.class); 
-			model.addObject("editEmployee", editEmployee);*/
+			GetPhaseTask[] getPhaseTask = restTemplate.postForObject(Constants.url + "/masters/getPhaseTaskListByProjectId",map,
+					GetPhaseTask[].class); 
+			List<GetPhaseTask> getPhaseTaskList = new ArrayList<GetPhaseTask>(Arrays.asList(getPhaseTask)); 
+			model.addObject("getPhaseTaskList", getPhaseTaskList); 
 			
 			Employee[] Employee = restTemplate.getForObject(Constants.url + "/masters/getAllEmpList", 
 					Employee[].class); 
 			List<Employee> empList = new ArrayList<Employee>(Arrays.asList(Employee)); 
 			model.addObject("empList", empList);
+			
+			PhaseType[] phaseType = restTemplate.getForObject(Constants.url + "/masters/getAllPhaseTypeList", 
+					PhaseType[].class); 
+			List<PhaseType> phaseTypeList = new ArrayList<PhaseType>(Arrays.asList(phaseType)); 
+			model.addObject("phaseTypeList", phaseTypeList);
+			
+		}catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+
+		return model;
+	}
+	
+	@RequestMapping(value = "/insertPhaseTask", method = RequestMethod.POST)
+	public String insertPhaseTask(HttpServletRequest request, HttpServletResponse response) {
+
+		 
+		int projectId = Integer.parseInt(request.getParameter("projectId"));
+		try {
+
+			
+			String tTaskPhaseId = request.getParameter("tTaskPhaseId");
+			int phaseId = Integer.parseInt(request.getParameter("phaseId"));
+			
+			String desc = request.getParameter("desc");
+			String expectedStartDate = request.getParameter("expectedStartDate");
+			String actualStartDate = request.getParameter("actualStartDate");
+			String expectedEndDate = request.getParameter("expectedEndDate");
+			String actualEndDate = request.getParameter("actualEndDate");
+			String expectedHours = request.getParameter("expectedHours");
+			String actualdHours = request.getParameter("actualdHours");
+
+			int empId = Integer.parseInt(request.getParameter("empId"));
+
+			PhaseTask insert = new PhaseTask();
+
+			if(tTaskPhaseId=="" || tTaskPhaseId==null)
+				insert.settTaskPhaseId(0);
+			else
+				insert.settTaskPhaseId(Integer.parseInt(tTaskPhaseId));
+			insert.setTaskPhaseId(phaseId);
+			insert.setTaskDesc(desc);
+			insert.setExpStartDate(DateConvertor.convertToYMD(expectedStartDate));
+			if(actualStartDate!="" || actualStartDate!=null)
+				insert.setActualStartDate(DateConvertor.convertToYMD(actualStartDate));
+			insert.setExpEndDate(DateConvertor.convertToYMD(expectedEndDate));
+			if(actualStartDate!="" || actualStartDate!=null)
+				insert.setAtcualEndDate(DateConvertor.convertToYMD(actualEndDate));
+			insert.setExpHrs(expectedHours);
+			insert.setActualHrs(actualdHours);
+			insert.setAssignedTo(empId);
+			insert.setProjectId(projectId);
+
+			PhaseTask res = restTemplate.postForObject(com.ats.adminpanel.common.Constants.url + "masters/savePhaseTask",
+					insert, PhaseTask.class); 
+			
+			
+			System.err.println("resss " + res.toString());
+		} catch (Exception e) {
+			System.err.println("Exc in Proj Insert " + e.getMessage());
+			e.printStackTrace();
+
+		}
+
+		return "redirect:/projectManagementTask/"+projectId;
+	}
+	
+	@RequestMapping(value = "/editPhaseTask/{tTaskPhaseId}/{projectId}", method = RequestMethod.GET)
+	public ModelAndView editPhaseTask(@PathVariable int tTaskPhaseId,@PathVariable int projectId, HttpServletRequest request, HttpServletResponse response) {
+
+		ModelAndView model = new ModelAndView("project/projectManagementTask");
+		try
+		{
+			HttpSession session = request.getSession();
+			LoginResponse login = (LoginResponse) session.getAttribute("UserDetail"); 
+			System.out.println("user Id "+ login.getEmployee().getEmpId());
+			String projectName=null;
+			
+			for(int i = 0 ; i<projList.size();i++)
+			{
+				if(projList.get(i).getProjectId()==projectId)
+					projectName = projList.get(i).getProjectName();
+			}
+			model.addObject("projectName", projectName); 
+			model.addObject("projectId", projectId);
+			
+			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+			map.add("projectId", projectId);
+			GetPhaseTask[] getPhaseTask = restTemplate.postForObject(Constants.url + "/masters/getPhaseTaskListByProjectId",map,
+					GetPhaseTask[].class); 
+			List<GetPhaseTask> getPhaseTaskList = new ArrayList<GetPhaseTask>(Arrays.asList(getPhaseTask)); 
+			model.addObject("getPhaseTaskList", getPhaseTaskList); 
+			
+			Employee[] Employee = restTemplate.getForObject(Constants.url + "/masters/getAllEmpList", 
+					Employee[].class); 
+			List<Employee> empList = new ArrayList<Employee>(Arrays.asList(Employee)); 
+			model.addObject("empList", empList);
+			
+			PhaseType[] phaseType = restTemplate.getForObject(Constants.url + "/masters/getAllPhaseTypeList", 
+					PhaseType[].class); 
+			List<PhaseType> phaseTypeList = new ArrayList<PhaseType>(Arrays.asList(phaseType)); 
+			model.addObject("phaseTypeList", phaseTypeList);
+			
+			
+			map = new LinkedMultiValueMap<String, Object>();
+			map.add("tTaskPhaseId", tTaskPhaseId);
+			PhaseTask phaseTask = restTemplate.postForObject(Constants.url + "/masters/phaseTaskById",map,
+					PhaseTask.class);
+			model.addObject("phaseTask", phaseTask);
 			
 		}catch(Exception e)
 		{

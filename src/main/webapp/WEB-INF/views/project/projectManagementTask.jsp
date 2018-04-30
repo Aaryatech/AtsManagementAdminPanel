@@ -101,16 +101,18 @@
 						</div>
 						
 						<div class=" box-content">
-							<form id="addSupplier" action="${pageContext.request.contextPath}/insertEmployee" method="post">
+							<form id="addSupplier" action="${pageContext.request.contextPath}/insertPhaseTask" method="post">
 							
 								<div class="box-content">
 							
 								<div class="col-md-2">Project Name</div>
 									<div class="col-md-3">
-									 <input id="projectId" name="projectId"  placeholder="Project Name"  class="form-control" disabled>
+									 <input id="projectName" type="text" name="projectName" value="${projectName}" placeholder="Project Name"  class="form-control" disabled>
 									 
 									</div>
-								 
+								 <input id="projectId" name="projectId" value="${projectId}" type="hidden"  >
+								 <input id="tTaskPhaseId" name="tTaskPhaseId" value="${phaseTask.tTaskPhaseId}" type="hidden"  >
+									 
 				 
 							</div><br>
 							
@@ -120,24 +122,36 @@
 									<div class="col-md-3">
 									 <select id="phaseId" name="phaseId"    class="form-control chosen" required>
 									 <option value=""></option>
-										<%-- <c:forEach items="${projList}" var="projList" varStatus="count">
-													 <option value="${projList.projectId}">${projList.projectName}</option>
-												</c:forEach> --%>
+										  <c:forEach items="${phaseTypeList}" var="phaseTypeList" varStatus="count">
+										  	<c:choose>
+										 		<c:when test="${phaseTypeList.mPhaseId==phaseTask.taskPhaseId}">
+										 			 <option value="${phaseTypeList.mPhaseId}" selected>${phaseTypeList.phaseName}</option>
+										 		</c:when>
+										 		<c:otherwise>
+														 <option value="${phaseTypeList.mPhaseId}">${phaseTypeList.phaseName}</option>
+												</c:otherwise>
+											</c:choose>
+												</c:forEach>  
 									 </select>
 									</div>
+								<div class="col-md-1"></div>
+								 <div class="col-md-2">Description</div>
+									<div class="col-md-3">
+									<textarea   id="desc" name="desc"    class="form-control"  placeholder="Description"   > ${phaseTask.taskDesc}</textarea>
 								
+									</div><br><br>
 				 
 							</div><br>
 							
 							<div class="box-content">
 							<div class="col-md-2">Expected Start Date*</div>
 								<div class="col-md-3">
-									<input type="text" name="expectedStartDate" value="${editEmployee.empJoiningDate}" placeholder="Expected Start Date" id="joiningDate" class="form-control date-picker" required/>
+									<input type="text" name="expectedStartDate" value="${phaseTask.expStartDate}" placeholder="Expected Start Date" id="joiningDate" class="form-control date-picker" required/>
 									</div>
 								<div class="col-md-1"></div>
 									<div class="col-md-2">Actual Start Date</div>
 								<div class="col-md-3">
-									<input type="text" name="actualStartDate" value="${editEmployee.empJoiningDate}" placeholder="Actual Start Date" id="joiningDate" class="form-control date-picker"  />
+									<input type="text" name="actualStartDate" value="${phaseTask.actualStartDate}" placeholder="Actual Start Date" id="joiningDate" class="form-control date-picker"  />
 									</div>
 							  
 							</div><br>
@@ -145,12 +159,12 @@
 								<div class="box-content">
 							<div class="col-md-2">Expected End Date*</div>
 								<div class="col-md-3">
-									<input type="text" name="expectedEndDate" value="${editEmployee.empJoiningDate}" placeholder="Expected Start Date" id="joiningDate" class="form-control date-picker" required/>
+									<input type="text" name="expectedEndDate" value="${phaseTask.expEndDate}" placeholder="Expected Start Date" id="joiningDate" class="form-control date-picker" required/>
 									</div>
 								<div class="col-md-1"></div>
 									<div class="col-md-2">Actual End Date</div>
 								<div class="col-md-3">
-									<input type="text" name="actualEndDate" value="${editEmployee.empJoiningDate}" placeholder="Actual Start Date" id="joiningDate" class="form-control date-picker"  />
+									<input type="text" name="actualEndDate" value="${phaseTask.atcualEndDate}" placeholder="Actual Start Date" id="joiningDate" class="form-control date-picker"  />
 									</div>
 							 
 								
@@ -161,14 +175,14 @@
 							
 								 <div class="col-md-2">Expected Hours*</div>
 									<div class="col-md-3">
-									<input type="text" value="${editEmployee.empPwd}"   id="expectedHours" name="expectedHours" value="${supplierMaster.country}" class="form-control"  placeholder="Expected Hours " required >
+									<input type="text"   value="${phaseTask.expHrs}"  id="expectedHours" name="expectedHours" value="${supplierMaster.country}" class="form-control"  placeholder="Expected Hours " required >
 								
 									</div>
 									
 								<div class="col-md-1"></div>
 								 <div class="col-md-2">Actual Hours</div>
 									<div class="col-md-3">
-									<input type="text" id="actualdHours" name="actualdHours"    class="form-control"  placeholder="Actual Hours "   >
+									<input type="text" id="actualdHours" name="actualdHours"  value="${phaseTask.actualHrs}"  class="form-control"  placeholder="Actual Hours "   >
 								
 									</div>
 								
@@ -183,8 +197,18 @@
 									 
 									  <option value=""></option>
 									 <c:forEach items="${empList}" var="empList" varStatus="count">
-													 <option value="${empList.empId}">${empList.empName}</option>
-												</c:forEach>
+									 	<c:choose>
+									 		<c:when test="${empList.empId==phaseTask.assignedTo}">
+									 			 <option value="${empList.empId}" selected>${empList.empName}</option>
+									 		</c:when>
+									 		<c:otherwise>
+									 			<option value="${empList.empId}"  >${empList.empName}</option>
+									 		</c:otherwise>
+									 	
+									 	</c:choose>
+													
+													 
+									</c:forEach>
 									 </select>
 									</div>
 									
@@ -196,7 +220,7 @@
 							 
 							 <div class=" box-content">
 					<div class="col-md-12" style="text-align: center">
-						<input type="submit" class="btn btn-info" value="Submit" id="submit" disabled>
+						<input type="submit" class="btn btn-info" value="Submit" id="submit"  >
 					 
 
 
@@ -211,14 +235,35 @@
 											<thead>
 												<tr>
 													<th style="width: 18px">Sr No</th>
-													<th>List</th>
-													<!-- <th>Form Name</th>
-													<th>Type</th> 
-													<th>Action</th>  --> 
+													<th>Phase Type</th>
+													<th>Description</th>
+													<th>Expected Start Date</th> 
+													<th>Expected End Date</th>
+													<th>Actual Start Date</th>  
+													<th>Actual End Date</th> 
+													<th>Expected Hours</th> 
+													<th>Actual Hours</th> 
+													<th>Assign To</th> 
+													<th>Action</th> 
 												</tr>
 											</thead>
 											<tbody>
-												 
+												 <c:forEach items="${getPhaseTaskList}" var="getPhaseTaskList" varStatus="count">
+													<tr class="table-flag-blue">
+														<td>${count.index+1}</td>
+														<td>${getPhaseTaskList.phaseName}</td>
+														<td>${getPhaseTaskList.taskDesc}</td>
+														<td>${getPhaseTaskList.expStartDate}</td>
+														<td>${getPhaseTaskList.expEndDate}</td>  
+														<td>${getPhaseTaskList.actualStartDate}</td>
+														<td>${getPhaseTaskList.atcualEndDate}</td>  
+														<td>${getPhaseTaskList.expHrs}</td>
+														<td>${getPhaseTaskList.actualHrs}</td>
+														<td>${getPhaseTaskList.empName}</td>
+														 <td><a href="${pageContext.request.contextPath}/editPhaseTask/${getPhaseTaskList.tTaskPhaseId}/${projectId}"><span class="glyphicon glyphicon-edit" ></span></a>
+							 							 </td> 
+													</tr>
+												</c:forEach>
 
 
 											</tbody>
