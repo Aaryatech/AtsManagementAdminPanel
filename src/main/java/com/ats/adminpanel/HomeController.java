@@ -149,7 +149,7 @@ public class HomeController {
 
 					assignedTask.add(getTaskList.get(i));
 
-					System.out.println("Assigned Task ----" + assignedTask.add(getTaskList.get(i)));
+					 
 				} else if (getTaskList.get(i).getDevStatus() == 2) {
 
 					inprogress.add(getTaskList.get(i));
@@ -159,6 +159,10 @@ public class HomeController {
 				}
 
 			}
+			System.out.println("Assigned Task ----" + assignedTask);
+			System.out.println("inprogress Task ----" + inprogress);
+			System.out.println("completed Task ----" + completed);
+			
 			model.addObject("assignedCount", assignedTask.size());
 			model.addObject("inprogressCount", inprogress.size());
 			model.addObject("completedCount", completed.size());
