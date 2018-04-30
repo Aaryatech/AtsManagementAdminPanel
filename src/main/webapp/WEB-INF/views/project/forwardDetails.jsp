@@ -168,7 +168,7 @@
 
 							</div>
 							<br>
-							<div class="box-content">
+							<%--  <div class="box-content">
 
 								<div class="col-md-2">Forwarded To</div>
 								<div class="col-md-3">
@@ -177,7 +177,29 @@
 										id="joiningDate" class="form-control">
 								</div>
 							</div>
-							<br>
+							<br>  --%>
+
+							<div class="box-content">
+								<div class="col-md-2">Forwarded To</div>
+								<div class="col-md-3">
+									<select id="devlpr${taskList.taskId}"
+										name="devlpr${taskList.taskId}" class="form-control chosen">
+										<c:forEach items="${empList}" var="empList" varStatus="count">
+											<c:choose>
+												<c:when test="${empList.empId==taskList.developerId}">
+													<option value="${empList.empId}" selected>${empList.empName}</option>
+												</c:when>
+											</c:choose>
+										</c:forEach>
+
+										<option value=""></option>
+										<c:forEach items="${empList}" var="empList" varStatus="count">
+											<option value="${empList.empId}">${empList.empName}</option>
+										</c:forEach>
+									</select>
+								</div>
+							</div>
+
 
 							<div class=" box-content">
 								<div class="col-md-12" style="text-align: center">
@@ -216,7 +238,7 @@
 	<script>
 		window.jQuery
 				|| document
-						.write('<script src="${pageContext.request.contextPath}/resources/assets/jquery/jquery-2.0.3.min.js"><\/script>')
+						.write('_$tag_________________________________________________________________________________________$tag_____')
 	</script>
 	<script
 		src="${pageContext.request.contextPath}/resources/assets/bootstrap/js/bootstrap.min.js"></script>

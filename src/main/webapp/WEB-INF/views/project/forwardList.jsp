@@ -81,7 +81,7 @@
 				<div>
 					<h1>
 
-						<i class="fa fa-file-o"></i>Assigned Task
+						<i class="fa fa-file-o"></i>Forwarded Task
 
 					</h1>
 				</div>
@@ -94,7 +94,7 @@
 					<div class="box" id="todayslist">
 						<div class="box-title">
 							<h3>
-								<i class="fa fa-table"></i>Assigned Task List
+								<i class="fa fa-table"></i>Forward Task List
 							</h3>
 
 						</div>
@@ -120,27 +120,32 @@
 									</thead>
 									<tbody>
 
-										<c:forEach items="${assignedTask}" var="assignTask"
+										<c:forEach items="${forward}" var="forward"
 											varStatus="count">
+											<c:choose>
+												<c:when test="${forward.devStatus==1 || forward.devStatus==2}">
 											<tr class="table-flag-blue">
+											
+												
+												
 												<td><input type="checkbox" /></td>
 												<td>${count.index+1}</td>
-												<td>${assignTask.projectName}</td>
-												<td>${assignTask.moduleName}</td>
-												<td>${assignTask.formName}</td>
-												<td>${assignTask.taskName}</td>
-												
-												<td>${inprogress.projectName}</td>
-												<td>${inprogress.moduleName}</td>
-												<td>${inprogress.formName}</td>
-												<td>${inprogress.taskName}</td>
+												<td>${forward.projectName}</td>
+												<td>${forward.moduleName}</td>
+												<td>${forward.formName}</td>
+												<td>${forward.taskName}</td>
+
 												<td><a
-													href="${pageContext.request.contextPath}/assignedTaskDetails/${assignTask.taskId}">
+													href="${pageContext.request.contextPath}/forwardTaskDetails/${forward.taskId}">
 														<input type="button" class="btn btn-info" value="Details"
 														id="submit">
 												</a></td>
 											</tr>
+											</c:when>
+											</c:choose>
 										</c:forEach>
+
+
 									</tbody>
 								</table>
 							</div>
