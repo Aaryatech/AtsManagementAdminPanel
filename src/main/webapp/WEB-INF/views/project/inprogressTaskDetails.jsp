@@ -103,7 +103,7 @@
 
 						<div class=" box-content">
 							<form id="addSupplier"
-								action="${pageContext.request.contextPath}/insertEmployee"
+								action="${pageContext.request.contextPath}/updateTaskDevlopment"
 								method="post">
 
 								<div class="box-content">
@@ -188,9 +188,9 @@
 									<div class="col-md-2">Development Status</div>
 									<div class="col-md-3">
 										<input type="text" name="dstatus"
-											value="${editEmployee.empJoiningDate}"
-											placeholder="Status in %" id="joiningDate"
-											class="form-control">
+											 value="${taskList.devComplPer}"
+											placeholder="Status in %" id="dstatus"
+											class="form-control" required>
 									</div>
 								</div>
 
@@ -204,12 +204,11 @@
 
 									<div class="col-md-2">Remark</div>
 									<div class="col-md-3">
-										<input type="text" id="empName" name="Remark"
-											class="form-control" value=""
-											placeholder=" Remark " > <input
-											type="hidden" name="Remark" value="${editEmployee.empId}" />
+										<input type="text" id="remark" name="remark"
+											class="form-control" value="${taskList.remarksByDev}"
+											placeholder=" Remark " >  
 									</div>
-
+</div>
 
 								<br>
 								<div class=" box-content">

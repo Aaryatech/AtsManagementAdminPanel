@@ -28,6 +28,7 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.ats.adminpanel.common.Constants;
+import com.ats.adminpanel.common.DateConvertor;
 import com.ats.adminpanel.model.GetTask;
 import com.ats.adminpanel.model.GetTaskList;
 import com.ats.adminpanel.model.LoginResponse;
@@ -47,6 +48,8 @@ public class HomeController {
 	List<GetTask> inprogress = new ArrayList<GetTask>();
 	List<GetTask> completed = new ArrayList<GetTask>();
 	GetTaskList assignedTaskDetails = new GetTaskList();
+	GetTaskList inprogressTaskDetails = new GetTaskList();
+	
 	@RequestMapping(value = "/", method = RequestMethod.GET)
 	public String home(Locale locale, Model model) {
 		logger.info("Welcome home! The client locale is {}.", locale);
@@ -176,13 +179,13 @@ public class HomeController {
 		return model;
 
 	}
-
+	
 	@RequestMapping(value = "/startAssignTask/{taskId}", method = RequestMethod.GET)
-	public ModelAndView startAssignTask(@PathVariable int taskId) {
+	public String startAssignTask(@PathVariable int taskId) {
 
-		ModelAndView model = new ModelAndView("project/homePage");
+		 
 
-		Date date = Calendar.getInstance().getTime();
+		Date date = new Date();
 
 		DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 
@@ -202,6 +205,8 @@ public class HomeController {
 		assignedTaskDetails.setDevStatus(2);
 		List<GetTaskList> update = new ArrayList<GetTaskList>();
 		update.add(assignedTaskDetails);
+		System.out.println("update" + update);
+		
 		List<Task> res = restTemplate.postForObject(Constants.url + "/masters/saveTask", update,
 				List.class);
 		
@@ -209,7 +214,7 @@ public class HomeController {
 		
 		
 
-		return model;
+		return "redirect:/homePage";
 
 	}
 
@@ -257,13 +262,66 @@ public class HomeController {
 
 		vars.add("taskId", taskId);
 
-		GetTaskList taskList = restTemplate.postForObject(Constants.url + "/masters/getTaskDetailsByTaskId", vars,
+		  inprogressTaskDetails = restTemplate.postForObject(Constants.url + "/masters/getTaskDetailsByTaskId", vars,
 				GetTaskList.class);
 		// masters/getTaskDetailsByTaskId
-		model.addObject("taskList", taskList);
+		model.addObject("taskList", inprogressTaskDetails);
 		return model;
 	}
 	
+	@RequestMapping(value = "/updateTaskDevlopment", method = RequestMethod.POST)
+	public String updateTaskDevlopment(HttpServletRequest request, HttpServletResponse response) {
+		
+		try {
+			String devPer = request.getParameter("dstatus");
+			String remark = request.getParameter("remark");
+			
+			Date date = new Date();
+
+			DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+
+			DateFormat dateTimeFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+			String endDate = dateFormat.format(date);
+			String endDateTime = dateTimeFormat.format(date);
+			System.out.println(" endDate " + endDate);
+
+			System.out.println(" endDateTime " + endDateTime);
+			 
+			
+			RestTemplate restTemplate = new RestTemplate();
+			
+			inprogressTaskDetails.setStartDate(DateConvertor.convertToYMD(inprogressTaskDetails.getStartDate()));
+			
+		 if(devPer.equals("100"))
+		 {
+			 inprogressTaskDetails.setDevStatus(3); 
+			 inprogressTaskDetails.setEndDate(endDate);
+			 inprogressTaskDetails.setEndDatetime(endDateTime); 
+			 inprogressTaskDetails.setDevComplPer(devPer);
+			 inprogressTaskDetails.setRemarksByDev(remark);
+		 }
+		 else
+		 {
+			 inprogressTaskDetails.setDevComplPer(devPer);
+			 inprogressTaskDetails.setRemarksByDev(remark);
+		 }
+			List<GetTaskList> update = new ArrayList<GetTaskList>();
+			update.add(inprogressTaskDetails);
+			System.out.println("update" + update);
+			
+			List<Task> res = restTemplate.postForObject(Constants.url + "/masters/saveTask", update,
+					List.class);
+			
+			System.out.println("res " + res);
+		}catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+
+		 
+		return "redirect:/homePage";
+
+	}
 	
 	
 	@RequestMapping(value = "/showForwardPage", method = RequestMethod.GET)
