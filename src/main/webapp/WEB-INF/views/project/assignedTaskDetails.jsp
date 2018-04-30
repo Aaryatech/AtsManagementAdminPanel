@@ -182,7 +182,7 @@
 								<div class=" box-content">
 									<div class="col-md-12" style="text-align: center">
 
-										<a href="${pageContext.request.contextPath}/startAssignTask/${assignTask.taskId}">
+										<a href="${pageContext.request.contextPath}/startAssignTask/${taskList.taskId}">
 											<input type="submit" class="btn btn-info" value="Start"
 											id="submit"></a>
 									</div>

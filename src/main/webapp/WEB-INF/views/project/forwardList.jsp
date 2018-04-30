@@ -129,6 +129,11 @@
 												<td>${assignTask.moduleName}</td>
 												<td>${assignTask.formName}</td>
 												<td>${assignTask.taskName}</td>
+												
+												<td>${inprogress.projectName}</td>
+												<td>${inprogress.moduleName}</td>
+												<td>${inprogress.formName}</td>
+												<td>${inprogress.taskName}</td>
 												<td><a
 													href="${pageContext.request.contextPath}/assignedTaskDetails/${assignTask.taskId}">
 														<input type="button" class="btn btn-info" value="Details"

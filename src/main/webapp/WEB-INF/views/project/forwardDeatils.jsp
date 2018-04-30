@@ -102,92 +102,94 @@
 						</div>
 
 						<div class=" box-content">
-							
 
-								<div class="box-content">
 
-									<div class="col-md-2">Project Name</div>
-									<div class="col-md-3">
-										<input type="text" id="empName" name="empName"
-											class="form-control" value="${taskList.projectName}"
-											placeholder=" Project Name " readonly /> <input
-											type="hidden" name="empId" value="${editEmployee.empId}" />
-									</div>
+							<div class="box-content">
 
-									<div class="col-md-1"></div>
+								<div class="col-md-2">Project Name</div>
+								<div class="col-md-3">
+									<input type="text" id="empName" name="empName"
+										class="form-control" value="${taskList.projectName}"
+										placeholder=" Project Name " readonly /> <input type="hidden"
+										name="empId" value="${editEmployee.empId}" />
+								</div>
 
-									<div class="col-md-2">Form Name</div>
-									<div class="col-md-3">
-										<input type="text" name="empMo" value="${taskList.formName}"
-											class="form-control" placeholder=" Form Name"readonly/ 
+								<div class="col-md-1"></div>
+
+								<div class="col-md-2">Form Name</div>
+								<div class="col-md-3">
+									<input type="text" name="empMo" value="${taskList.formName}"
+										class="form-control" placeholder=" Form Name"readonly/ 
 													  >
-									</div>
 								</div>
-								<br>
+							</div>
+							<br>
 
-								<div class="box-content">
+							<div class="box-content">
 
-									<div class="col-md-2">Task Name</div>
-									<div class="col-md-3">
-										<input type="text" name="empEdu" value="${taskList.taskName}"
-											class="form-control" placeholder="Task Name" readonly />
-									</div>
-									<div class="col-md-1"></div>
-
-									<div class="col-md-2">Task Desc</div>
-									<div class="col-md-3">
-										<input type="text" name="empEdu"
-											value="${taskList.taskDescription}" class="form-control"
-											placeholder="Task Desc" readonly />
-									</div>
-
+								<div class="col-md-2">Task Name</div>
+								<div class="col-md-3">
+									<input type="text" name="empEdu" value="${taskList.taskName}"
+										class="form-control" placeholder="Task Name" readonly />
 								</div>
-								<br>
+								<div class="col-md-1"></div>
+
+								<div class="col-md-2">Task Desc</div>
+								<div class="col-md-3">
+									<input type="text" name="empEdu"
+										value="${taskList.taskDescription}" class="form-control"
+										placeholder="Task Desc" readonly />
+								</div>
+
+							</div>
+							<br>
 
 
 
-								<div class="box-content">
+							<div class="box-content">
 
-									<div class="col-md-2">Task SP Remarks</div>
-									<div class="col-md-3">
-										<input type="text" name="empDesg"
-											value="${taskList.taskSpRemarks}" class="form-control"
-											placeholder="Task SP Remarks" readonly />
-									</div>
-									<div class="col-md-1"></div>
+								<div class="col-md-2">Task SP Remarks</div>
+								<div class="col-md-3">
+									<input type="text" name="empDesg"
+										value="${taskList.taskSpRemarks}" class="form-control"
+										placeholder="Task SP Remarks" readonly />
+								</div>
+								<div class="col-md-1"></div>
 
-									<div class="col-md-2">Planned Hrs</div>
-									<div class="col-md-3">
-										<input type="text" name="empExperience"
-											value="${taskList.taskPlannedHrs}" class="form-control"
-											placeholder="Planned Nrs" readonly />
-
-									</div>
-
-
+								<div class="col-md-2">Planned Hrs</div>
+								<div class="col-md-3">
+									<input type="text" name="empExperience"
+										value="${taskList.taskPlannedHrs}" class="form-control"
+										placeholder="Planned Nrs" readonly />
 
 								</div>
-								<br>
-								<div class="box-content">
 
-									<div class="col-md-2">Assigned By</div>
-									<div class="col-md-3">
-										<input type="text" name="joiningDate"
-											value="${taskList.empName}" placeholder="Assigned By"
-											id="joiningDate" class="form-control" readonly />
-									</div>
+
+
+							</div>
+							<br>
+							<div class="box-content">
+
+								<div class="col-md-2">Forwarded To</div>
+								<div class="col-md-3">
+									<input type="text" name="joiningDate"
+										value="${taskList.empName}" placeholder="Employee List"
+										id="joiningDate" class="form-control">
 								</div>
-								<br>
+							</div>
+							<br>
 
-								<div class=" box-content">
-									<div class="col-md-12" style="text-align: center">
+							<div class=" box-content">
+								<div class="col-md-12" style="text-align: center">
 
-										<a href="${pageContext.request.contextPath}/startAssignTask/${assignTask.taskId}">
-											<input type="submit" class="btn btn-info" value="Start"
-											id="submit"></a>
-									</div>
+									<a
+										href="${pageContext.request.contextPath}/forwardToEmployee/${assignTask.taskId}">
+										<input type="submit" class="btn btn-info" value="Forward"
+										id="submit">
+									</a>
 								</div>
-						
+							</div>
+
 
 
 						</div>
