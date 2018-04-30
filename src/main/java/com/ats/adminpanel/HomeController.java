@@ -253,14 +253,35 @@ public class HomeController {
 		model.addObject("taskList", taskList);
 		return model;
 	}
-
+	
+	
+	
 	@RequestMapping(value = "/showForwardPage", method = RequestMethod.GET)
 	public ModelAndView showForwardPage(HttpServletRequest request, HttpServletResponse response) {
 
-		ModelAndView model = new ModelAndView("project/forward");
+		ModelAndView model = new ModelAndView("project/forwardList");
 
+		model.addObject("inprogress", inprogress);
 		return model;
 
+	}
+
+
+
+	@RequestMapping(value = "/forwardTaskDetails/{taskId}", method = RequestMethod.GET)
+	public ModelAndView forwardTaskDetails(@PathVariable int taskId) {
+		ModelAndView model = new ModelAndView("project/inprogressTaskDetails");
+
+		RestTemplate restTemplate = new RestTemplate();
+		MultiValueMap<String, Object> vars = new LinkedMultiValueMap<String, Object>();
+
+		vars.add("taskId", taskId);
+
+		GetTaskList taskList = restTemplate.postForObject(Constants.url + "/masters/getTaskDetailsByTaskId", vars,
+				GetTaskList.class);
+		// masters/getTaskDetailsByTaskId
+		model.addObject("taskList", taskList);
+		return model;
 	}
 
 	@RequestMapping(value = "/showCompletedPage", method = RequestMethod.GET)
