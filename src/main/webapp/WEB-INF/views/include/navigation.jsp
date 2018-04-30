@@ -75,7 +75,7 @@
 			</a>
 			<div style="clear: both;"></div>
 			<ul class="nav nav-list">
-				<li class="active"><a href="home"> <i
+				<li class="active"><a href="${pageContext.request.contextPath}/homePage"> <i
 						class="fa fa-dashboard"></i> <span>Dashboard</span>
 				</a></li>
 
