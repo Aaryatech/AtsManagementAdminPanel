@@ -308,6 +308,7 @@ public class HomeController {
 			 inprogressTaskDetails.setEndDatetime(endDateTime); 
 			 inprogressTaskDetails.setDevComplPer(devPer);
 			 inprogressTaskDetails.setRemarksByDev(remark);
+			 inprogressTaskDetails.setActualReqHrs(request.getParameter("actualReqHours"));
 		 }
 		 else
 		 {
@@ -385,8 +386,8 @@ public class HomeController {
 			 
 			
 			RestTemplate restTemplate = new RestTemplate();
-			
-			forwardTaskDetails.setStartDate(DateConvertor.convertToYMD(forwardTaskDetails.getStartDate()));
+			if(forwardTaskDetails.getStartDate()!="" && forwardTaskDetails.getStartDate()!=null)
+				forwardTaskDetails.setStartDate(DateConvertor.convertToYMD(forwardTaskDetails.getStartDate()));
 			forwardTaskDetails.setDeveloperId(empId); 
 			
 			List<GetTaskList> updateForword = new ArrayList<GetTaskList>();
