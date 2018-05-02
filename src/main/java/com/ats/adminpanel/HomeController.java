@@ -212,6 +212,8 @@ public class HomeController {
 		assignedTaskDetails.setStartDate(strDate);
 		assignedTaskDetails.setStartDatetime(strDateTime);
 		assignedTaskDetails.setDevStatus(2);
+		if(assignedTaskDetails.getEndDate()!="" && assignedTaskDetails.getEndDate()!=null)
+			assignedTaskDetails.setEndDate(DateConvertor.convertToYMD(assignedTaskDetails.getEndDate()));
 		List<GetTaskList> update = new ArrayList<GetTaskList>();
 		update.add(assignedTaskDetails);
 		System.out.println("update" + update);
@@ -388,6 +390,8 @@ public class HomeController {
 			RestTemplate restTemplate = new RestTemplate();
 			if(forwardTaskDetails.getStartDate()!="" && forwardTaskDetails.getStartDate()!=null)
 				forwardTaskDetails.setStartDate(DateConvertor.convertToYMD(forwardTaskDetails.getStartDate()));
+			if(forwardTaskDetails.getEndDate()!="" && forwardTaskDetails.getEndDate()!=null)
+				forwardTaskDetails.setEndDate(DateConvertor.convertToYMD(forwardTaskDetails.getEndDate()));
 			forwardTaskDetails.setDeveloperId(empId); 
 			
 			List<GetTaskList> updateForword = new ArrayList<GetTaskList>();
