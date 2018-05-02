@@ -188,6 +188,7 @@ public class MasterController {
 
 		ModelAndView model = new ModelAndView("masters/formListForAssignTask");
 		try
+		
 		{
 			 
 			GetProjects[] projArray = rest.getForObject(Constants.url + "masters/getProjectList",
