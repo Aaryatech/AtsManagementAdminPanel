@@ -111,8 +111,6 @@ table, th, td {
 						</div>
 
 						<div class=" box-content" align="center">
-
-
 							<div class="box-content" align="center">
 
 
@@ -177,13 +175,10 @@ table, th, td {
 								</div>
 								<br>
 
-
 								<div class=" box-content">
 									<div class="col-md-12" style="text-align: center">
 										<input type="submit" class="btn btn-info" value="SEARCH"
 											id="submit" onclick="search()">
-
-
 
 									</div>
 								</div>
@@ -197,6 +192,7 @@ table, th, td {
 									<table class="table table-advance" id="table1" name="table1">
 										<thead>
 											<tr>
+											
 												<th>Project Name</th>
 												<th>Task Planned Hrs</th>
 												<th>Actual Required Hrs</th>
@@ -209,9 +205,6 @@ table, th, td {
 								</div>
 								<br>
 								<div class="form-group" style="display: none;" id="range">
-
-
-
 									<div class="col-sm-3  controls">
 										<input type="button" id="expExcel" class="btn btn-primary"
 											value="EXPORT TO Excel" onclick="exportToExcel();"
@@ -219,9 +212,6 @@ table, th, td {
 									</div>
 								</div>
 							</div>
-
-
-
 						</div>
 					</div>
 
@@ -330,10 +320,9 @@ table, th, td {
 			var fromDate = document.getElementById("fromDate").value;
 			var toDate = document.getElementById("toDate").value;
 
-			/* 	alert(" empId " + empId);
-				alert(" proId " + proId);
-				alert(" fromDate " + fromDate);
-				alert(" toDate " + toDate); */
+		
+			
+			
 
 			if (validate() == true) {
 				alert("true");

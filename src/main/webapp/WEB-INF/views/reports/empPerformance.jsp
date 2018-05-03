@@ -7,7 +7,7 @@
 <head>
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-<title>Add Supplier</title>
+<title>Report For Emp Performance</title>
 <meta name="description" content="">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
@@ -48,13 +48,23 @@
 
 <script type="text/javascript"
 	src="${pageContext.request.contextPath}/resources/js/common.js"></script>
+
+
+
+
+<c:url var="findEmpPerformance" value="/findEmpPerformance" />
 </head>
+
+<style type="text/css">
+table, th, td {
+	border: 1px solid #9da88d;
+}
+</style>
 <body>
 
 
-	<c:url var="getMixingListWithDate" value="/getMixingListWithDate"></c:url>
-	<c:url var="getMixingAllListWithDate" value="/getMixingAllListWithDate"></c:url>
 	<jsp:include page="/WEB-INF/views/include/header.jsp"></jsp:include>
+
 
 
 	<div class="container" id="main-container">
@@ -78,7 +88,7 @@
 				<div>
 					<h1>
 
-						<i class="fa fa-file-o"></i>Add Employee
+						<i class="fa fa-file-o"></i> Report
 
 					</h1>
 				</div>
@@ -91,181 +101,101 @@
 					<div class="box" id="todayslist">
 						<div class="box-title">
 							<h3>
-								<i class="fa fa-table"></i>Add Employee
+								<i class="fa fa-table"></i>Employee Performance
 							</h3>
 							<div class="box-tool">
-								<a href="${pageContext.request.contextPath}/allEmployeeList">Employee
-									List</a> <a data-action="collapse" href="#"><i
+								<a data-action="collapse" href="#"><i
 									class="fa fa-chevron-up"></i></a>
 							</div>
 
 						</div>
 
-						<div class=" box-content">
-							<form id="addSupplier"
-								action="${pageContext.request.contextPath}/insertEmployee"
-								method="post">
+						<div class=" box-content" align="center">
 
-								<div class="box-content">
 
-									<div class="col-md-2">Employee Name*</div>
+							<div class="box-content" align="center">
+
+
+								<div class="row" align="center">
+
+									<div class="col-md-2">Select Employee *</div>
 									<div class="col-md-3">
-										<input type="text" id="empName" name="empName"
-											class="form-control" value="${editEmployee.empName}"
-											placeholder=" Employee Name " required /> <input
-											type="hidden" name="empId" value="${editEmployee.empId}" />
-									</div>
-									<div class="col-md-1"></div>
-									<div class="col-md-2">Mobile No.*</div>
-									<div class="col-md-3">
-										<input type="text" name="empMo"
-											value="${editEmployee.empMobile}" class="form-control"
-											placeholder=" Mobile No " required pattern="^\d{10}$"
-											required />
+										<select name="empId" id="empId" class="form-control chosen"
+											required>
 
-									</div>
+											<option value="" selected></option>
+											<c:forEach items="${empList}" var="empList" varStatus="count">
+												<option value="${empList.empId}">${empList.empName}</option>
 
-
-								</div>
-								<br>
-
-								<div class="box-content">
-
-									<div class="col-md-2">Employee Education*</div>
-									<div class="col-md-3">
-										<input type="text" name="empEdu"
-											value="${editEmployee.empEdu}" class="form-control"
-											placeholder="Employee Education" required />
-									</div>
-									<div class="col-md-1"></div>
-									<div class="col-md-2">Birth Date*</div>
-									<div class="col-md-3">
-										<input type="text" name="birthDate" placeholder="Birth Date"
-											value="${editEmployee.empBirthdate}" id="birthDate"
-											class="form-control date-picker" required />
-									</div>
-
-
-								</div>
-								<br>
-
-								<div class="box-content">
-
-									<div class="col-md-2">Employee Designation*</div>
-									<div class="col-md-3">
-										<input type="text" name="empDesg"
-											value="${editEmployee.empDesignation}" class="form-control"
-											placeholder="Employee Designation" required />
-									</div>
-									<div class="col-md-1"></div>
-
-									<div class="col-md-2">Any Experience*</div>
-									<div class="col-md-3">
-										<input type="text" name="empExperience"
-											value="${editEmployee.empPrevExp}" class="form-control"
-											placeholder="Any Experience" required />
-
-									</div>
-
-
-
-								</div>
-								<br>
-								<div class="box-content">
-
-									<div class="col-md-2">Joining Date*</div>
-									<div class="col-md-3">
-										<input type="text" name="joiningDate"
-											value="${editEmployee.empJoiningDate}"
-											placeholder="Joining Date" id="joiningDate"
-											class="form-control date-picker" required />
-									</div>
-
-									<div class="col-md-1"></div>
-									<div class="col-md-2">Employee Per Hour Rate*</div>
-									<div class="col-md-3">
-										<input type="text" name="perHour"
-											value="${editEmployee.empPerHrRate}" class="form-control"
-											placeholder="Employee Per Hour Rate" required />
-									</div>
-
-
-								</div>
-								<br>
-
-								<c:choose>
-									<c:when test="${editEmployee.empType==1}">
-										<c:set var="type" value="Developer"></c:set>
-									</c:when>
-									<c:when test="${editEmployee.empType==2}">
-										<c:set var="type" value="Project Manager"></c:set>
-									</c:when>
-								</c:choose>
-
-								<div class="box-content">
-
-									<div class="col-md-2">Employee Type*</div>
-									<div class="col-md-3">
-										<select id="isSameState" name="empType" id="empType"
-											class="form-control chosen" required>
-
-											<option value=""></option>
-											<option value="${editEmployee.empType}" selected>${type}</option>
-											<option value="1">Developer</option>
-											<option value="2">Project Manager</option>
+											</c:forEach>
 										</select>
 									</div>
+								</div>
 
-									<div class="col-md-1"></div>
+								<br>
+								<div class="row" align="center">
 
-									<div class="col-md-2">Total Leaves*</div>
+									<div class="col-md-2">Select Project</div>
 									<div class="col-md-3">
-										<input type="text" name="totalLeaves"
-											value="${editEmployee.totalLeaves}" class="form-control"
-											placeholder="Total Leaves " required />
-									</div>
+										<select name="projectId" id="projectId"
+											class="form-control chosen" required>
 
+											<option value="" selected></option>
+											<c:forEach items="${projectList}" var="projectList"
+												varStatus="count">
+												<option value="${projectList.projectId}">${projectList.projectName}</option>
+
+											</c:forEach>
+										</select>
+									</div>
 								</div>
 								<br>
-
-
-
-
-								<div class="box-content">
-
-									<div class="col-md-2">Password*</div>
-									<div class="col-md-3">
-										<input type="password" value="${editEmployee.empPwd}"
-											onchange="passwordValidation();" id="password"
-											name="password" value="${supplierMaster.country}"
-											class="form-control" placeholder="Password " required>
-
-									</div>
-
-									<div class="col-md-1"></div>
-									<div class="col-md-2">ReEnter Password*</div>
-									<div class="col-md-3">
-										<input type="password" id="rePassword" name="rePassword"
-											onchange="passwordValidation();" class="form-control"
-											placeholder="Password " required>
-
-									</div>
-
-
-								</div>
-								<br>
-
 
 								<div class=" box-content">
 									<div class="col-md-12" style="text-align: center">
-										<input type="submit" class="btn btn-info" value="Submit"
-											id="submit" disabled>
+										<input type="submit" class="btn btn-info" value="SEARCH"
+											id="submit" onclick="search()">
 
 
 
 									</div>
 								</div>
-							</form>
+							</div>
+
+
+							<div class="row">
+								<div class="clearfix"></div>
+
+								<div class="table-responsive" style="border: 0">
+									<table class="table table-advance" id="table1" name="table1">
+										<thead>
+											<tr>
+
+												<th>Task Name</th>
+												<th>Module Name</th>
+												<th>Task Planned Hrs</th>
+												<th>Actual Required Hrs</th>
+												<th>Remark By Dev</th>
+
+											</tr>
+										</thead>
+										<tbody>
+										</tbody>
+									</table>
+								</div>
+								<br>
+								<div class="form-group" style="display: none;" id="range">
+
+
+
+									<div class="col-sm-3  controls">
+										<input type="button" id="expExcel" class="btn btn-primary"
+											value="EXPORT TO Excel" onclick="exportToExcel();"
+											disabled="disabled">
+									</div>
+								</div>
+							</div>
+
 
 
 						</div>
@@ -275,9 +205,7 @@
 				</div>
 			</div>
 			<!-- END Main Content -->
-			<footer>
-			<p>2018 © SONA ELECTRICALS</p>
-			</footer>
+
 
 			<a id="btn-scrollup" class="btn btn-circle btn-lg" href="#"><i
 				class="fa fa-chevron-up"></i></a>
@@ -367,6 +295,62 @@
 				}
 
 			}
+		}
+	</script>
+	<script type="text/javascript">
+		function search() {
+
+			//document.getElementById('btn_pdf').style.display = "block";
+			var empId = document.getElementById("empId").value;
+			var projectId = document.getElementById("projectId").value;
+
+			$.getJSON('${findEmpPerformance}', {
+
+				empId : empId,
+				projectId : projectId,
+
+				ajax : 'true',
+
+			}, function(data) {
+				$('#table1 td').remove();
+
+				var tr = $('<tr></tr>');
+
+				tr.append($('<td></td>').html(data.taskName));
+				tr.append($('<td></td>').html(data.moduleName));
+
+				tr.append($('<td></td>').html(data.taskPlannedHrs));
+				tr.append($('<td></td>').html(data.actualReqHrs));
+
+				tr.append($('<td></td>').html(data.remarksByDev));
+				$('#table1 tbody').append(tr).trigger('update');
+
+				//alert("ala"+data);
+
+			}
+
+			);
+
+		}
+	</script>
+	<script type="text/javascript">
+		function validate() {
+
+			var empId = $("#empId").val();
+			var projectId = $("#projectId").val();
+
+			var isValid = true;
+
+			if (empId == "" || empId == null) {
+				alert("Please select employee");
+				return false;
+
+			} else if (projectId == "" || projectId == null) {
+
+				alert("Please select project ");
+				return false;
+			}
+
 		}
 	</script>
 

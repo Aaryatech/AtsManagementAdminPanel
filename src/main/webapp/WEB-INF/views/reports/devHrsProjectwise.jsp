@@ -7,7 +7,7 @@
 <head>
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-<title>My Profile</title>
+<title>Report For Dev Hrs Projectwise</title>
 <meta name="description" content="">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
@@ -48,13 +48,23 @@
 
 <script type="text/javascript"
 	src="${pageContext.request.contextPath}/resources/js/common.js"></script>
+
+
+
+
+<c:url var="findDevHrsByProId" value="/findDevHrsByProId" />
 </head>
+
+<style type="text/css">
+table, th, td {
+	border: 1px solid #9da88d;
+}
+</style>
 <body>
 
 
-	<c:url var="getMixingListWithDate" value="/getMixingListWithDate"></c:url>
-	<c:url var="getMixingAllListWithDate" value="/getMixingAllListWithDate"></c:url>
 	<jsp:include page="/WEB-INF/views/include/header.jsp"></jsp:include>
+
 
 
 	<div class="container" id="main-container">
@@ -78,7 +88,7 @@
 				<div>
 					<h1>
 
-						<i class="fa fa-file-o"></i>My Profile
+						<i class="fa fa-file-o"></i> Report
 
 					</h1>
 				</div>
@@ -91,106 +101,80 @@
 					<div class="box" id="todayslist">
 						<div class="box-title">
 							<h3>
-								<i class="fa fa-table"></i>My Info
+								<i class="fa fa-table"></i>Development Hrs
 							</h3>
-
+							<div class="box-tool">
+								<a data-action="collapse" href="#"><i
+									class="fa fa-chevron-up"></i></a>
+							</div>
 
 						</div>
 
-						<div class=" box-content">
+						<div class=" box-content" align="center">
 
 
-							<div class="box-content">
+							<div class="box-content" align="center">
 
-								<div class="col-md-2">Employee Name</div>
-								<div class="col-md-3">
-									<input type="text" id="empName" name="empName"
-										class="form-control" value="${empList.empName}"
-										placeholder=" Employee Name " readonly /> <input
-										type="hidden" name="empId" value="${editEmployee.empId}" />
+
+
+								<div class="row" align="center">
+
+									<div class="col-md-2">Select Project</div>
+									<div class="col-md-3">
+										<select name="projectId" id="projectId"
+											class="form-control chosen" required>
+
+											<option value="" selected></option>
+											<c:forEach items="${projectList}" var="projectList"
+												varStatus="count">
+												<option value="${projectList.projectId}">${projectList.projectName}</option>
+
+											</c:forEach>
+										</select>
+									</div>
 								</div>
+								<br>
 
-								<div class="col-md-1"></div>
+								<div class=" box-content">
+									<div class="col-md-12" style="text-align: center">
+										<input type="submit" class="btn btn-info" value="SEARCH"
+											id="submit" onclick="search()">
 
-								<div class="col-md-2">Employee Mobile No</div>
-								<div class="col-md-3">
-									<input type="text" name="empMo" value="${empList.empMo}"
-										class="form-control" placeholder=" Employee Mobile No"readonly/ 
-													  >
-								</div>
-							</div>
-							<br>
 
-							<div class="box-content">
 
-								<div class="col-md-2">Employee Designation</div>
-								<div class="col-md-3">
-									<input type="text" name="empEdu" value="${empList.taskName}"
-										class="form-control" placeholder="Employee Designation"
-										readonly />
-								</div>
-								<div class="col-md-1"></div>
-
-								<div class="col-md-2">Total Leaves</div>
-								<div class="col-md-3">
-									<input type="text" name="empEdu"
-										value="${taskList.taskDescription}" class="form-control"
-										placeholder="Total Leaves">
-								</div>
-
-							</div>
-							<br> <br>
-
-							<div class=" box-content">
-								<div class="col-md-12" style="text-align: center">
-
-									<a
-										href="${pageContext.request.contextPath}/startAssignTask/${taskList.taskId}">
-										<input type="submit" class="btn btn-info"
-										value="Apply For New Leave" id="submit">
-									</a>
+									</div>
 								</div>
 							</div>
 
 
-							<br>
-							<div class="box-content">
+							<div class="row">
+								<div class="clearfix"></div>
 
-								<div class="col-md-2">From Date*</div>
-								<div class="col-md-3">
-									<input type="text" name="joiningDate"
-										value="${editEmployee.empJoiningDate}" placeholder="From Date"
-										id="fromDate" class="form-control date-picker" required />
+								<div class="table-responsive" style="border: 0">
+									<table class="table table-advance" id="table1" name="table1">
+										<thead>
+											<tr>
+												<th>Sr No</th>
+												<th>Module Name</th>
+												<th>Total Forms</th>
+												<th>Task Planned Hrs</th>
+												<th>Actual Required Hrs</th>
+											</tr>
+										</thead>
+										<tbody>
+										</tbody>
+									</table>
 								</div>
-								<div class="col-md-1"></div>
-								<div class="col-md-2">To Date*</div>
-								<div class="col-md-3">
-									<input type="text" name="toDate"
-										value="${editEmployee.empJoiningDate}" placeholder="To Date"
-										id="toDate" class="form-control date-picker" required />
-								</div>
-							</div>
+								<br>
+								<div class="form-group" style="display: none;" id="range">
 
-							<br>
-							<div class="box-content">
 
-								<div class="col-md-2">Reason*</div>
-								<div class="col-md-3">
-									<textarea type="text" name="reason"
-										value="${taskList.taskSpRemarks}" class="form-control"
-										placeholder="Reason" id="reason" required></textarea>
-								</div>
-							</div>
-							<br>
 
-							<div class=" box-content">
-								<div class="col-md-12" style="text-align: center">
-
-									<a
-										href="${pageContext.request.contextPath}/startAssignTask/${taskList.taskId}">
-										<input type="submit" class="btn btn-info" value="Apply"
-										id="submit">
-									</a>
+									<div class="col-sm-3  controls">
+										<input type="button" id="expExcel" class="btn btn-primary"
+											value="EXPORT TO Excel" onclick="exportToExcel();"
+											disabled="disabled">
+									</div>
 								</div>
 							</div>
 
@@ -203,9 +187,7 @@
 				</div>
 			</div>
 			<!-- END Main Content -->
-			<footer>
-			<p>2018 © SONA ELECTRICALS</p>
-			</footer>
+
 
 			<a id="btn-scrollup" class="btn btn-circle btn-lg" href="#"><i
 				class="fa fa-chevron-up"></i></a>
@@ -277,5 +259,88 @@
 		src="${pageContext.request.contextPath}/resources/assets/bootstrap-daterangepicker/date.js"></script>
 	<script type="text/javascript"
 		src="${pageContext.request.contextPath}/resources/assets/bootstrap-daterangepicker/daterangepicker.js"></script>
+
+
+	<script type="text/javascript">
+		function passwordValidation() {
+
+			var pass = document.getElementById("password").value;
+			var pass1 = document.getElementById("rePassword").value;
+
+			if (pass != "" && pass1 != "") {
+				if (pass != pass1) {
+					alert("Password Not Matched ");
+					document.getElementById("submit").disabled = true;
+				} else {
+					document.getElementById("submit").disabled = false;
+
+				}
+
+			}
+		}
+	</script>
+	<script type="text/javascript">
+		function search() {
+
+			//document.getElementById('btn_pdf').style.display = "block";
+$('#table1 tbody').empty();
+			var projectId = document.getElementById("projectId").value;
+			
+			if (validate() == true) {
+
+			$.getJSON('${findDevHrsByProId}', {
+
+				projectId : projectId,
+
+				ajax : 'true',
+
+			}, function(data) {
+				$('#table1 td').remove();
+				$.each(
+						data,
+						function(key, itemList) {
+							
+							 
+							var tr = $('<tr></tr>');
+							tr.append($('<td></td>').html(key+1));
+							tr.append($('<td></td>').html(itemList.moduleName)); 
+							tr.append($('<td></td>').html(itemList.totalForms));
+							tr.append($('<td></td>').html(itemList.taskPlannedHrs));
+							tr.append($('<td></td>').html(itemList.actualReqHrs));
+							  	 $('#table1 tbody').append(tr);
+							 
+
+						})
+				
+
+			 
+
+				//alert("ala"+data);
+
+			}
+			
+
+			);
+
+		}
+	</script>
+	<script type="text/javascript">
+		function validate() {
+
+			var projectId = $("#projectId").val();
+
+			var isValid = true;
+			if (projectId == "" || projectId == null) {
+
+				alert("Please select project ");
+				return false;
+			}else {
+				
+				return true;
+			}
+
+		}
+	</script>
+
 </body>
 </html>
