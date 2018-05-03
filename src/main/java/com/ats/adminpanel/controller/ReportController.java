@@ -1,6 +1,7 @@
 package com.ats.adminpanel.controller;
 
 import java.util.ArrayList;
+
 import java.util.Arrays;
 import java.util.List;
 
@@ -19,17 +20,26 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.ats.adminpanel.common.Constants;
 import com.ats.adminpanel.common.DateConvertor;
+import com.ats.adminpanel.model.DevelopmentHrsProwise;
 import com.ats.adminpanel.model.EmpAllocatedWork;
 import com.ats.adminpanel.model.EmpConReport;
+import com.ats.adminpanel.model.EmpPerformance;
 import com.ats.adminpanel.model.Employee;
 import com.ats.adminpanel.model.GetTaskList;
+import com.ats.adminpanel.model.PhaseTask;
+import com.ats.adminpanel.model.PhaseType;
 import com.ats.adminpanel.model.Project;
+import com.ats.adminpanel.model.ProjectPhaseTracking;
 
 @Controller
 public class ReportController {
 
 	EmpConReport empConReport = new EmpConReport();
 	EmpAllocatedWork empAllocatedWork = new EmpAllocatedWork();
+	EmpPerformance empPerformance = new EmpPerformance();
+	List<DevelopmentHrsProwise> developmentHrsProwiseList = null;
+
+	ProjectPhaseTracking projectPhaseTracking = new ProjectPhaseTracking();
 
 	@RequestMapping(value = "/viewEmpConsumptionReport", method = RequestMethod.GET)
 	public ModelAndView viewEmpConsumptionReport(HttpServletRequest request, HttpServletResponse response) {
@@ -67,10 +77,60 @@ public class ReportController {
 
 	}
 
-	@RequestMapping(value = "/myProfile", method = RequestMethod.GET)
-	public ModelAndView myProfile(HttpServletRequest request, HttpServletResponse response) {
+	@RequestMapping(value = "/viewEmpPerformanceReport", method = RequestMethod.GET)
+	public ModelAndView viewEmpPerformanceReport(HttpServletRequest request, HttpServletResponse response) {
 
-		ModelAndView model = new ModelAndView("reports/myProfile");
+		ModelAndView model = new ModelAndView("reports/empPerformance");
+
+		RestTemplate restTemplate = new RestTemplate();
+		Employee[] Employee = restTemplate.getForObject(Constants.url + "/masters/getAllEmpList", Employee[].class);
+		List<Employee> empList = new ArrayList<Employee>(Arrays.asList(Employee));
+
+		Project[] project = restTemplate.getForObject(Constants.url + "/masters/getAllProjectList", Project[].class);
+		List<Project> projectList = new ArrayList<Project>(Arrays.asList(project));
+
+		model.addObject("projectList", projectList);
+		model.addObject("empList", empList);
+		return model;
+
+	}
+
+	@RequestMapping(value = "/viewDevelopmentHrsReport", method = RequestMethod.GET)
+	public ModelAndView viewDevelopmentHrsReport(HttpServletRequest request, HttpServletResponse response) {
+
+		ModelAndView model = new ModelAndView("reports/devHrsProjectwise");
+
+		RestTemplate restTemplate = new RestTemplate();
+
+		Project[] project = restTemplate.getForObject(Constants.url + "/masters/getAllProjectList", Project[].class);
+		List<Project> projectList = new ArrayList<Project>(Arrays.asList(project));
+
+		model.addObject("projectList", projectList);
+
+		return model;
+
+	}
+
+	@RequestMapping(value = "/viewProjectPhaseTrackingReport", method = RequestMethod.GET)
+	public ModelAndView viewProjectPhaseTrackingReport(HttpServletRequest request, HttpServletResponse response) {
+
+		ModelAndView model = new ModelAndView("reports/projectPhaseTracking");
+		try {
+			RestTemplate restTemplate = new RestTemplate();
+			PhaseType[] PhaseType = restTemplate.getForObject(Constants.url + "/masters/getAllPhaseTypeList",
+					PhaseType[].class);
+			List<PhaseType> phaseList = new ArrayList<PhaseType>(Arrays.asList(PhaseType));
+
+			Project[] project = restTemplate.getForObject(Constants.url + "/masters/getAllProjectList",
+					Project[].class);
+			List<Project> projectList = new ArrayList<Project>(Arrays.asList(project));
+
+			model.addObject("projectList", projectList);
+			model.addObject("phaseList", phaseList);
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 
 		return model;
 
@@ -101,8 +161,7 @@ public class ReportController {
 			map.add("toDate", DateConvertor.convertToYMD(toDate));
 			map.add("empId", empId);
 
-			empConReport = restTemplate.postForObject(Constants.url + "Test/getDatewiseEmpCon", map,
-					EmpConReport.class);
+			empConReport = restTemplate.postForObject(Constants.url + "/getDatewiseEmpCon", map, EmpConReport.class);
 
 			System.out.println("EmpConReport []" + empConReport.toString());
 
@@ -152,7 +211,7 @@ public class ReportController {
 				map.add("toDate", DateConvertor.convertToYMD(toDate));
 				map.add("empId", empId);
 
-				empAllocatedWork = restTemplate.postForObject(Constants.url + "Test/getDatewiseEmpCon", map,
+				empAllocatedWork = restTemplate.postForObject(Constants.url + "/getDatewiseEmpCon", map,
 						EmpAllocatedWork.class);
 
 				System.out.println("EmpConReport []" + empAllocatedWork.toString());
@@ -174,6 +233,94 @@ public class ReportController {
 		}
 
 		return empAllocatedWork;
+	}
+
+	@RequestMapping(value = "/findEmpPerformance", method = RequestMethod.GET)
+	public @ResponseBody EmpPerformance findEmpPerformance(HttpServletRequest request, HttpServletResponse response) {
+		try {
+			System.out.println("in method");
+
+			String empId = request.getParameter("empId");
+			System.out.println("EmpID" + empId);
+
+			String projectId = request.getParameter("projectId");
+			System.out.println("ProjectID" + projectId);
+
+			RestTemplate restTemplate = new RestTemplate();
+
+			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+
+			map.add("empId", empId);
+			map.add("projectId", projectId);
+
+			empPerformance = restTemplate.postForObject(Constants.url + "/getEmployeePerformance", map,
+					EmpPerformance.class);
+
+			System.out.println("empPerformance []" + empPerformance.toString());
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return empPerformance;
+	}
+
+	@RequestMapping(value = "/findDevHrsByProId", method = RequestMethod.GET)
+	public @ResponseBody List<DevelopmentHrsProwise> findDevHrsByProId(HttpServletRequest request,
+			HttpServletResponse response) {
+		try {
+			System.out.println("in method");
+
+			String projectId = request.getParameter("projectId");
+			System.out.println("ProjectID" + projectId);
+
+			RestTemplate restTemplate = new RestTemplate();
+
+			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+
+			map.add("projectId", projectId);
+
+			developmentHrsProwiseList = restTemplate.postForObject(Constants.url + "/getDevelopmentHrsByProwise", map,
+					List.class);
+
+			System.out.println("DevelopmentHrsProwise []" + developmentHrsProwiseList.toString());
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return developmentHrsProwiseList;
+	}
+
+	@RequestMapping(value = "/findProjectPhaseTracking", method = RequestMethod.GET)
+	public @ResponseBody ProjectPhaseTracking findProjectPhaseTracking(HttpServletRequest request,
+			HttpServletResponse response) {
+		try {
+			System.out.println("in method");
+
+			String phaseId = request.getParameter("phaseId");
+			System.out.println("phaseId" + phaseId);
+
+			String projectId = request.getParameter("projectId");
+			System.out.println("ProjectID" + projectId);
+
+			RestTemplate restTemplate = new RestTemplate();
+
+			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+
+			map.add("phaseId", phaseId);
+			map.add("projectId", projectId);
+
+			projectPhaseTracking = restTemplate.postForObject(Constants.url + "/getProjectPhaseTracking", map,
+					ProjectPhaseTracking.class);
+
+			System.out.println("projectPhaseTracking []" + projectPhaseTracking.toString());
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return projectPhaseTracking;
 	}
 
 }

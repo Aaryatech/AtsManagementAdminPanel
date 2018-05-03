@@ -32,6 +32,7 @@ import com.ats.adminpanel.common.DateConvertor;
 import com.ats.adminpanel.model.Employee;
 import com.ats.adminpanel.model.GetTask;
 import com.ats.adminpanel.model.GetTaskList;
+import com.ats.adminpanel.model.Leave;
 import com.ats.adminpanel.model.LoginResponse;
 import com.ats.adminpanel.model.Task;
 
@@ -52,7 +53,7 @@ public class HomeController {
 	GetTaskList inprogressTaskDetails = new GetTaskList();
 	List<GetTask> getTaskList = new ArrayList<GetTask>();
 	GetTaskList forwardTaskDetails = new GetTaskList();
-	
+
 	@RequestMapping(value = "/", method = RequestMethod.GET)
 	public String home(Locale locale, Model model) {
 		logger.info("Welcome home! The client locale is {}.", locale);
@@ -116,7 +117,7 @@ public class HomeController {
 		return mav;
 
 	}
-	
+
 	@RequestMapping(value = "/logout", method = RequestMethod.GET)
 	public String logout(HttpSession session) {
 		System.out.println("User Logout");
@@ -133,8 +134,8 @@ public class HomeController {
 		try {
 
 			HttpSession session = request.getSession();
-			LoginResponse login = (LoginResponse) session.getAttribute("UserDetail"); 
-			System.out.println("user Id "+ login.getEmployee().getEmpId());
+			LoginResponse login = (LoginResponse) session.getAttribute("UserDetail");
+			System.out.println("user Id " + login.getEmployee().getEmpId());
 			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
 			map.add("developerId", login.getEmployee().getEmpId());
 			GetTask[] taskList = rest.postForObject(Constants.url + "masters/allTaskByDeveloperId", map,
@@ -154,7 +155,6 @@ public class HomeController {
 
 					assignedTask.add(getTaskList.get(i));
 
-					 
 				} else if (getTaskList.get(i).getDevStatus() == 2) {
 
 					inprogress.add(getTaskList.get(i));
@@ -167,7 +167,7 @@ public class HomeController {
 			System.out.println("Assigned Task ----" + assignedTask);
 			System.out.println("inprogress Task ----" + inprogress);
 			System.out.println("completed Task ----" + completed);
-			
+
 			model.addObject("assignedCount", assignedTask.size());
 			model.addObject("inprogressCount", inprogress.size());
 			model.addObject("completedCount", completed.size());
@@ -188,11 +188,9 @@ public class HomeController {
 		return model;
 
 	}
-	
+
 	@RequestMapping(value = "/startAssignTask/{taskId}", method = RequestMethod.GET)
 	public String startAssignTask(@PathVariable int taskId) {
-
-		 
 
 		Date date = new Date();
 
@@ -204,26 +202,21 @@ public class HomeController {
 		System.out.println(" str date " + strDate);
 
 		System.out.println(" str date time " + strDateTime);
-		 
-		
+
 		RestTemplate restTemplate = new RestTemplate();
-	 
 
 		assignedTaskDetails.setStartDate(strDate);
 		assignedTaskDetails.setStartDatetime(strDateTime);
 		assignedTaskDetails.setDevStatus(2);
-		if(assignedTaskDetails.getEndDate()!="" && assignedTaskDetails.getEndDate()!=null)
+		if (assignedTaskDetails.getEndDate() != "" && assignedTaskDetails.getEndDate() != null)
 			assignedTaskDetails.setEndDate(DateConvertor.convertToYMD(assignedTaskDetails.getEndDate()));
 		List<GetTaskList> update = new ArrayList<GetTaskList>();
 		update.add(assignedTaskDetails);
 		System.out.println("update" + update);
-		
-		List<Task> res = restTemplate.postForObject(Constants.url + "/masters/saveTask", update,
-				List.class);
-		
+
+		List<Task> res = restTemplate.postForObject(Constants.url + "/masters/saveTask", update, List.class);
+
 		System.out.println("res " + res);
-		
-		
 
 		return "redirect:/homePage";
 
@@ -237,7 +230,7 @@ public class HomeController {
 
 		vars.add("taskId", taskId);
 
-		  assignedTaskDetails = restTemplate.postForObject(Constants.url + "/masters/getTaskDetailsByTaskId", vars,
+		assignedTaskDetails = restTemplate.postForObject(Constants.url + "/masters/getTaskDetailsByTaskId", vars,
 				GetTaskList.class);
 		// masters/getTaskDetailsByTaskId
 		model.addObject("taskList", assignedTaskDetails);
@@ -273,20 +266,20 @@ public class HomeController {
 
 		vars.add("taskId", taskId);
 
-		  inprogressTaskDetails = restTemplate.postForObject(Constants.url + "/masters/getTaskDetailsByTaskId", vars,
+		inprogressTaskDetails = restTemplate.postForObject(Constants.url + "/masters/getTaskDetailsByTaskId", vars,
 				GetTaskList.class);
 		// masters/getTaskDetailsByTaskId
 		model.addObject("taskList", inprogressTaskDetails);
 		return model;
 	}
-	
+
 	@RequestMapping(value = "/updateTaskDevlopment", method = RequestMethod.POST)
 	public String updateTaskDevlopment(HttpServletRequest request, HttpServletResponse response) {
-		
+
 		try {
 			String devPer = request.getParameter("dstatus");
 			String remark = request.getParameter("remark");
-			
+
 			Date date = new Date();
 
 			DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
@@ -297,50 +290,42 @@ public class HomeController {
 			System.out.println(" endDate " + endDate);
 
 			System.out.println(" endDateTime " + endDateTime);
-			 
-			
+
 			RestTemplate restTemplate = new RestTemplate();
-			
+
 			inprogressTaskDetails.setStartDate(DateConvertor.convertToYMD(inprogressTaskDetails.getStartDate()));
-			
-		 if(devPer.equals("100"))
-		 {
-			 inprogressTaskDetails.setDevStatus(3); 
-			 inprogressTaskDetails.setEndDate(endDate);
-			 inprogressTaskDetails.setEndDatetime(endDateTime); 
-			 inprogressTaskDetails.setDevComplPer(devPer);
-			 inprogressTaskDetails.setRemarksByDev(remark);
-			 inprogressTaskDetails.setActualReqHrs(request.getParameter("actualReqHours"));
-		 }
-		 else
-		 {
-			 inprogressTaskDetails.setDevComplPer(devPer);
-			 inprogressTaskDetails.setRemarksByDev(remark);
-		 }
+
+			if (devPer.equals("100")) {
+				inprogressTaskDetails.setDevStatus(3);
+				inprogressTaskDetails.setEndDate(endDate);
+				inprogressTaskDetails.setEndDatetime(endDateTime);
+				inprogressTaskDetails.setDevComplPer(devPer);
+				inprogressTaskDetails.setRemarksByDev(remark);
+				inprogressTaskDetails.setActualReqHrs(request.getParameter("actualReqHours"));
+			} else {
+				inprogressTaskDetails.setDevComplPer(devPer);
+				inprogressTaskDetails.setRemarksByDev(remark);
+			}
 			List<GetTaskList> update = new ArrayList<GetTaskList>();
 			update.add(inprogressTaskDetails);
 			System.out.println("update" + update);
-			
-			List<Task> res = restTemplate.postForObject(Constants.url + "/masters/saveTask", update,
-					List.class);
-			
+
+			List<Task> res = restTemplate.postForObject(Constants.url + "/masters/saveTask", update, List.class);
+
 			System.out.println("res " + res);
-		}catch(Exception e)
-		{
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 
-		 
 		return "redirect:/homePage";
 
 	}
-	
-	
+
 	@RequestMapping(value = "/showForwardPage", method = RequestMethod.GET)
 	public ModelAndView showForwardPage(HttpServletRequest request, HttpServletResponse response) {
 
 		ModelAndView model = new ModelAndView("project/forwardList");
-	 
+
 		System.out.println("getTaskList" + getTaskList.size());
 		model.addObject("forward", getTaskList);
 
@@ -357,24 +342,22 @@ public class HomeController {
 
 		vars.add("taskId", taskId);
 
-		 forwardTaskDetails = restTemplate.postForObject(Constants.url + "/masters/getTaskDetailsByTaskId", vars,
+		forwardTaskDetails = restTemplate.postForObject(Constants.url + "/masters/getTaskDetailsByTaskId", vars,
 				GetTaskList.class);
-		Employee[] Employee = rest.getForObject(Constants.url + "/masters/getAllEmpList", 
-				Employee[].class); 
+		Employee[] Employee = rest.getForObject(Constants.url + "/masters/getAllEmpList", Employee[].class);
 		List<Employee> empList = new ArrayList<Employee>(Arrays.asList(Employee));
 		// masters/getTaskDetailsByTaskId
 		model.addObject("taskList", forwardTaskDetails);
 		model.addObject("empList", empList);
 		return model;
 	}
-	
+
 	@RequestMapping(value = "/forwordTaskToOtherDevloper", method = RequestMethod.POST)
 	public String forwordTaskToOtherDevloper(HttpServletRequest request, HttpServletResponse response) {
-		
+
 		try {
 			int empId = Integer.parseInt(request.getParameter("empId"));
-			 
-			
+
 			Date date = new Date();
 
 			DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
@@ -385,33 +368,27 @@ public class HomeController {
 			System.out.println(" endDate " + endDate);
 
 			System.out.println(" endDateTime " + endDateTime);
-			 
-			
+
 			RestTemplate restTemplate = new RestTemplate();
-			if(forwardTaskDetails.getStartDate()!="" && forwardTaskDetails.getStartDate()!=null)
+			if (forwardTaskDetails.getStartDate() != "" && forwardTaskDetails.getStartDate() != null)
 				forwardTaskDetails.setStartDate(DateConvertor.convertToYMD(forwardTaskDetails.getStartDate()));
-			if(forwardTaskDetails.getEndDate()!="" && forwardTaskDetails.getEndDate()!=null)
+			if (forwardTaskDetails.getEndDate() != "" && forwardTaskDetails.getEndDate() != null)
 				forwardTaskDetails.setEndDate(DateConvertor.convertToYMD(forwardTaskDetails.getEndDate()));
-			forwardTaskDetails.setDeveloperId(empId); 
-			
+			forwardTaskDetails.setDeveloperId(empId);
+
 			List<GetTaskList> updateForword = new ArrayList<GetTaskList>();
 			updateForword.add(forwardTaskDetails);
-		 
-			List<Task> res = restTemplate.postForObject(Constants.url + "/masters/saveTask", updateForword,
-					List.class);
-			
+
+			List<Task> res = restTemplate.postForObject(Constants.url + "/masters/saveTask", updateForword, List.class);
+
 			System.out.println("res " + res);
-		}catch(Exception e)
-		{
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 
-		 
 		return "redirect:/homePage";
 
 	}
-
-
 
 	@RequestMapping(value = "/showCompletedPage", method = RequestMethod.GET)
 	public ModelAndView showCompletedPage(HttpServletRequest request, HttpServletResponse response) {
@@ -421,6 +398,47 @@ public class HomeController {
 		model.addObject("completed", completed);
 		return model;
 
+	}
+
+	@RequestMapping(value = "/myProfile", method = RequestMethod.GET)
+	public ModelAndView myProfile(HttpServletRequest request, HttpServletResponse response) {
+
+		ModelAndView model = new ModelAndView("masters/myProfile");
+		HttpSession session = request.getSession();
+		Employee employee = (Employee) session.getAttribute("employee");
+
+		model.addObject("employee", employee);
+		return model;
+
+	}
+
+	@RequestMapping(value = "/applyForLeave", method = RequestMethod.POST)
+	public String applyForLeave(HttpServletRequest request, HttpServletResponse response) {
+
+		try {
+			HttpSession session = request.getSession();
+			Employee employee = (Employee) session.getAttribute("employee");
+
+			String fromDate = request.getParameter("fromDate");
+			String toDate = request.getParameter("toDate");
+			String remark = request.getParameter("remark");
+
+			Leave leave = new Leave();
+
+			leave.setEmpId(employee.getEmpId());
+			leave.setFromDate(fromDate);
+			leave.setToDate(toDate);
+			leave.setRemark(remark);
+
+			Leave res = rest.postForObject(Constants.url + "/saveLeaves", leave, Leave.class);
+
+			System.out.println("res " + res);
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return "redirect:/allEmployeeList";
 	}
 
 }
