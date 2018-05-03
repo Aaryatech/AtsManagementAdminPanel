@@ -192,7 +192,7 @@ table, th, td {
 									<table class="table table-advance" id="table1" name="table1">
 										<thead>
 											<tr>
-											
+
 												<th>Project Name</th>
 												<th>Task Planned Hrs</th>
 												<th>Actual Required Hrs</th>
@@ -320,10 +320,6 @@ table, th, td {
 			var fromDate = document.getElementById("fromDate").value;
 			var toDate = document.getElementById("toDate").value;
 
-		
-			
-			
-
 			if (validate() == true) {
 				alert("true");
 				$.getJSON('${findEmpConsumption}', {
@@ -370,8 +366,10 @@ table, th, td {
 
 				alert("Please select project OR Dates");
 				isValid = false;
+			} else {
+				return true
 			}
-			return isValid;
+
 		}
 	</script>
 

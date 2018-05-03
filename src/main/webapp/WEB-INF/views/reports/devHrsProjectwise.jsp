@@ -282,45 +282,40 @@ table, th, td {
 	<script type="text/javascript">
 		function search() {
 
-			//document.getElementById('btn_pdf').style.display = "block";
-$('#table1 tbody').empty();
+			$('#table1 tbody').empty();
 			var projectId = document.getElementById("projectId").value;
-			
+
 			if (validate() == true) {
 
-			$.getJSON('${findDevHrsByProId}', {
+				$.getJSON('${findDevHrsByProId}', {
 
-				projectId : projectId,
+					projectId : projectId,
 
-				ajax : 'true',
+					ajax : 'true',
 
-			}, function(data) {
-				$('#table1 td').remove();
-				$.each(
-						data,
-						function(key, itemList) {
-							
-							 
-							var tr = $('<tr></tr>');
-							tr.append($('<td></td>').html(key+1));
-							tr.append($('<td></td>').html(itemList.moduleName)); 
-							tr.append($('<td></td>').html(itemList.totalForms));
-							tr.append($('<td></td>').html(itemList.taskPlannedHrs));
-							tr.append($('<td></td>').html(itemList.actualReqHrs));
-							  	 $('#table1 tbody').append(tr);
-							 
+				}, function(data) {
+					$('#table1 td').remove();
+					$.each(data,
+							function(key, itemList) {
 
-						})
-				
+								var tr = $('<tr></tr>');
+								tr.append($('<td></td>').html(key + 1));
+								tr.append($('<td></td>').html(
+										itemList.moduleName));
+								tr.append($('<td></td>').html(
+										itemList.totalForms));
+								tr.append($('<td></td>').html(
+										itemList.taskPlannedHrs));
+								tr.append($('<td></td>').html(
+										itemList.actualReqHrs));
+								$('#table1 tbody').append(tr);
 
-			 
+							})
 
-				//alert("ala"+data);
+				}
 
+				);
 			}
-			
-
-			);
 
 		}
 	</script>
@@ -328,14 +323,14 @@ $('#table1 tbody').empty();
 		function validate() {
 
 			var projectId = $("#projectId").val();
-
+			alert(projectId)
 			var isValid = true;
 			if (projectId == "" || projectId == null) {
 
 				alert("Please select project ");
 				return false;
-			}else {
-				
+			} else {
+
 				return true;
 			}
 

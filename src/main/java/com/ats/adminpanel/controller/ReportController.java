@@ -37,9 +37,9 @@ public class ReportController {
 	EmpConReport empConReport = new EmpConReport();
 	EmpAllocatedWork empAllocatedWork = new EmpAllocatedWork();
 	EmpPerformance empPerformance = new EmpPerformance();
-	List<DevelopmentHrsProwise> developmentHrsProwiseList = null;
+	List<DevelopmentHrsProwise> developmentHrsProwiseList =null;
 
-	ProjectPhaseTracking projectPhaseTracking = new ProjectPhaseTracking();
+	List<ProjectPhaseTracking> projectPhaseTrackingList ;
 
 	@RequestMapping(value = "/viewEmpConsumptionReport", method = RequestMethod.GET)
 	public ModelAndView viewEmpConsumptionReport(HttpServletRequest request, HttpServletResponse response) {
@@ -293,7 +293,7 @@ public class ReportController {
 	}
 
 	@RequestMapping(value = "/findProjectPhaseTracking", method = RequestMethod.GET)
-	public @ResponseBody ProjectPhaseTracking findProjectPhaseTracking(HttpServletRequest request,
+	public @ResponseBody List<ProjectPhaseTracking> findProjectPhaseTracking(HttpServletRequest request,
 			HttpServletResponse response) {
 		try {
 			System.out.println("in method");
@@ -311,16 +311,16 @@ public class ReportController {
 			map.add("phaseId", phaseId);
 			map.add("projectId", projectId);
 
-			projectPhaseTracking = restTemplate.postForObject(Constants.url + "/getProjectPhaseTracking", map,
-					ProjectPhaseTracking.class);
+			projectPhaseTrackingList = restTemplate.postForObject(Constants.url + "/getProjectPhaseTracking", map,
+					List.class);
 
-			System.out.println("projectPhaseTracking []" + projectPhaseTracking.toString());
+			System.out.println("projectPhaseTrackingList []" + projectPhaseTrackingList.toString());
 
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 
-		return projectPhaseTracking;
+		return projectPhaseTrackingList;
 	}
 
 }

@@ -134,7 +134,7 @@ table, th, td {
 									<div class="col-md-2">Select Phase *</div>
 									<div class="col-md-3">
 										<select name="phaseId" placeholder="Phase Name"
-											data-rule-required="true"  id="phaseId"
+											data-rule-required="true" id="phaseId"
 											class="form-control chosen" required>
 
 											<option value="0" selected><c:out value="All" /></option>
@@ -335,22 +335,26 @@ table, th, td {
 
 				}, function(data) {
 
-					var tr = $('<tr></tr>');
-					tr.append($('<td></td>').html(data.tTaskPhaseId));
-					tr.append($('<td></td>').html(data.taskDesc));
+					$('#table1 td').remove();
+					$.each(data, function(key, List) {
 
-					tr.append($('<td></td>').html(data.empName));
-					tr.append($('<td></td>').html(data.expStartDate));
+						var tr = $('<tr></tr>');
+						tr.append($('<td></td>').html(List.tTaskPhaseId));
+						tr.append($('<td></td>').html(List.taskDesc));
 
-					tr.append($('<td></td>').html(data.expEndDate));
-					tr.append($('<td></td>').html(data.actualStartDate));
-					tr.append($('<td></td>').html(data.atcualEndDate));
-					tr.append($('<td></td>').html(data.expHrs));
-					tr.append($('<td></td>').html(data.actualHrs));
+						tr.append($('<td></td>').html(List.empName));
+						tr.append($('<td></td>').html(List.expStartDate));
 
-					$('#table1 tbody').append(tr).trigger('update');
+						tr.append($('<td></td>').html(List.expEndDate));
+						tr.append($('<td></td>').html(List.actualStartDate));
+						tr.append($('<td></td>').html(List.atcualEndDate));
+						tr.append($('<td></td>').html(List.expHrs));
+						tr.append($('<td></td>').html(List.actualHrs));
 
-					//alert("ala"+data);
+						$('#table1 tbody').append(tr).trigger('update');
+
+						//alert("ala"+data);
+					})
 
 				}
 
