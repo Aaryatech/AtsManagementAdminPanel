@@ -27,6 +27,8 @@ public class Project {
 	private int status;
 	
 	private String projectEndDate;
+	
+	private String projectExpEndDate;
 
 	public int getProjectId() {
 		return projectId;
@@ -119,12 +121,21 @@ public class Project {
 		this.projectEndDate = projectEndDate;
 	}
 
+	public String getProjectExpEndDate() {
+		return projectExpEndDate;
+	}
+
+	public void setProjectExpEndDate(String projectExpEndDate) {
+		this.projectExpEndDate = projectExpEndDate;
+	}
+
 	@Override
 	public String toString() {
 		return "Project [projectId=" + projectId + ", projectName=" + projectName + ", projectDescription="
 				+ projectDescription + ", referenceBy=" + referenceBy + ", projectCost=" + projectCost
 				+ ", projectAllocatedTo=" + projectAllocatedTo + ", projectStartDate=" + projectStartDate + ", devPer="
-				+ devPer + ", compPer=" + compPer + ", status=" + status + ", projectEndDate=" + projectEndDate + "]";
+				+ devPer + ", compPer=" + compPer + ", status=" + status + ", projectEndDate=" + projectEndDate
+				+ ", projectExpEndDate=" + projectExpEndDate + "]";
 	}
 	
 	

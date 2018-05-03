@@ -63,6 +63,50 @@ public class ProjectController {
 		return model;
 
 	}
+	
+	
+	@RequestMapping(value = "/editProject/{projectId}", method = RequestMethod.GET)
+	public ModelAndView editProject(@PathVariable int projectId, HttpServletRequest request, HttpServletResponse response) {
+
+		ModelAndView model = new ModelAndView("project/addproject");
+		try {
+			
+			MultiValueMap<String , Object> map = new LinkedMultiValueMap<String, Object>();
+			map.add("projectId", projectId); 
+			Project editproject = restTemplate.postForObject(Constants.url + "masters/projectByProjectId",map, Project.class);
+			if(editproject.getProjectStartDate()!="" && editproject.getProjectStartDate()!=null)
+				editproject.setProjectStartDate(DateConvertor.convertToDMY(editproject.getProjectStartDate()));
+			if(editproject.getProjectEndDate()!="" && editproject.getProjectEndDate()!=null)
+				editproject.setProjectEndDate(DateConvertor.convertToDMY(editproject.getProjectEndDate()));
+			if(editproject.getProjectExpEndDate()!="" && editproject.getProjectExpEndDate()!=null)
+				editproject.setProjectExpEndDate(DateConvertor.convertToDMY(editproject.getProjectExpEndDate()));
+				
+			List<Employee> empList; 
+			Employee[] empArray = restTemplate.getForObject(Constants.url + "masters/getAllEmpList", Employee[].class);
+
+			empList = new ArrayList<Employee>(Arrays.asList(empArray));
+
+			projList = new ArrayList<GetProjects>();
+
+			GetProjects[] projArray = restTemplate.getForObject(Constants.url + "masters/getProjectList",
+					GetProjects[].class);
+
+			projList = new ArrayList<GetProjects>(Arrays.asList(projArray));
+
+			model.addObject("projList", projList);
+			model.addObject("editproject", editproject); 
+			model.addObject("empList", empList);
+			
+		}catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+
+		
+
+		return model;
+
+	}
 
 	@RequestMapping(value = "/postProject", method = RequestMethod.POST)
 	public String postProject(HttpServletRequest request, HttpServletResponse response) {
@@ -70,20 +114,31 @@ public class ProjectController {
 		ModelAndView model = new ModelAndView("project/addproject");
 
 		try {
-
+			String projectId = request.getParameter("projectId");
 			String projName = request.getParameter("proj_name");
 			String projDesc = request.getParameter("desc");
 			String refBy = request.getParameter("ref_by");
 			String cost = request.getParameter("cost");
 			String projAlloc = request.getParameter("proj_alloc");
 			String startDate = request.getParameter("start_date");
-
+			String endDate = request.getParameter("endDate");
+			String projectExpEndDate = request.getParameter("projectExpEndDate");
+			String devPer = request.getParameter("devPer");
+			String compPer = request.getParameter("compPer");
+			
+			System.out.println("projectExpEndDate " + projectExpEndDate);
 			int empAlloc = Integer.parseInt((projAlloc));
 
 			Project proj = new Project();
-
-			proj.setCompPer("");
-			proj.setDevPer("");
+			
+			if(projectId=="" || projectId==null) 
+				proj.setProjectId(0);
+			else
+				proj.setProjectId(Integer.parseInt(projectId));
+			 
+			proj.setProjectExpEndDate(DateConvertor.convertToYMD(projectExpEndDate));
+			proj.setCompPer(compPer);
+			proj.setDevPer(devPer);
 			proj.setProjectAllocatedTo(empAlloc);
 			proj.setProjectCost(cost);
 			proj.setProjectDescription(projDesc); 
@@ -91,7 +146,11 @@ public class ProjectController {
 			proj.setProjectStartDate(DateConvertor.convertToYMD(startDate));
 			proj.setReferenceBy(refBy);
 			proj.setStatus(0);
-
+			
+			if(endDate!="" && endDate!=null)
+				proj.setProjectEndDate(DateConvertor.convertToYMD(endDate));
+			
+			System.out.println("projectExpEndDate " + proj.getProjectExpEndDate());
 			Project info = restTemplate.postForObject(com.ats.adminpanel.common.Constants.url + "masters/saveProject",
 					proj, Project.class);
 
@@ -410,10 +469,10 @@ String modId=null;
 			insert.setTaskPhaseId(phaseId);
 			insert.setTaskDesc(desc);
 			insert.setExpStartDate(DateConvertor.convertToYMD(expectedStartDate));
-			if(actualStartDate!="" || actualStartDate!=null)
+			if(actualStartDate!="" && actualStartDate!=null)
 				insert.setActualStartDate(DateConvertor.convertToYMD(actualStartDate));
 			insert.setExpEndDate(DateConvertor.convertToYMD(expectedEndDate));
-			if(actualStartDate!="" || actualStartDate!=null)
+			if(actualStartDate!="" && actualStartDate!=null)
 				insert.setAtcualEndDate(DateConvertor.convertToYMD(actualEndDate));
 			insert.setExpHrs(expectedHours);
 			insert.setActualHrs(actualdHours);
@@ -483,6 +542,33 @@ String modId=null;
 		}
 
 		return model;
+	}
+	
+	
+	@RequestMapping(value = "/ongoingProjecList", method = RequestMethod.GET)
+	public ModelAndView ongoingProjecList(HttpServletRequest request, HttpServletResponse response) {
+
+		ModelAndView model = new ModelAndView("project/ongoingProjecList");
+		
+		try {
+		 
+			List<GetProjects> projList;
+
+			GetProjects[] projArray = restTemplate.getForObject(Constants.url + "masters/ongoingProjectList",
+					GetProjects[].class); 
+			projList = new ArrayList<GetProjects>(Arrays.asList(projArray)); 
+			System.out.println("projList " + projList);
+			model.addObject("projList", projList); 
+			 
+		}catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+
+		
+
+		return model;
+
 	}
 
 }

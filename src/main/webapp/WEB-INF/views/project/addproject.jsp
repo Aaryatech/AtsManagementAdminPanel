@@ -53,7 +53,7 @@
 
 							<div>
 								<div class="box-content">
-									<form action="postProject" method="post"
+									<form action="${pageContext.request.contextPath}/postProject" method="post"
 										class="form-horizontal" id="validation-form" method="post">
 
 										<div class="form-group">
@@ -62,7 +62,8 @@
 											<div class="col-sm-6 col-lg-4 controls">
 												<input type="text" name="proj_name" id="proj_name"
 													class="form-control" placeholder="Project Name"
-													data-rule-required="true" required />
+													data-rule-required="true" value="${editproject.projectName}" required />
+													<input type="hidden" name="projectId" id="projectId" value="${editproject.projectId}" />
 											</div>
 
 											<label class="col-sm-3 col-lg-2 control-label">Description</label>
@@ -76,13 +77,13 @@
 												By</label>
 											<div class="col-sm-6 col-lg-4 controls">
 												<input type="text" name="ref_by" id="ref_by"
-													class="form-control" placeholder="Reference"
+													value="${editproject.referenceBy}" class="form-control" placeholder="Reference"
 													data-rule-required="true" />
 											</div>
 											<label class="col-sm-3 col-lg-2 control-label">Cost </label>
 											<div class="col-sm-6 col-lg-4 controls">
 												<input id="cost" type="number" name="cost"
-													data-rule-required="true" required />
+												value="${editproject.projectCost}"	class="form-control" data-rule-required="true" required />
 											</div>
 										</div>
 
@@ -93,12 +94,21 @@
 												To</label>
 											<div class="col-sm-6 col-lg-4 controls">
 												<select name="proj_alloc" id="proj_alloc"
-													class="form-control" placeholder="Allocation"
-													data-rule-required="true">
-													<option value="0">Select Empl</option>
+													class="form-control chosen" placeholder="Allocation"
+													required>
+													<option value="">Select Empl</option>
 													<c:forEach items="${empList}" var="empList"
 														varStatus="count">
+														<c:choose>
+															<c:when test="${empList.empId==editproject.projectAllocatedTo}">
+															<option value="${empList.empId}" selected><c:out value="${empList.empName}"/></option>
+															</c:when>
+															<c:otherwise>
 														<option value="${empList.empId}"><c:out value="${empList.empName}"/></option>
+															</c:otherwise>
+														</c:choose>
+														
+														
 													</c:forEach>
 												</select>
 											</div>
@@ -107,19 +117,60 @@
 												Date </label>
 
 											<div class="col-sm-3 col-lg-2 controls">
-												<input class="form-control date-picker" id="start_date"
+												<input class="form-control date-picker" value="${editproject.projectStartDate}" id="start_date"
 													size="10" type="text" name="start_date" required />
 											</div>
+ 
 
-											<div style="text-align: center;">
+										</div>
+										
+										<div class="form-group">
+										
+										<label class="col-sm-3 col-lg-2 control-label"> Expected End Date </label>
+
+											<div class="col-sm-6 col-lg-4 controls">
+												<input class="form-control date-picker" placeholder="Expected End Date" value="${editproject.projectExpEndDate}" id="projectExpEndDate"
+													size="10" type="text" name="projectExpEndDate" required />
+											</div>
+ 
+											<label class="col-sm-3 col-lg-2 control-label"> End Date </label>
+
+											<div class="col-sm-6 col-lg-4 controls">
+												<input class="form-control date-picker" placeholder="End Date" value="${editproject.projectEndDate}" id="endDate"
+													size="10" type="text" name="endDate"   />
+											</div>
+											
+										  
+
+										</div>
+										
+										<div class="form-group">
+										
+										<label class="col-sm-3 col-lg-2 control-label">Development %  </label>
+											<div class="col-sm-6 col-lg-4 controls">
+												<input type="text" name="devPer" id="devPer"
+													value="${editproject.devPer}" class="form-control" placeholder="Development %"
+													data-rule-required="true" />
+											</div>
+ 
+											<label class="col-sm-3 col-lg-2 control-label">Complete %  </label>
+											<div class="col-sm-6 col-lg-4 controls">
+												<input type="text" name="compPer" id="compPer"
+													value="${editproject.compPer}" class="form-control" placeholder="Complete %"
+													data-rule-required="true" />
+											</div>
+											 
+										</div>
+										
+										<div style="text-align: center;">
 
 												<input type="submit" onclick="validateQty()"
 													class="btn btn-info" value="Submit">
 											</div>
-
-										</div>
 									</form>
 								</div>
+								
+								
 
 								<div class="box-content">
 
@@ -155,8 +206,11 @@
 														<td>${proj.compPer}</td>
 														<td>${proj.status}</td>
 														<td>${proj.projectEndDate}</td>
-<td><a href="${pageContext.request.contextPath}/projectManagementTask/${proj.projectId}" class="action_btn" >
-						<abbr title="Detail"><i class="fa fa-list"></i></abbr></a></td>
+														<td><a href="${pageContext.request.contextPath}/projectManagementTask/${proj.projectId}" class="action_btn" >
+						<abbr title="Detail"><i class="fa fa-list"></i></abbr></a>
+														<a
+											href="${pageContext.request.contextPath}/editProject/${proj.projectId}"><span
+												class="glyphicon glyphicon-edit"></span></a> </td>
 													</tr>
 												</c:forEach>
 

@@ -1,5 +1,8 @@
 package com.ats.adminpanel.model;
 
+import java.util.List;
+ 
+
 public class GetProjects {
 	
 		private int projectId;
@@ -24,6 +27,8 @@ public class GetProjects {
 		private String projectEndDate;
 		
 		private String empName;
+		
+		List<DevloperListFromTask> devloperListFromTask;
 
 		public int getProjectId() {
 			return projectId;
@@ -125,13 +130,21 @@ public class GetProjects {
 			this.empName = empName;
 		}
 
+		public List<DevloperListFromTask> getDevloperListFromTask() {
+			return devloperListFromTask;
+		}
+
+		public void setDevloperListFromTask(List<DevloperListFromTask> devloperListFromTask) {
+			this.devloperListFromTask = devloperListFromTask;
+		}
+
 		@Override
 		public String toString() {
 			return "GetProjects [projectId=" + projectId + ", projectName=" + projectName + ", projectDescription="
 					+ projectDescription + ", referenceBy=" + referenceBy + ", projectCost=" + projectCost
 					+ ", projectAllocatedTo=" + projectAllocatedTo + ", projectStartDate=" + projectStartDate
 					+ ", devPer=" + devPer + ", compPer=" + compPer + ", status=" + status + ", projectEndDate="
-					+ projectEndDate + ", empName=" + empName + "]";
+					+ projectEndDate + ", empName=" + empName + ", devloperListFromTask=" + devloperListFromTask + "]";
 		}
 		
 		
