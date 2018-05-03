@@ -199,32 +199,45 @@
 					
 				
 					</ul>
-					  </c:when>
-				</c:choose>   
+					    
 					
 					
-				<%--	<a href="#" class="dropdown-toggle"> <i class="fa fa-list"></i>
-					<span>Bill Transaction</span> <b class="arrow fa fa-angle-right"></b>
+				 	<a href="#" class="dropdown-toggle"> <i class="fa fa-list"></i>
+					<span>Reports</span> <b class="arrow fa fa-angle-right"></b>
 				</a>
 				<!-- BEGIN Submenu -->
 				<ul class="submenu">
 					<li> 
-					<a href="${pageContext.request.contextPath}/orders">Order And Bill</a>
+					<a href="${pageContext.request.contextPath}/viewEmpConsumptionReport">Employee Consumption Report</a>
 					</li>
 				     <li> 
-				 	<a href="${pageContext.request.contextPath}/bill">Sale Bill</a>
+				 	<a href="${pageContext.request.contextPath}/viewEmpAllocatedWorkReport">Employee Allocated Work</a>
 					</li>
 				    <li> 
-				  	<a href="${pageContext.request.contextPath}/bills">View Bills</a>
+				  	<a href="${pageContext.request.contextPath}/viewEmpPerformanceReport">Employee Performance</a>
 					</li>
 					 
 					 <li> 
-				  	<a href="${pageContext.request.contextPath}/saleUnpaidReport">Pending Payment Of Sale Bills</a>
+				  	<a href="${pageContext.request.contextPath}/viewDevelopmentHrsReport">Development Hours</a>
 					</li>
-				
-				</ul>
 					
-					<a href="#" class="dropdown-toggle"> <i class="fa fa-list"></i>
+					<li> 
+				  	<a href="${pageContext.request.contextPath}/viewProjectPhaseTrackingReport">Project Phase Tracking</a>
+					</li>
+					
+					<li> 
+				  	<a href="${pageContext.request.contextPath}/ongoingProjecList">Ongoing Project List</a>
+					</li>
+					
+					<li> 
+				  	<a href="${pageContext.request.contextPath}/projectCostReport">Project Cost Report</a>
+					</li>
+					 
+				</ul>
+				 </c:when>
+				</c:choose>
+					
+					<%-- <a href="#" class="dropdown-toggle"> <i class="fa fa-list"></i>
 					<span>Stock</span> <b class="arrow fa fa-angle-right"></b>
 				</a>
 				<!-- BEGIN Submenu -->
@@ -305,7 +318,7 @@
 					</li>
 					
 					
-					</ul> --%>
+					</ul>  --%> 
 					
 					 
 				<a href="#" class="dropdown-toggle"> <i class="fa fa-list"></i>
@@ -313,15 +326,11 @@
 				</a>
 				<!-- BEGIN Submenu -->
 				<ul class="submenu">
-					<c:choose>
-						<c:when test="${Constants.subAct==111}">
-							<li class="active">
-						</c:when>
-						<c:otherwise>
-							<li>
-						</c:otherwise>
-					</c:choose>
-					 
+				
+					<li> 
+				  	<a href="${pageContext.request.contextPath}/myProfile">My Profile</a>
+					</li>
+					 <li>
 					<a href="${pageContext.request.contextPath}/logout">Logout</a>
 					</li>
 						

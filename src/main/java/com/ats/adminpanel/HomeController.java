@@ -438,7 +438,7 @@ public class HomeController {
 			e.printStackTrace();
 		}
 
-		return "redirect:/allEmployeeList";
+		return "redirect:/myProfile";
 	}
 
 }

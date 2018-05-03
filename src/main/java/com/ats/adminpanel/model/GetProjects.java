@@ -1,33 +1,23 @@
 package com.ats.adminpanel.model;
-
+ 
 import java.util.List;
  
 
 public class GetProjects {
 	
-		private int projectId;
-	
-		private String projectName;
-		
-		private String projectDescription;
-		
-		private String referenceBy;
-		
-		private String projectCost;
-		
+		private int projectId; 
+		private String projectName; 
+		private String projectDescription; 
+		private String referenceBy; 
+		private String projectCost; 
 		private int projectAllocatedTo;
-		private String projectStartDate;
-		
-		private String devPer;
-		
-		private String compPer;
-		 
-		private int status;
-		
+		private String projectStartDate; 
+		private String devPer; 
+		private String compPer; 
+		private int status; 
 		private String projectEndDate;
-		
-		private String empName;
-		
+		private String projectExpEndDate; 
+		private String empName; 
 		List<DevloperListFromTask> devloperListFromTask;
 
 		public int getProjectId() {
@@ -138,13 +128,22 @@ public class GetProjects {
 			this.devloperListFromTask = devloperListFromTask;
 		}
 
+		public String getProjectExpEndDate() {
+			return projectExpEndDate;
+		}
+
+		public void setProjectExpEndDate(String projectExpEndDate) {
+			this.projectExpEndDate = projectExpEndDate;
+		}
+
 		@Override
 		public String toString() {
 			return "GetProjects [projectId=" + projectId + ", projectName=" + projectName + ", projectDescription="
 					+ projectDescription + ", referenceBy=" + referenceBy + ", projectCost=" + projectCost
 					+ ", projectAllocatedTo=" + projectAllocatedTo + ", projectStartDate=" + projectStartDate
 					+ ", devPer=" + devPer + ", compPer=" + compPer + ", status=" + status + ", projectEndDate="
-					+ projectEndDate + ", empName=" + empName + ", devloperListFromTask=" + devloperListFromTask + "]";
+					+ projectEndDate + ", projectExpEndDate=" + projectExpEndDate + ", empName=" + empName
+					+ ", devloperListFromTask=" + devloperListFromTask + "]";
 		}
 		
 		

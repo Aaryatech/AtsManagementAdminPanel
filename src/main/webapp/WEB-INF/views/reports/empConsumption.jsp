@@ -348,7 +348,48 @@ table, th, td {
 		}
 	</script>
 	<script type="text/javascript">
-		function validate() {
+	
+	function validate() {
+
+		var fromDate = $("#fromDate").val();
+		var toDate = $("#toDate").val();
+		var empId = $("#empId").val();
+		var proId = $("#proId").val();
+		
+		alert(" proId " + proId);
+		alert(" fromDate " + fromDate);
+		alert(" toDate " + toDate);
+
+		var isValid = true;
+
+		if (empId == "" || empId == null) {
+			alert("Please select employee");
+			isValid = false;
+
+		} 
+		else 
+		{
+			if (proId != "") 
+				{
+				//alert("Please select project OR Dates");
+				isValid = true;
+				}
+			
+			
+			else if ( fromDate != "" && toDate != "") 
+			{
+				isValid = true;
+			}
+			else
+				{
+				alert("Select Any One");
+				isValid = false;
+				}
+		}
+		 
+return isValid;
+	}
+		/* function validate() {
 
 			var fromDate = $("#fromDate").val();
 			var toDate = $("#toDate").val();
@@ -370,7 +411,7 @@ table, th, td {
 				return true
 			}
 
-		}
+		} */
 	</script>
 
 </body>

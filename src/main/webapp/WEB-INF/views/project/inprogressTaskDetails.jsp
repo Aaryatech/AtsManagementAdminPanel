@@ -189,7 +189,7 @@
 									<div class="col-md-3">
 										<input type="text" name="dstatus"
 											 value="${taskList.devComplPer}"
-											placeholder="Status in %" id="dstatus" onchange="requiredActualHours()"
+											placeholder="Status in %" id="dstatus" pattern="[+-]?([0-9]*[.])?[0-9]+" onchange="requiredActualHours()"
 											class="form-control" required>
 									</div>
 								</div>
@@ -211,9 +211,8 @@
 									<div class="col-md-1"> </div>
 									<div class="col-md-2">Actual Required Hours</div>
 									<div class="col-md-3">
-										<input type="text" name="actualReqHours"
-										 
-											placeholder="Actual Required Hours" id="actualReqHours"
+										<input type="text" name="actualReqHours" 
+											placeholder="Actual Required Hours" pattern="[+-]?([0-9]*[.])?[0-9]+" id="actualReqHours"
 											class="form-control" disabled required/> 
 									</div>
 								</div>

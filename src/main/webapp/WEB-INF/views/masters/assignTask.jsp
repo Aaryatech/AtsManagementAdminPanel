@@ -134,7 +134,7 @@
 														value="${taskList.taskSpRemarks}" placeholder="Remark"  /></td> 
 														   <c:choose>
 															<c:when test="${taskList.devStatus>0}">
-																<td style="width: 100px"><input type="text" id="planHours${taskList.taskId}" name="planHours${taskList.taskId}" class="form-control" 
+																<td style="width: 100px"><input type="text" pattern="[+-]?([0-9]*[.])?[0-9]+" id="planHours${taskList.taskId}" name="planHours${taskList.taskId}" class="form-control" 
 																value="${taskList.taskPlannedHrs}" placeholder="Plan Hours"  /></td>
 																
 															</c:when>
@@ -142,7 +142,7 @@
 																 <c:forEach items="${taskTypeList}" var="taskTypeList" >
 																 	<c:choose>
 																 		<c:when test="${taskList.taskTypeId==taskTypeList.taskTypeId}">
-																	 		<td style="width: 100px"><input type="text" id="planHours${taskList.taskId}" name="planHours${taskList.taskId}" class="form-control" 
+																	 		<td style="width: 100px"><input type="text" pattern="[+-]?([0-9]*[.])?[0-9]+" id="planHours${taskList.taskId}" name="planHours${taskList.taskId}" class="form-control" 
 																			value="${taskTypeList.taskPlannedHrs}" placeholder="Plan Hours"  /></td>
 																			
 																 		</c:when>

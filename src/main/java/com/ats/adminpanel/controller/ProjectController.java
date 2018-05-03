@@ -570,5 +570,31 @@ String modId=null;
 		return model;
 
 	}
+	
+	@RequestMapping(value = "/projectCostReport", method = RequestMethod.GET)
+	public ModelAndView projectCostReport(HttpServletRequest request, HttpServletResponse response) {
+
+		ModelAndView model = new ModelAndView("project/projectCostReport");
+		
+		try {
+		 
+			List<GetProjects> projList;
+
+			GetProjects[] projArray = restTemplate.getForObject(Constants.url + "masters/ongoingProjectList",
+					GetProjects[].class); 
+			projList = new ArrayList<GetProjects>(Arrays.asList(projArray)); 
+			System.out.println("projList " + projList);
+			model.addObject("projList", projList); 
+			 
+		}catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+
+		
+
+		return model;
+
+	}
 
 }
