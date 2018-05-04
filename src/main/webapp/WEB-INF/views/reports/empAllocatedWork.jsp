@@ -137,7 +137,7 @@ table, th, td {
 
 									<div class="col-md-2">Select Project</div>
 									<div class="col-md-3">
-										<select name="proId" id="proId" class="form-control chosen"
+										<select name="projectId" id="projectId" class="form-control chosen"
 											required>
 
 											<option value="" selected></option>
@@ -326,14 +326,14 @@ table, th, td {
 
 			//document.getElementById('btn_pdf').style.display = "block";
 			var empId = document.getElementById("empId").value;
-			var proId = document.getElementById("proId").value;
+			var projectId = document.getElementById("projectId").value;
 			var fromDate = document.getElementById("fromDate").value;
 			var toDate = document.getElementById("toDate").value;
 
 			$.getJSON('${findEmpAllocatedWork}', {
 
 				empId : empId,
-				proId : proId,
+				projectId : projectId,
 				fromDate : fromDate,
 				toDate : toDate,
 				ajax : 'true',
@@ -361,7 +361,7 @@ table, th, td {
 			var fromDate = $("fromdatepicker").val();
 			var toDate = $("#todatepicker").val();
 			var empId = $("#empId").val();
-			var proId = $("#proId").val();
+			var projectId = $("#projectId").val();
 
 			var isValid = true;
 
@@ -369,7 +369,7 @@ table, th, td {
 				alert("Please select employee");
 				return false;
 
-			} else if (proId == "" || proId == null || fromDate == ""
+			} else if (projectId == "" || projectId == null || fromDate == ""
 					|| fromDate == null || toDate == "" || toDate == null) {
 
 				alert("Please select project OR Dates");
