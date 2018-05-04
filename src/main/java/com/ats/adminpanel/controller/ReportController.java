@@ -36,7 +36,7 @@ public class ReportController {
 
 	EmpConReport empConReport = new EmpConReport();
 	EmpAllocatedWork empAllocatedWork = new EmpAllocatedWork();
-	EmpPerformance empPerformance = new EmpPerformance();
+	List<EmpPerformance> empPerformance = new ArrayList<EmpPerformance>();
 	List<DevelopmentHrsProwise> developmentHrsProwiseList =null;
 
 	List<ProjectPhaseTracking> projectPhaseTrackingList ;
@@ -140,7 +140,7 @@ public class ReportController {
 	public @ResponseBody EmpConReport findEmpConsumption(HttpServletRequest request, HttpServletResponse response) {
 		try {
 			System.out.println("in method");
-
+			empConReport = new EmpConReport();
 			String empId = request.getParameter("empId");
 			System.out.println("EmpID" + empId);
 
@@ -191,6 +191,7 @@ public class ReportController {
 	public @ResponseBody EmpAllocatedWork findEmpAllocatedWork(HttpServletRequest request,
 			HttpServletResponse response) {
 		try {
+			empAllocatedWork = new EmpAllocatedWork();
 			System.out.println("in method");
 
 			String fromDate = null;
@@ -238,38 +239,37 @@ public class ReportController {
 				map.add("projectId", projectId);
 
 				empAllocatedWork = restTemplate.postForObject(Constants.url + "/getEmployeeAllocatedWorkById", map,
-						EmpAllocatedWork.class);
-
-				System.out.println("EmpConReportById []" + empAllocatedWork.toString());
-
+						EmpAllocatedWork.class); 
+				System.out.println("EmpConReportById []" + empAllocatedWork.toString()); 
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
+			empAllocatedWork = new EmpAllocatedWork();
 		}
 
 		return empAllocatedWork;
 	}
 
 	@RequestMapping(value = "/findEmpPerformance", method = RequestMethod.GET)
-	public @ResponseBody EmpPerformance findEmpPerformance(HttpServletRequest request, HttpServletResponse response) {
+	public @ResponseBody List<EmpPerformance> findEmpPerformance(HttpServletRequest request, HttpServletResponse response) {
 		try {
 			System.out.println("in method");
 
 			String empId = request.getParameter("empId");
 			System.out.println("EmpID" + empId);
-
+			empPerformance = new ArrayList<EmpPerformance>();
 			String projectId = request.getParameter("projectId");
 			System.out.println("ProjectID" + projectId);
 
-			RestTemplate restTemplate = new RestTemplate();
-
+			RestTemplate restTemplate = new RestTemplate(); 
+			
 			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
 
 			map.add("empId", empId);
 			map.add("projectId", projectId);
 
 			empPerformance = restTemplate.postForObject(Constants.url + "/getEmployeePerformance", map,
-					EmpPerformance.class);
+					List.class);
 
 			System.out.println("empPerformance []" + empPerformance.toString());
 

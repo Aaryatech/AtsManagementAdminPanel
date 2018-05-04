@@ -170,7 +170,7 @@ table, th, td {
 									<table class="table table-advance" id="table1" name="table1">
 										<thead>
 											<tr>
-
+												<th>Sr No</th>
 												<th>Task Name</th>
 												<th>Module Name</th>
 												<th>Task Planned Hrs</th>
@@ -312,24 +312,31 @@ table, th, td {
 				ajax : 'true',
 
 			}, function(data) {
-				$('#table1 td').remove();
+				$('#table1 td').remove(); 
+				 
+				if (data == "") {
+					alert("No records found !!");
 
-				var tr = $('<tr></tr>');
+				}
+				var grandTotal=0;
+				$.each(
+						data,
+						function(key, itemList) {
+							
+							 
+							var tr = $('<tr></tr>');
+								tr.append($('<td></td>').html(key+1));
+								tr.append($('<td></td>').html(itemList.taskName));
+							  	tr.append($('<td></td>').html(itemList.moduleName));
+							  	tr.append($('<td></td>').html(itemList.taskPlannedHrs)) 
+							  	tr.append($('<td></td>').html(itemList.actualReqHrs)) 
+							  	tr.append($('<td></td>').html(itemList.remarksByDev)) 
+							  	 $('#table1 tbody').append(tr);
+							 
 
-				tr.append($('<td></td>').html(data.taskName));
-				tr.append($('<td></td>').html(data.moduleName));
+						})
 
-				tr.append($('<td></td>').html(data.taskPlannedHrs));
-				tr.append($('<td></td>').html(data.actualReqHrs));
-
-				tr.append($('<td></td>').html(data.remarksByDev));
-				$('#table1 tbody').append(tr).trigger('update');
-
-				//alert("ala"+data);
-
-			}
-
-			);
+			});
 
 		}
 	</script>

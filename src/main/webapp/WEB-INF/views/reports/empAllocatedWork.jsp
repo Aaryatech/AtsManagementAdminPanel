@@ -140,7 +140,7 @@ table, th, td {
 										<select name="projectId" id="projectId" class="form-control chosen"
 											required>
 
-											<option value="" selected></option>
+											<option value="0" selected>All</option>
 											<c:forEach items="${projectList}" var="projectList"
 												varStatus="count">
 												<option value="${projectList.projectId}">${projectList.projectName}</option>
@@ -149,32 +149,21 @@ table, th, td {
 										</select>
 									</div>
 								</div>
-								<br>OR
-								<div class="box-content">
-
-									<div class="col-md-2">From Date</div>
-									<div class="col-md-3">
-										<input type="text" name="fromDate"
+								 
+								 
+										<input type="hidden" name="fromDate"
 											value="${editEmployee.empJoiningDate}"
 											placeholder="From Date" id="fromDate"
 											class="form-control date-picker" required />
-									</div>
-
-									<div class="box-content">
-
-										<div class="col-md-2">To Date</div>
-										<div class="col-md-3">
-											<input type="text" name="toDate"
+									 
+											<input type="hidden" name="toDate"
 												value="${editEmployee.empJoiningDate}" placeholder="To Date"
 												id="toDate" class="form-control date-picker" required />
-										</div>
-
-									</div>
-									<br>
+										 
 
 
 
-								</div>
+								</div>  
 								<br>
 
 
@@ -197,6 +186,7 @@ table, th, td {
 									<table class="table table-advance" id="table1" name="table1">
 										<thead>
 											<tr>
+											<th>Sr No</th>
 												<th>Project Name</th>
 												<th>Task Planned Hrs</th>
 												<th>No of Days</th>
@@ -326,10 +316,12 @@ table, th, td {
 
 			//document.getElementById('btn_pdf').style.display = "block";
 			var empId = document.getElementById("empId").value;
-			var projectId = document.getElementById("projectId").value;
+			var projectId = document.getElementById("projectId").value;  
 			var fromDate = document.getElementById("fromDate").value;
-			var toDate = document.getElementById("toDate").value;
-
+			var toDate = document.getElementById("toDate").value;  
+			
+			if(empId!="")
+				{
 			$.getJSON('${findEmpAllocatedWork}', {
 
 				empId : empId,
@@ -340,18 +332,29 @@ table, th, td {
 
 			}, function(data) {
 				$('#table1 td').remove();
-
+				
+			 
+				//alert("Not Record Found " + data.taskId);
 				var tr = $('<tr></tr>');
+				tr.append($('<td></td>').html(1));
 				tr.append($('<td></td>').html(data.projectName));
-				tr.append($('<td></td>').html(data.no_of_days));
 				tr.append($('<td></td>').html(data.taskPlannedHrs));
+				tr.append($('<td></td>').html(data.no_of_days));
 				$('#table1 tbody').append(tr).trigger('update');
 
 				//alert("ala"+data);
+				if(data.taskId==0)
+					{
+					alert("Not Record Found ");
+					$('#table1 td').remove();
+					}
 
-			}
-
-			);
+			});
+				}
+			else
+				{
+				alert("Select Employee");
+				}
 
 		}
 	</script>
