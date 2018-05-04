@@ -138,7 +138,7 @@ table, th, td {
 										<select name="proId" id="proId" class="form-control chosen"
 											required>
 
-											<option value="" selected></option>
+											<option value="0" >Select Project</option>
 											<c:forEach items="${projectList}" var="projectList"
 												varStatus="count">
 												<option value="${projectList.projectId}">${projectList.projectName}</option>
@@ -192,7 +192,7 @@ table, th, td {
 									<table class="table table-advance" id="table1" name="table1">
 										<thead>
 											<tr>
-
+												<th>Sr No</th>
 												<th>Project Name</th>
 												<th>Task Planned Hrs</th>
 												<th>Actual Required Hrs</th>
@@ -331,8 +331,9 @@ table, th, td {
 					ajax : 'true',
 
 				}, function(data) {
-
+					$('#table1 td').remove();
 					var tr = $('<tr></tr>');
+					tr.append($('<td></td>').html(1));
 					tr.append($('<td></td>').html(data.projectName));
 					tr.append($('<td></td>').html(data.actualReqHrs));
 					tr.append($('<td></td>').html(data.taskPlannedHrs));
@@ -356,9 +357,9 @@ table, th, td {
 		var empId = $("#empId").val();
 		var proId = $("#proId").val();
 		
-		alert(" proId " + proId);
+		/* alert(" proId " + proId);
 		alert(" fromDate " + fromDate);
-		alert(" toDate " + toDate);
+		alert(" toDate " + toDate); */
 
 		var isValid = true;
 
@@ -369,7 +370,7 @@ table, th, td {
 		} 
 		else 
 		{
-			if (proId != "") 
+			if (proId != 0) 
 				{
 				//alert("Please select project OR Dates");
 				isValid = true;

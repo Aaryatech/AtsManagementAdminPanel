@@ -150,16 +150,31 @@ public class ReportController {
 			String toDate = request.getParameter("toDate");
 			System.out.println("toDate" + toDate);
 
-			String proId = request.getParameter("proId");
+			int proId = Integer.parseInt(request.getParameter("proId"));
 			System.out.println("ProjectID" + proId);
 
 			RestTemplate restTemplate = new RestTemplate();
 
 			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+			
+			if(proId!=0)
+			{
+				System.out.println("in if ");
+				map.add("fromDate", fromDate);
+				map.add("toDate", toDate);
+				map.add("empId", empId);
+				map.add("projectId", proId);
+			}
+			else
+			{
+				System.out.println("else");
+				map.add("fromDate", DateConvertor.convertToYMD(fromDate));
+				map.add("toDate", DateConvertor.convertToYMD(toDate));
+				map.add("empId", empId);
+				map.add("projectId", proId);
+			}
 
-			map.add("fromDate", DateConvertor.convertToYMD(fromDate));
-			map.add("toDate", DateConvertor.convertToYMD(toDate));
-			map.add("empId", empId);
+			
 
 			empConReport = restTemplate.postForObject(Constants.url + "/getDatewiseEmpCon", map, EmpConReport.class);
 
@@ -222,7 +237,7 @@ public class ReportController {
 				map.add("empId", empId);
 				map.add("projectId", proId);
 
-				empAllocatedWork = restTemplate.postForObject(Constants.url + "Test/getEmployeeAllocatedWorkById", map,
+				empAllocatedWork = restTemplate.postForObject(Constants.url + "/getEmployeeAllocatedWorkById", map,
 						EmpAllocatedWork.class);
 
 				System.out.println("EmpConReportById []" + empAllocatedWork.toString());
