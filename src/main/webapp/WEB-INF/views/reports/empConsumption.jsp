@@ -335,8 +335,8 @@ table, th, td {
 					var tr = $('<tr></tr>');
 					tr.append($('<td></td>').html(1));
 					tr.append($('<td></td>').html(data.projectName));
-					tr.append($('<td></td>').html(data.actualReqHrs));
 					tr.append($('<td></td>').html(data.taskPlannedHrs));
+					tr.append($('<td></td>').html(data.actualReqHrs));
 					$('#table1 tbody').append(tr).trigger('update');
 
 					//alert("ala"+data);
