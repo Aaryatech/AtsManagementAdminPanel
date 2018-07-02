@@ -27,45 +27,40 @@ import com.ats.adminpanel.model.GetTask;
 import com.ats.adminpanel.model.Info;
 import com.ats.adminpanel.model.LoginResponse;
 import com.ats.adminpanel.model.Task;
-import com.ats.adminpanel.model.TaskType; 
- 
+import com.ats.adminpanel.model.TaskType;
 
 @Controller
 @Scope("session")
 public class MasterController {
-	
+
 	RestTemplate rest = new RestTemplate();
 	List<GetTask> taskList = new ArrayList<GetTask>();
-	
+
 	@RequestMapping(value = "/addEmployee", method = RequestMethod.GET)
 	public ModelAndView addEmployee(HttpServletRequest request, HttpServletResponse response) {
 
 		ModelAndView model = new ModelAndView("masters/addEmployee");
-		try
-		{
+		try {
 			HttpSession session = request.getSession();
 			LoginResponse login = (LoginResponse) session.getAttribute("UserDetail");
-			
-			System.out.println("user Id "+ login.getEmployee().getEmpId());
-			
-		}catch(Exception e)
-		{
+
+			System.out.println("user Id " + login.getEmployee().getEmpId());
+
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 
 		return model;
 	}
-	
+
 	@RequestMapping(value = "/insertEmployee", method = RequestMethod.POST)
 	public String insertEmployee(HttpServletRequest request, HttpServletResponse response) {
 
-	 
-		try
-		{
+		try {
 			HttpSession session = request.getSession();
-			LoginResponse login = (LoginResponse) session.getAttribute("UserDetail"); 
-			System.out.println("user Id "+ login.getEmployee().getEmpId());
-			
+			LoginResponse login = (LoginResponse) session.getAttribute("UserDetail");
+			System.out.println("user Id " + login.getEmployee().getEmpId());
+
 			String empName = request.getParameter("empName");
 			String empId = request.getParameter("empId");
 			String empMo = request.getParameter("empMo");
@@ -75,12 +70,12 @@ public class MasterController {
 			String empExperience = request.getParameter("empExperience");
 			String joiningDate = request.getParameter("joiningDate");
 			float perHour = Float.parseFloat(request.getParameter("perHour"));
-			
+
 			int empType = Integer.parseInt(request.getParameter("empType"));
 			String password = request.getParameter("password");
-			
+
 			Employee employee = new Employee();
-			if(empId=="" || empId == null)
+			if (empId == "" || empId == null)
 				employee.setEmpId(0);
 			else
 				employee.setEmpId(Integer.parseInt(empId));
@@ -95,324 +90,278 @@ public class MasterController {
 			employee.setEmpType(empType);
 			employee.setEmpPwd(password);
 			employee.setIsUsed(1);
-			
-			Employee res = rest.postForObject(Constants.url + "/masters/saveEmployee",employee,
-					Employee.class); 
-			
+
+			Employee res = rest.postForObject(Constants.url + "/masters/saveEmployee", employee, Employee.class);
+
 			System.out.println("res " + res);
-			
-		}catch(Exception e)
-		{
+
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 
 		return "redirect:/allEmployeeList";
 	}
-	
+
 	@RequestMapping(value = "/allEmployeeList", method = RequestMethod.GET)
 	public ModelAndView allEmployeeList(HttpServletRequest request, HttpServletResponse response) {
 
 		ModelAndView model = new ModelAndView("masters/empList");
-		try
-		{
+		try {
 			HttpSession session = request.getSession();
 			LoginResponse login = (LoginResponse) session.getAttribute("UserDetail");
-			
-			System.out.println("user Id "+ login.getEmployee().getEmpId());
-			
-			Employee[] Employee = rest.getForObject(Constants.url + "/masters/getAllEmpList", 
-					Employee[].class); 
+
+			System.out.println("user Id " + login.getEmployee().getEmpId());
+
+			Employee[] Employee = rest.getForObject(Constants.url + "/masters/getAllEmpList", Employee[].class);
 			List<Employee> empList = new ArrayList<Employee>(Arrays.asList(Employee));
-			
+
 			model.addObject("empList", empList);
-			
-		}catch(Exception e)
-		{
+
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 
 		return model;
 	}
-	
+
 	@RequestMapping(value = "/editEmp/{empId}", method = RequestMethod.GET)
 	public ModelAndView editEmp(@PathVariable int empId, HttpServletRequest request, HttpServletResponse response) {
 
 		ModelAndView model = new ModelAndView("masters/addEmployee");
-		try
-		{
+		try {
 			HttpSession session = request.getSession();
-			LoginResponse login = (LoginResponse) session.getAttribute("UserDetail"); 
-			System.out.println("user Id "+ login.getEmployee().getEmpId());
-			
+			LoginResponse login = (LoginResponse) session.getAttribute("UserDetail");
+			System.out.println("user Id " + login.getEmployee().getEmpId());
+
 			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
 			map.add("empId", empId);
-			Employee editEmployee = rest.postForObject(Constants.url + "/masters/employeeByEmpId",map,
-					Employee.class); 
+			Employee editEmployee = rest.postForObject(Constants.url + "/masters/employeeByEmpId", map, Employee.class);
 			model.addObject("editEmployee", editEmployee);
-			
-		}catch(Exception e)
-		{
+
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 
 		return model;
 	}
-	
+
 	@RequestMapping(value = "/deleteEmp/{empId}", method = RequestMethod.GET)
 	public String deleteEmp(@PathVariable int empId, HttpServletRequest request, HttpServletResponse response) {
 
-	 
-		try
-		{
+		try {
 			HttpSession session = request.getSession();
-			LoginResponse login = (LoginResponse) session.getAttribute("UserDetail"); 
-			System.out.println("user Id "+ login.getEmployee().getEmpId());
-			
+			LoginResponse login = (LoginResponse) session.getAttribute("UserDetail");
+			System.out.println("user Id " + login.getEmployee().getEmpId());
+
 			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
 			map.add("empId", empId);
-			Info info = rest.postForObject(Constants.url + "/masters/deleteEmployee",map,
-					Info.class); 
-			
+			Info info = rest.postForObject(Constants.url + "/masters/deleteEmployee", map, Info.class);
+
 			System.out.println("info " + info);
-			
-		}catch(Exception e)
-		{
+
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 
 		return "redirect:/allEmployeeList";
 	}
-	
+
 	@RequestMapping(value = "/formListForAssignTask", method = RequestMethod.GET)
 	public ModelAndView formListForAssignTask(HttpServletRequest request, HttpServletResponse response) {
 
 		ModelAndView model = new ModelAndView("masters/formListForAssignTask");
 		try
-		
+
 		{
-			 
-			GetProjects[] projArray = rest.getForObject(Constants.url + "masters/getProjectList",
-					GetProjects[].class);
+
+			GetProjects[] projArray = rest.getForObject(Constants.url + "masters/getProjectList", GetProjects[].class);
 
 			List<GetProjects> projList = new ArrayList<GetProjects>(Arrays.asList(projArray));
 
 			model.addObject("projList", projList);
-			
-		}catch(Exception e)
-		{
+
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 
 		return model;
 	}
-	
-	
+
 	@RequestMapping(value = "/getFormListByProjectId", method = RequestMethod.GET)
 	@ResponseBody
 	public List<GetFormList> getFormListByProjectId(HttpServletRequest request, HttpServletResponse response) {
 
 		List<GetFormList> getFormList = new ArrayList<GetFormList>();
-		try
-		{
-			 
+		try {
+
 			int projectId = Integer.parseInt(request.getParameter("projectId"));
 			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
 			map.add("projectId", projectId);
-			GetFormList[] getForm = rest.postForObject(Constants.url + "masters/getFormListByProjectId",map,
+			GetFormList[] getForm = rest.postForObject(Constants.url + "masters/getFormListByProjectId", map,
 					GetFormList[].class);
 
-			 getFormList = new ArrayList<GetFormList>(Arrays.asList(getForm));
+			getFormList = new ArrayList<GetFormList>(Arrays.asList(getForm));
 
-		 
-			
-		}catch(Exception e)
-		{
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 
 		return getFormList;
 	}
-	
+
 	@RequestMapping(value = "/assignTask/{formId}", method = RequestMethod.GET)
 	public ModelAndView assignTask(@PathVariable int formId, HttpServletRequest request, HttpServletResponse response) {
 
 		ModelAndView model = new ModelAndView("masters/assignTask");
-		try
-		{
-			 MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
-			 map.add("formId", formId);
-			 GetTask[] task = rest.postForObject(Constants.url + "masters/taskByFormId",map,
-					 GetTask[].class); 
-			 taskList = new ArrayList<GetTask>(Arrays.asList(task)); 
+		try {
+			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+			map.add("formId", formId);
+			GetTask[] task = rest.postForObject(Constants.url + "masters/taskByFormId", map, GetTask[].class);
+			taskList = new ArrayList<GetTask>(Arrays.asList(task));
 			model.addObject("taskList", taskList);
-			
+
 			TaskType[] taskTypeArray = rest.getForObject(Constants.url + "masters/getAllTaskTypeList",
-					TaskType[].class); 
-			List<TaskType> taskTypeList = new ArrayList<TaskType>(Arrays.asList(taskTypeArray)); 
+					TaskType[].class);
+			List<TaskType> taskTypeList = new ArrayList<TaskType>(Arrays.asList(taskTypeArray));
 			model.addObject("taskTypeList", taskTypeList);
-			
-			Employee[] Employee = rest.getForObject(Constants.url + "/masters/getAllEmpList", 
-					Employee[].class); 
+
+			Employee[] Employee = rest.getForObject(Constants.url + "/masters/getAllEmpList", Employee[].class);
 			List<Employee> empList = new ArrayList<Employee>(Arrays.asList(Employee));
-			
+
 			model.addObject("empList", empList);
-			
-		}catch(Exception e)
-		{
+
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 
 		return model;
 	}
-	
-	
-	@RequestMapping(value = "/submitAssignTask", method = RequestMethod.POST)
-	public String submitAssignTask( HttpServletRequest request, HttpServletResponse response) {
 
-	 
-		try
-		{
+	@RequestMapping(value = "/submitAssignTask", method = RequestMethod.POST)
+	public String submitAssignTask(HttpServletRequest request, HttpServletResponse response) {
+
+		try {
 			HttpSession session = request.getSession();
-			LoginResponse login = (LoginResponse) session.getAttribute("UserDetail"); 
-			System.out.println("user Id "+ login.getEmployee().getEmpId());
-			
-			String[] checkbox=request.getParameterValues("select_to_approve");
-			
-			for(int i = 0 ; i<taskList.size();i++)
-			{
-				for(int j = 0; j<checkbox.length;j++)
-				{
-					if(Integer.parseInt(checkbox[j])==taskList.get(i).getTaskId())
-					{
-						taskList.get(i).setTaskDescription(request.getParameter("desc"+taskList.get(i).getTaskId()));
-						taskList.get(i).setTaskSpRemarks(request.getParameter("remark"+taskList.get(i).getTaskId()));
-						taskList.get(i).setTaskPlannedHrs(request.getParameter("planHours"+taskList.get(i).getTaskId()));
-						taskList.get(i).setDeveloperId(Integer.parseInt(request.getParameter("devlpr"+taskList.get(i).getTaskId())));
-						 String  testerId = request.getParameter("tester"+taskList.get(i).getTaskId());
-						 if(testerId=="" || testerId==null)
-							 taskList.get(i).setTesterId(0);
-						 else
-							 taskList.get(i).setTesterId(Integer.parseInt(testerId));
-						 taskList.get(i).setDevStatus(1); 
-						 taskList.get(i).setAssignedBy(login.getEmployee().getEmpId());
+			LoginResponse login = (LoginResponse) session.getAttribute("UserDetail");
+			System.out.println("user Id " + login.getEmployee().getEmpId());
+
+			String[] checkbox = request.getParameterValues("select_to_approve");
+
+			for (int i = 0; i < taskList.size(); i++) {
+				for (int j = 0; j < checkbox.length; j++) {
+					if (Integer.parseInt(checkbox[j]) == taskList.get(i).getTaskId()) {
+						taskList.get(i).setTaskDescription(request.getParameter("desc" + taskList.get(i).getTaskId()));
+						taskList.get(i).setTaskSpRemarks(request.getParameter("remark" + taskList.get(i).getTaskId()));
+						taskList.get(i)
+								.setTaskPlannedHrs(request.getParameter("planHours" + taskList.get(i).getTaskId()));
+						taskList.get(i).setDeveloperId(
+								Integer.parseInt(request.getParameter("devlpr" + taskList.get(i).getTaskId())));
+						String testerId = request.getParameter("tester" + taskList.get(i).getTaskId());
+						if (testerId == "" || testerId == null)
+							taskList.get(i).setTesterId(0);
+						else
+							taskList.get(i).setTesterId(Integer.parseInt(testerId));
+						taskList.get(i).setDevStatus(1);
+						taskList.get(i).setAssignedBy(login.getEmployee().getEmpId());
 					}
 				}
 			}
-			 
+
 			System.out.println("taskList " + taskList);
-			
-			List<Task>  assign = rest.postForObject(Constants.url + "masters/saveTask",taskList,
-					List.class);
-			
+
+			List<Task> assign = rest.postForObject(Constants.url + "masters/saveTask", taskList, List.class);
+
 			System.out.println("assign " + assign);
-			
-		}catch(Exception e)
-		{
+
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 
-		return "redirect:/assignTask/"+taskList.get(0).getFormId();
+		return "redirect:/assignTask/" + taskList.get(0).getFormId();
 	}
-	
-	
+
 	@RequestMapping(value = "/assignSpecialTask", method = RequestMethod.GET)
 	public ModelAndView assignSpecialTask(HttpServletRequest request, HttpServletResponse response) {
 
 		ModelAndView model = new ModelAndView("masters/assignSpecialTask");
-		try
-		{
-			 
-			GetProjects[] projArray = rest.getForObject(Constants.url + "masters/getProjectList",
-					GetProjects[].class);
+		try {
+
+			GetProjects[] projArray = rest.getForObject(Constants.url + "masters/getProjectList", GetProjects[].class);
 
 			List<GetProjects> projList = new ArrayList<GetProjects>(Arrays.asList(projArray));
 
 			model.addObject("projList", projList);
-			
-			Employee[] Employee = rest.getForObject(Constants.url + "/masters/getAllEmpList", 
-					Employee[].class); 
+
+			Employee[] Employee = rest.getForObject(Constants.url + "/masters/getAllEmpList", Employee[].class);
 			List<Employee> empList = new ArrayList<Employee>(Arrays.asList(Employee));
-			
+
 			model.addObject("empList", empList);
-			
-		}catch(Exception e)
-		{
+
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 
 		return model;
 	}
-	
+
 	@RequestMapping(value = "/viewAllSpecialTask", method = RequestMethod.GET)
 	public ModelAndView viewAllSpecialTask(HttpServletRequest request, HttpServletResponse response) {
 
 		ModelAndView model = new ModelAndView("masters/viewAllSpecialTask");
-		try
-		{
-			 
-			GetProjects[] projArray = rest.getForObject(Constants.url + "masters/getProjectList",
-					GetProjects[].class);
+		try {
+
+			GetProjects[] projArray = rest.getForObject(Constants.url + "masters/getProjectList", GetProjects[].class);
 
 			List<GetProjects> projList = new ArrayList<GetProjects>(Arrays.asList(projArray));
 
 			model.addObject("projList", projList);
-			
-			 
-			
-		}catch(Exception e)
-		{
+
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 
 		return model;
 	}
-	
+
 	@RequestMapping(value = "/getSpecialTaskList", method = RequestMethod.GET)
 	@ResponseBody
 	public List<Task> getSpecialTaskList(HttpServletRequest request, HttpServletResponse response) {
 
 		List<Task> getTaskList = new ArrayList<Task>();
-		try
-		{
-			 
+		try {
+
 			int projectId = Integer.parseInt(request.getParameter("projectId"));
 			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
 			map.add("projectId", projectId);
-			Task[] getTask = rest.postForObject(Constants.url + "masters/getSpecialTaskList",map,
-					Task[].class);
+			Task[] getTask = rest.postForObject(Constants.url + "masters/getSpecialTaskList", map, Task[].class);
 
 			getTaskList = new ArrayList<Task>(Arrays.asList(getTask));
 
-		 
-			
-		}catch(Exception e)
-		{
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 
 		return getTaskList;
 	}
-	
-	@RequestMapping(value = "/submitAssignSpecialTask", method = RequestMethod.POST)
-	public String submitAssignSpecialTask( HttpServletRequest request, HttpServletResponse response) {
 
-	 
-		try
-		{
+	@RequestMapping(value = "/submitAssignSpecialTask", method = RequestMethod.POST)
+	public String submitAssignSpecialTask(HttpServletRequest request, HttpServletResponse response) {
+
+		try {
 			HttpSession session = request.getSession();
-			LoginResponse login = (LoginResponse) session.getAttribute("UserDetail"); 
-			System.out.println("user Id "+ login.getEmployee().getEmpId());
-			
-			String  taskId = request.getParameter("taskId");
+			LoginResponse login = (LoginResponse) session.getAttribute("UserDetail");
+			System.out.println("user Id " + login.getEmployee().getEmpId());
+
+			String taskId = request.getParameter("taskId");
 			int projectId = Integer.parseInt(request.getParameter("projectId"));
-			String  taskName = request.getParameter("taskName");
-			String  taskDisc = request.getParameter("taskDisc");
-			String  taskHours = request.getParameter("taskHours");
+			String taskName = request.getParameter("taskName");
+			String taskDisc = request.getParameter("taskDisc");
+			String taskHours = request.getParameter("taskHours");
 			int devlprId = Integer.parseInt(request.getParameter("devlprId"));
 			List<Task> insertList = new ArrayList<Task>();
-			
+
 			Task insert = new Task();
-			if(taskId=="" || taskId==null)
+			if (taskId == "" || taskId == null)
 				insert.setTaskId(0);
 			else
 				insert.setTaskId(Integer.parseInt(taskId));
@@ -427,48 +376,41 @@ public class MasterController {
 			insert.setAssignedBy(login.getEmployee().getEmpId());
 			insert.setDevStatus(1);
 			insertList.add(insert);
-			
-			
-			List<Task>  assign = rest.postForObject(Constants.url + "masters/saveTask",insertList,
-					List.class);
-			
-		}catch(Exception e)
-		{
+
+			List<Task> assign = rest.postForObject(Constants.url + "masters/saveTask", insertList, List.class);
+
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 
 		return "redirect:/assignSpecialTask";
 	}
-	
+
 	@RequestMapping(value = "/editSpecialTask/{taskId}", method = RequestMethod.GET)
-	public ModelAndView editSpecialTask(@PathVariable int taskId, HttpServletRequest request, HttpServletResponse response) {
+	public ModelAndView editSpecialTask(@PathVariable int taskId, HttpServletRequest request,
+			HttpServletResponse response) {
 
 		ModelAndView model = new ModelAndView("masters/assignSpecialTask");
-		try
-		{
-			
-			MultiValueMap<String , Object> map = new LinkedMultiValueMap<String, Object>();
+		try {
+
+			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
 			map.add("taskId", taskId);
-			
-			Task  task = rest.postForObject(Constants.url + "masters/getTaskById",map,
-					Task .class);
+
+			Task task = rest.postForObject(Constants.url + "masters/getTaskById", map, Task.class);
 			model.addObject("task", task);
-			 
-			GetProjects[] projArray = rest.getForObject(Constants.url + "masters/getProjectList",
-					GetProjects[].class);
+
+			GetProjects[] projArray = rest.getForObject(Constants.url + "masters/getProjectList", GetProjects[].class);
 
 			List<GetProjects> projList = new ArrayList<GetProjects>(Arrays.asList(projArray));
 
 			model.addObject("projList", projList);
-			
-			Employee[] Employee = rest.getForObject(Constants.url + "/masters/getAllEmpList", 
-					Employee[].class); 
+
+			Employee[] Employee = rest.getForObject(Constants.url + "/masters/getAllEmpList", Employee[].class);
 			List<Employee> empList = new ArrayList<Employee>(Arrays.asList(Employee));
-			
+
 			model.addObject("empList", empList);
-			
-		}catch(Exception e)
-		{
+
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 
