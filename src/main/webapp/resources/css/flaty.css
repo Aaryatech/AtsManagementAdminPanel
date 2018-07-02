@@ -4741,7 +4741,7 @@ div.tagsinput .not_valid {
 .nav-list > li .submenu > li > ul > li.active > a,
 .nav-list > li .submenu > li > a:focus,
 .nav-list > li .submenu > li > a:hover,
-.nav-list > li .submenu > li.active > a             {background-color: #bb6f54;}    /* Submenu Hover */
+.nav-list > li .submenu > li.active > a             {background-color: #180686;}    /* Submenu Hover */
 .nav-list > li.active > a:after                     {border-right-color: #e9f0f9;}
 .login-page:before,
 .error-page:before,
