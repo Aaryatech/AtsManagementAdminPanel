@@ -1,7 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
-
+<%@ page import="com.ats.adminpanel.common.*"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
@@ -138,23 +138,61 @@
 				</c:choose>
 		  <c:choose>
 						<c:when test="${sessionScope.employee.empType==2}"> 
+						<c:choose>
+							<c:when test="${Constants.mainAct==1}">
+								<li class="active">
+							</c:when>
+
+							<c:otherwise>
+								<li>
+							</c:otherwise>
+						</c:choose>
 				<a href="#" class="dropdown-toggle"> <i class="fa fa-list"></i>
 					<span>Masters</span> <b class="arrow fa fa-angle-right"></b>
 				</a>
 				<!-- BEGIN Submenu -->
 				<ul class="submenu">
 					 
-					<li> 
+					<c:choose>
+								<c:when test="${Constants.subAct==11}">
+									<li class="active">
+								</c:when>
+								<c:otherwise>
+									<li>
+								</c:otherwise>
+							</c:choose>
 					<a href="${pageContext.request.contextPath}/addEmployee">Add Employee</a>
 					</li>
-					<li> 
+					<c:choose>
+								<c:when test="${Constants.subAct==12}">
+									<li class="active">
+								</c:when>
+								<c:otherwise>
+									<li>
+								</c:otherwise>
+							</c:choose>
 					<a href="${pageContext.request.contextPath}/allEmployeeList">Employee List</a>
 					</li>
-					<li> 
+					
+					<c:choose>
+								<c:when test="${Constants.subAct==13}">
+									<li class="active">
+								</c:when>
+								<c:otherwise>
+									<li>
+								</c:otherwise>
+							</c:choose>
 					<a href="${pageContext.request.contextPath}/showAddProject">Add Project</a>
 					</li>
 					
-					<li> 
+					<c:choose>
+								<c:when test="${Constants.subAct==14}">
+									<li class="active">
+								</c:when>
+								<c:otherwise>
+									<li>
+								</c:otherwise>
+							</c:choose>
 					<a href="${pageContext.request.contextPath}/showAddNewModule">Add Module</a>
 					</li>
 					<%-- <li> 
@@ -178,62 +216,154 @@
 					</li> --%>
  
 				</ul>
-				
+				</li>
+				<c:choose>
+							<c:when test="${Constants.mainAct==2}">
+								<li class="active">
+							</c:when>
+
+							<c:otherwise>
+								<li>
+							</c:otherwise>
+						</c:choose>
 					 <a href="#" class="dropdown-toggle"> <i class="fa fa-list"></i>
 					<span>Task Transaction</span> <b class="arrow fa fa-angle-right"></b>
 				</a>
 				<!-- BEGIN Submenu -->
 				<ul class="submenu">
 				
-					<li> 
+					<c:choose>
+								<c:when test="${Constants.subAct==21}">
+									<li class="active">
+								</c:when>
+								<c:otherwise>
+									<li>
+								</c:otherwise>
+							</c:choose>
 					<a href="${pageContext.request.contextPath}/formListForAssignTask">Assign Task</a>
 					</li>
-					<li> 
+					
+							<c:choose>
+								<c:when test="${Constants.subAct==22}">
+									<li class="active">
+								</c:when>
+								<c:otherwise>
+									<li>
+								</c:otherwise>
+							</c:choose>
 					<a href="${pageContext.request.contextPath}/assignSpecialTask">Assign Special Task</a>
 					</li>
 					
-				    <li>
+				    <c:choose>
+								<c:when test="${Constants.subAct==23}">
+									<li class="active">
+								</c:when>
+								<c:otherwise>
+									<li>
+								</c:otherwise>
+							</c:choose>
 				  	<a href="${pageContext.request.contextPath}/viewAllSpecialTask">View Special Task</a>
 					</li>
 					 
 					
 				
 					</ul>
-					    
+					</li>    
 					
+					<c:choose>
+							<c:when test="${Constants.mainAct==3}">
+								<li class="active">
+							</c:when>
+
+							<c:otherwise>
+								<li>
+							</c:otherwise>
+						</c:choose>
 					
 				 	<a href="#" class="dropdown-toggle"> <i class="fa fa-list"></i>
 					<span>Reports</span> <b class="arrow fa fa-angle-right"></b>
 				</a>
 				<!-- BEGIN Submenu -->
 				<ul class="submenu">
-					<li> 
+					<c:choose>
+								<c:when test="${Constants.subAct==31}">
+									<li class="active">
+								</c:when>
+								<c:otherwise>
+									<li>
+								</c:otherwise>
+							</c:choose>
 					<a href="${pageContext.request.contextPath}/viewEmpConsumptionReport">Employee Consumption Report</a>
 					</li>
-				     <li> 
+					
+				     <c:choose>
+								<c:when test="${Constants.subAct==32}">
+									<li class="active">
+								</c:when>
+								<c:otherwise>
+									<li>
+								</c:otherwise>
+							</c:choose> 
 				 	<a href="${pageContext.request.contextPath}/viewEmpAllocatedWorkReport">Employee Allocated Work</a>
 					</li>
-				    <li> 
+					
+				    <c:choose>
+								<c:when test="${Constants.subAct==33}">
+									<li class="active">
+								</c:when>
+								<c:otherwise>
+									<li>
+								</c:otherwise>
+							</c:choose> 
 				  	<a href="${pageContext.request.contextPath}/viewEmpPerformanceReport">Employee Performance</a>
 					</li>
 					 
-					 <li> 
+					<c:choose>
+								<c:when test="${Constants.subAct==34}">
+									<li class="active">
+								</c:when>
+								<c:otherwise>
+									<li>
+								</c:otherwise>
+							</c:choose> 
 				  	<a href="${pageContext.request.contextPath}/viewDevelopmentHrsReport">Development Hours</a>
 					</li>
 					
-					<li> 
+					<c:choose>
+								<c:when test="${Constants.subAct==35}">
+									<li class="active">
+								</c:when>
+								<c:otherwise>
+									<li>
+								</c:otherwise>
+							</c:choose>
 				  	<a href="${pageContext.request.contextPath}/viewProjectPhaseTrackingReport">Project Phase Tracking</a>
 					</li>
 					
-					<li> 
+					<c:choose>
+								<c:when test="${Constants.subAct==36}">
+									<li class="active">
+								</c:when>
+								<c:otherwise>
+									<li>
+								</c:otherwise>
+							</c:choose> 
 				  	<a href="${pageContext.request.contextPath}/ongoingProjecList">Ongoing Project List</a>
 					</li>
 					
-					<li> 
+					<c:choose>
+								<c:when test="${Constants.subAct==37}">
+									<li class="active">
+								</c:when>
+								<c:otherwise>
+									<li>
+								</c:otherwise>
+							</c:choose> 
 				  	<a href="${pageContext.request.contextPath}/projectCostReport">Project Cost Report</a>
 					</li>
 					 
 				</ul>
+				</li>
 				 </c:when>
 				</c:choose>
 					
@@ -320,14 +450,29 @@
 					
 					</ul>  --%> 
 					
-					 
+				<c:choose>
+							<c:when test="${Constants.mainAct==4}">
+								<li class="active">
+							</c:when>
+
+							<c:otherwise>
+								<li>
+							</c:otherwise>
+						</c:choose>	 
 				<a href="#" class="dropdown-toggle"> <i class="fa fa-list"></i>
 					<span>Logout</span> <b class="arrow fa fa-angle-right"></b>
 				</a>
 				<!-- BEGIN Submenu -->
 				<ul class="submenu">
 				
-					<li> 
+					<c:choose>
+								<c:when test="${Constants.subAct==41}">
+									<li class="active">
+								</c:when>
+								<c:otherwise>
+									<li>
+								</c:otherwise>
+							</c:choose> 
 				  	<a href="${pageContext.request.contextPath}/myProfile">My Profile</a>
 					</li>
 					 <li>

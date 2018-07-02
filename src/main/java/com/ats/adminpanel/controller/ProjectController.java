@@ -40,6 +40,9 @@ public class ProjectController {
 
 	@RequestMapping(value = "/showAddProject", method = RequestMethod.GET)
 	public ModelAndView showAddProject(HttpServletRequest request, HttpServletResponse response) {
+		
+		Constants.mainAct = 1;
+		Constants.subAct = 13;
 
 		ModelAndView model = new ModelAndView("project/addproject");
 
@@ -166,6 +169,9 @@ public class ProjectController {
 
 	@RequestMapping(value = "/showAddNewModule", method = RequestMethod.GET)
 	public ModelAndView showAddNewModule(HttpServletRequest request, HttpServletResponse response) {
+		
+		Constants.mainAct = 1;
+		Constants.subAct = 14;
 
 		ModelAndView model = new ModelAndView("modules/addmodule");
 
@@ -547,6 +553,9 @@ String modId=null;
 	
 	@RequestMapping(value = "/ongoingProjecList", method = RequestMethod.GET)
 	public ModelAndView ongoingProjecList(HttpServletRequest request, HttpServletResponse response) {
+		
+		Constants.mainAct = 3;
+		Constants.subAct = 36;
 
 		ModelAndView model = new ModelAndView("project/ongoingProjecList");
 		
@@ -573,6 +582,9 @@ String modId=null;
 	
 	@RequestMapping(value = "/projectCostReport", method = RequestMethod.GET)
 	public ModelAndView projectCostReport(HttpServletRequest request, HttpServletResponse response) {
+		
+		Constants.mainAct = 3;
+		Constants.subAct = 37;
 
 		ModelAndView model = new ModelAndView("project/projectCostReport");
 		

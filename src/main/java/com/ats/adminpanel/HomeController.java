@@ -85,7 +85,8 @@ public class HomeController {
 
 				mav = new ModelAndView("login");
 			} else {
-
+				Constants.mainAct = 0;
+				Constants.subAct = 0;
 				String pass = "1234";
 				RestTemplate rest = new RestTemplate();
 				MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
@@ -128,6 +129,9 @@ public class HomeController {
 
 	@RequestMapping(value = "/homePage", method = RequestMethod.GET)
 	public ModelAndView viewBill(HttpServletRequest request, HttpServletResponse response) {
+		
+		Constants.mainAct = 0;
+		Constants.subAct = 0;
 
 		ModelAndView model = new ModelAndView("project/homePage");
 		getTaskList = new ArrayList<GetTask>();
@@ -402,6 +406,9 @@ public class HomeController {
 
 	@RequestMapping(value = "/myProfile", method = RequestMethod.GET)
 	public ModelAndView myProfile(HttpServletRequest request, HttpServletResponse response) {
+		
+		Constants.mainAct = 4;
+		Constants.subAct = 41;
 
 		ModelAndView model = new ModelAndView("masters/myProfile");
 		HttpSession session = request.getSession();

@@ -46,6 +46,9 @@ public class ReportController {
 
 	@RequestMapping(value = "/viewEmpConsumptionReport", method = RequestMethod.GET)
 	public ModelAndView viewEmpConsumptionReport(HttpServletRequest request, HttpServletResponse response) {
+		
+		Constants.mainAct = 3;
+		Constants.subAct = 31;
 
 		ModelAndView model = new ModelAndView("reports/empConsumption");
 
@@ -64,6 +67,9 @@ public class ReportController {
 
 	@RequestMapping(value = "/viewEmpAllocatedWorkReport", method = RequestMethod.GET)
 	public ModelAndView viewEmpAllocatedWorkReport(HttpServletRequest request, HttpServletResponse response) {
+		
+		Constants.mainAct = 3;
+		Constants.subAct = 32;
 
 		ModelAndView model = new ModelAndView("reports/empAllocatedWork");
 
@@ -82,6 +88,9 @@ public class ReportController {
 
 	@RequestMapping(value = "/viewEmpPerformanceReport", method = RequestMethod.GET)
 	public ModelAndView viewEmpPerformanceReport(HttpServletRequest request, HttpServletResponse response) {
+		
+		Constants.mainAct = 3;
+		Constants.subAct = 33;
 
 		ModelAndView model = new ModelAndView("reports/empPerformance");
 
@@ -100,6 +109,9 @@ public class ReportController {
 
 	@RequestMapping(value = "/viewDevelopmentHrsReport", method = RequestMethod.GET)
 	public ModelAndView viewDevelopmentHrsReport(HttpServletRequest request, HttpServletResponse response) {
+		
+		Constants.mainAct = 3;
+		Constants.subAct = 34;
 
 		ModelAndView model = new ModelAndView("reports/devHrsProjectwise");
 
@@ -116,6 +128,9 @@ public class ReportController {
 
 	@RequestMapping(value = "/viewProjectPhaseTrackingReport", method = RequestMethod.GET)
 	public ModelAndView viewProjectPhaseTrackingReport(HttpServletRequest request, HttpServletResponse response) {
+		
+		Constants.mainAct = 3;
+		Constants.subAct = 35;
 
 		ModelAndView model = new ModelAndView("reports/projectPhaseTracking");
 		try {

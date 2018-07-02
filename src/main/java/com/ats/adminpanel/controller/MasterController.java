@@ -38,6 +38,9 @@ public class MasterController {
 
 	@RequestMapping(value = "/addEmployee", method = RequestMethod.GET)
 	public ModelAndView addEmployee(HttpServletRequest request, HttpServletResponse response) {
+		
+		Constants.mainAct = 1;
+		Constants.subAct = 11;
 
 		ModelAndView model = new ModelAndView("masters/addEmployee");
 		try {
@@ -104,6 +107,9 @@ public class MasterController {
 
 	@RequestMapping(value = "/allEmployeeList", method = RequestMethod.GET)
 	public ModelAndView allEmployeeList(HttpServletRequest request, HttpServletResponse response) {
+		
+		Constants.mainAct = 1;
+		Constants.subAct = 12;
 
 		ModelAndView model = new ModelAndView("masters/empList");
 		try {
@@ -168,6 +174,9 @@ public class MasterController {
 
 	@RequestMapping(value = "/formListForAssignTask", method = RequestMethod.GET)
 	public ModelAndView formListForAssignTask(HttpServletRequest request, HttpServletResponse response) {
+		
+		Constants.mainAct = 2;
+		Constants.subAct = 21;
 
 		ModelAndView model = new ModelAndView("masters/formListForAssignTask");
 		try
@@ -282,6 +291,9 @@ public class MasterController {
 
 	@RequestMapping(value = "/assignSpecialTask", method = RequestMethod.GET)
 	public ModelAndView assignSpecialTask(HttpServletRequest request, HttpServletResponse response) {
+		
+		Constants.mainAct = 2;
+		Constants.subAct = 22;
 
 		ModelAndView model = new ModelAndView("masters/assignSpecialTask");
 		try {
@@ -306,6 +318,9 @@ public class MasterController {
 
 	@RequestMapping(value = "/viewAllSpecialTask", method = RequestMethod.GET)
 	public ModelAndView viewAllSpecialTask(HttpServletRequest request, HttpServletResponse response) {
+		
+		Constants.mainAct = 2;
+		Constants.subAct = 23;
 
 		ModelAndView model = new ModelAndView("masters/viewAllSpecialTask");
 		try {
