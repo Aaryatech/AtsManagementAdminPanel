@@ -175,13 +175,8 @@ table, th, td {
 
 
 									</div>
-								</div>
-							</div>
-
-
-							<div class="row">
-								<div class="clearfix"></div>
-
+								</div><br>
+								
 								<div class="table-responsive" style="border: 0">
 									<table class="table table-advance" id="table1" name="table1">
 										<thead>
@@ -209,15 +204,17 @@ table, th, td {
 									</div>
 								</div>
 							</div>
-
-
-
+ 
 						</div>
 					</div>
 
 
 				</div>
+				<footer>
+	<p>2018 © AARYATECH SOLUTIONS</p>
+	</footer>
 			</div>
+			
 			<!-- END Main Content -->
 
 

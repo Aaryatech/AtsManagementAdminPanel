@@ -104,13 +104,13 @@
 				 
 	 
 	</div>
-	 
+	 <footer>
+	<p>2018 © AARYATECH SOLUTIONS</p>
+	</footer>
 	</div>
 	<!-- END Main Content -->
 
-	<footer>
-	<p>2018 © SONA ELECTRICALS.</p>
-	</footer>
+	 
 
 	<a id="btn-scrollup" class="btn btn-circle btn-lg" href="#"><i
 		class="fa fa-chevron-up"></i></a>

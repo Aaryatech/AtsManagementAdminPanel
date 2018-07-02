@@ -186,6 +186,9 @@ table, th, td {
 
 				</div>
 			</div>
+			<footer>
+	<p>2018 © AARYATECH SOLUTIONS</p>
+	</footer>
 			<!-- END Main Content -->
 
 
@@ -295,6 +298,10 @@ table, th, td {
 
 				}, function(data) {
 					$('#table1 td').remove();
+					if(data=="")
+						{
+						alert("No Record Found ");
+						}
 					$.each(data,
 							function(key, itemList) {
 
@@ -323,7 +330,7 @@ table, th, td {
 		function validate() {
 
 			var projectId = $("#projectId").val();
-			alert(projectId)
+			//alert(projectId)
 			var isValid = true;
 			if (projectId == "" || projectId == null) {
 

@@ -218,6 +218,9 @@ table, th, td {
 
 				</div>
 			</div>
+			<footer>
+	<p>2018 © AARYATECH SOLUTIONS</p>
+	</footer>
 			<!-- END Main Content -->
 
 
@@ -321,7 +324,7 @@ table, th, td {
 			var toDate = document.getElementById("toDate").value;
 
 			if (validate() == true) {
-				alert("true");
+				//alert("true");
 				$.getJSON('${findEmpConsumption}', {
 
 					empId : empId,

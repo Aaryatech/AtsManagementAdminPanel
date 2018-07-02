@@ -119,17 +119,18 @@
 										</tr>
 									</thead>
 									<tbody>
-
+										<c:set var="srno" value="0"></c:set>
 										<c:forEach items="${forward}" var="forward"
 											varStatus="count">
+											
 											<c:choose>
 												<c:when test="${forward.devStatus==1 || forward.devStatus==2}">
 											<tr class="table-flag-blue">
-											
+											<c:set var="srno" value="${srno+1}"></c:set>
 												
 												
 												<td><input type="checkbox" /></td>
-												<td>${count.index+1}</td>
+												<td>${srno}</td>
 												<td>${forward.projectName}</td>
 												<td>${forward.moduleName}</td>
 												<td>${forward.formName}</td>
@@ -156,7 +157,7 @@
 
 			<!-- END Main Content -->
 			<footer>
-			<p>2018 © SONA ELECTRICALS</p>
+			<p>2018 © AARYATECH SOLUTIONS</p>
 			</footer>
 
 			<a id="btn-scrollup" class="btn btn-circle btn-lg" href="#"><i

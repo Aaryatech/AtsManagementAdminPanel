@@ -203,7 +203,11 @@ table, th, td {
 
 
 				</div>
+				
 			</div>
+			<footer>
+	<p>2018 © AARYATECH SOLUTIONS</p>
+	</footer>
 			<!-- END Main Content -->
 
 
