@@ -23,10 +23,13 @@
 <!--page specific css styles-->
 
 <!--flaty css styles-->
-<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/flaty.css">
-<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/flaty-responsive.css">
+<link rel="stylesheet"
+	href="${pageContext.request.contextPath}/resources/css/flaty.css">
+<link rel="stylesheet"
+	href="${pageContext.request.contextPath}/resources/css/flaty-responsive.css">
 
-<link rel="shortcut icon" href="${pageContext.request.contextPath}/resources/img/favicon.png">
+<link rel="shortcut icon"
+	href="${pageContext.request.contextPath}/resources/img/favicon.png">
 </head>
 
 <body>
@@ -76,79 +79,111 @@
 
 
 
-					<div class="col-md-12">
+				<div class="col-md-12">
 					<div class="box">
-					
-		 <div class="col-md-6">
-			<div class="row">
-				<a href="${pageContext.request.contextPath}/showAssignedTask" />
-				<div class="col-md-6">
-					<div class="tile tile-orange">
-						<div class="img">
-							<i class="fa fa-comments"></i>
-						</div>
-						<div class="content">
-							<p class="big">${assignedCount}</p>
-							<p class="title">Assigned</p>
-						</div>
-					</div>
-				</div>
 
-			</div>
-		</div>
+						<div class="col-md-6">
+							<div class="row">
+								<a href="${pageContext.request.contextPath}/showAssignedTask" />
+								<div class="col-md-6">
+									<div class="tile tile-orange">
+										<div class="img">
+											<i class="fa fa-comments"></i>
+										</div>
+										<div class="content">
+											<p class="big">${assignedCount}</p>
+											<p class="title">Assigned</p>
+										</div>
+									</div>
+								</div>
 
-		<div class="col-md-6">
-			<div class="row">
-				<a href="${pageContext.request.contextPath}/showInprogessPage" />
-				<div class="col-md-6">
-					<div class="tile tile-orange">
-						<div class="img">
-							<i class="fa fa-comments"></i>
+							</div>
 						</div>
-						<div class="content">
-							<p class="big">${inprogressCount}</p>
-							<p class="title">In Progress</p>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
 
-		<div class="col-md-6">
-			<div class="row">
-				<a href="${pageContext.request.contextPath}/showForwardPage" />
-				<div class="col-md-6">
-					<div class="tile tile-orange">
-						<div class="img">
-							<i class="fa fa-comments"></i>
+						<div class="col-md-6">
+							<div class="row">
+								<a href="${pageContext.request.contextPath}/showInprogessPage" />
+								<div class="col-md-6">
+									<div class="tile tile-orange">
+										<div class="img">
+											<i class="fa fa-comments"></i>
+										</div>
+										<div class="content">
+											<p class="big">${inprogressCount}</p>
+											<p class="title">In Progress</p>
+										</div>
+									</div>
+								</div>
+							</div>
 						</div>
-						<div class="content">
-							<p class="big"></p>
-							<p class="title">Forward</p>
+
+						<div class="col-md-6">
+							<div class="row">
+								<a href="${pageContext.request.contextPath}/showForwardPage" />
+								<div class="col-md-6">
+									<div class="tile tile-orange">
+										<div class="img">
+											<i class="fa fa-comments"></i>
+										</div>
+										<div class="content">
+											<p class="big"></p>
+											<p class="title">Forward</p>
+										</div>
+									</div>
+								</div>
+							</div>
 						</div>
-					</div>
-				</div>
-			</div>
-		</div>
 
 
-		<div class="col-md-6">
-			<div class="row">
-				<a href="${pageContext.request.contextPath}/showCompletedPage" />
-				<div class="col-md-6">
-					<div class="tile tile-orange">
-						<div class="img">
-							<i class="fa fa-comments"></i>
+						<div class="col-md-6">
+							<div class="row">
+								<a href="${pageContext.request.contextPath}/showCompletedPage" />
+								<div class="col-md-6">
+									<div class="tile tile-orange">
+										<div class="img">
+											<i class="fa fa-comments"></i>
+										</div>
+										<div class="content">
+											<p class="big">${completedCount}</p>
+											<p class="title">Completed</p>
+										</div>
+									</div>
+								</div>
+							</div>
 						</div>
-						<div class="content">
-							<p class="big">${completedCount}</p>
-							<p class="title">Completed</p>
+						<div class="col-md-6">
+							<div class="row">
+								<a href="${pageContext.request.contextPath}/showEmployeeGraph" />
+								<div class="col-md-6">
+									<div class="tile tile-orange">
+										<div class="img">
+											<i class="fa fa-comments"></i>
+										</div>
+										<div class="content">
+											<p class="big"></p>
+											<p class="title">Employee Graph</p>
+										</div>
+									</div>
+								</div>
+							</div>
 						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-						 
+
+						<div class="col-md-6">
+							<div class="row">
+								<a href="${pageContext.request.contextPath}/showProjectsGraph" />
+								<div class="col-md-6">
+									<div class="tile tile-orange">
+										<div class="img">
+											<i class="fa fa-comments"></i>
+										</div>
+										<div class="content">
+											<p class="big"></p>
+											<p class="title">Projects Graph</p>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
 					</div>
 
 
@@ -170,24 +205,38 @@
 	<!--basic scripts-->
 	<script
 		src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
-	<script>window.jQuery || document.write('<script src="${pageContext.request.contextPath}/resources/assets/jquery/jquery-2.0.3.min.js"><\/script>')</script>
-	<script src="${pageContext.request.contextPath}/resources/assets/bootstrap/js/bootstrap.min.js"></script>
+	<script>
+		window.jQuery
+				|| document
+						.write('<script src="${pageContext.request.contextPath}/resources/assets/jquery/jquery-2.0.3.min.js"><\/script>')
+	</script>
+	<script
+		src="${pageContext.request.contextPath}/resources/assets/bootstrap/js/bootstrap.min.js"></script>
 	<script
 		src="${pageContext.request.contextPath}/resources/assets/jquery-slimscroll/jquery.slimscroll.min.js"></script>
-	<script src="${pageContext.request.contextPath}/resources/assets/jquery-cookie/jquery.cookie.js"></script>
+	<script
+		src="${pageContext.request.contextPath}/resources/assets/jquery-cookie/jquery.cookie.js"></script>
 
 	<!--page specific plugin scripts-->
-	<script src="${pageContext.request.contextPath}/resources/assets/flot/jquery.flot.js"></script>
-	<script src="${pageContext.request.contextPath}/resources/assets/flot/jquery.flot.resize.js"></script>
-	<script src="${pageContext.request.contextPath}/resources/assets/flot/jquery.flot.pie.js"></script>
-	<script src="${pageContext.request.contextPath}/resources/assets/flot/jquery.flot.stack.js"></script>
-	<script src="${pageContext.request.contextPath}/resources/assets/flot/jquery.flot.crosshair.js"></script>
-	<script src="${pageContext.request.contextPath}/resources/assets/flot/jquery.flot.tooltip.min.js"></script>
-	<script src="${pageContext.request.contextPath}/resources/assets/sparkline/jquery.sparkline.min.js"></script>
+	<script
+		src="${pageContext.request.contextPath}/resources/assets/flot/jquery.flot.js"></script>
+	<script
+		src="${pageContext.request.contextPath}/resources/assets/flot/jquery.flot.resize.js"></script>
+	<script
+		src="${pageContext.request.contextPath}/resources/assets/flot/jquery.flot.pie.js"></script>
+	<script
+		src="${pageContext.request.contextPath}/resources/assets/flot/jquery.flot.stack.js"></script>
+	<script
+		src="${pageContext.request.contextPath}/resources/assets/flot/jquery.flot.crosshair.js"></script>
+	<script
+		src="${pageContext.request.contextPath}/resources/assets/flot/jquery.flot.tooltip.min.js"></script>
+	<script
+		src="${pageContext.request.contextPath}/resources/assets/sparkline/jquery.sparkline.min.js"></script>
 
 	<!--flaty scripts-->
 	<script src="${pageContext.request.contextPath}/resources/js/flaty.js"></script>
-	<script src="${pageContext.request.contextPath}/resources/js/flaty-demo-codes.js"></script>
+	<script
+		src="${pageContext.request.contextPath}/resources/js/flaty-demo-codes.js"></script>
 
 </body>
 <%-- <body>

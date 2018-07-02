@@ -441,4 +441,22 @@ public class HomeController {
 		return "redirect:/myProfile";
 	}
 
+	@RequestMapping(value = "/showEmployeeGraph", method = RequestMethod.GET)
+	public ModelAndView showEmployeeGraph(HttpServletRequest request, HttpServletResponse response) {
+
+		ModelAndView model = new ModelAndView("project/showEmployeeGraph");
+
+		return model;
+
+	}
+
+	@RequestMapping(value = "/showProjectsGraph", method = RequestMethod.GET)
+	public ModelAndView showProjectsGraph(HttpServletRequest request, HttpServletResponse response) {
+
+		ModelAndView model = new ModelAndView("project/showProjectsGraph");
+
+		return model;
+
+	}
+
 }

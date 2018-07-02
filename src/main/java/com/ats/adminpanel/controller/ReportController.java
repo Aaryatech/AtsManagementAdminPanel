@@ -29,17 +29,20 @@ import com.ats.adminpanel.model.GetTaskList;
 import com.ats.adminpanel.model.PhaseTask;
 import com.ats.adminpanel.model.PhaseType;
 import com.ats.adminpanel.model.Project;
+import com.ats.adminpanel.model.ProjectHours;
 import com.ats.adminpanel.model.ProjectPhaseTracking;
+import com.ats.adminpanel.model.RemainingTaskGraph;
 
 @Controller
 public class ReportController {
 
 	EmpConReport empConReport = new EmpConReport();
+	RestTemplate rest = new RestTemplate();
 	EmpAllocatedWork empAllocatedWork = new EmpAllocatedWork();
 	List<EmpPerformance> empPerformance = new ArrayList<EmpPerformance>();
-	List<DevelopmentHrsProwise> developmentHrsProwiseList =null;
+	List<DevelopmentHrsProwise> developmentHrsProwiseList = null;
 
-	List<ProjectPhaseTracking> projectPhaseTrackingList ;
+	List<ProjectPhaseTracking> projectPhaseTrackingList;
 
 	@RequestMapping(value = "/viewEmpConsumptionReport", method = RequestMethod.GET)
 	public ModelAndView viewEmpConsumptionReport(HttpServletRequest request, HttpServletResponse response) {
@@ -156,25 +159,20 @@ public class ReportController {
 			RestTemplate restTemplate = new RestTemplate();
 
 			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
-			
-			if(proId!=0)
-			{
+
+			if (proId != 0) {
 				System.out.println("in if ");
 				map.add("fromDate", fromDate);
 				map.add("toDate", toDate);
 				map.add("empId", empId);
 				map.add("projectId", proId);
-			}
-			else
-			{
+			} else {
 				System.out.println("else");
 				map.add("fromDate", DateConvertor.convertToYMD(fromDate));
 				map.add("toDate", DateConvertor.convertToYMD(toDate));
 				map.add("empId", empId);
 				map.add("projectId", proId);
 			}
-
-			
 
 			empConReport = restTemplate.postForObject(Constants.url + "/getDatewiseEmpCon", map, EmpConReport.class);
 
@@ -239,8 +237,8 @@ public class ReportController {
 				map.add("projectId", projectId);
 
 				empAllocatedWork = restTemplate.postForObject(Constants.url + "/getEmployeeAllocatedWorkById", map,
-						EmpAllocatedWork.class); 
-				System.out.println("EmpConReportById []" + empAllocatedWork.toString()); 
+						EmpAllocatedWork.class);
+				System.out.println("EmpConReportById []" + empAllocatedWork.toString());
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -251,7 +249,8 @@ public class ReportController {
 	}
 
 	@RequestMapping(value = "/findEmpPerformance", method = RequestMethod.GET)
-	public @ResponseBody List<EmpPerformance> findEmpPerformance(HttpServletRequest request, HttpServletResponse response) {
+	public @ResponseBody List<EmpPerformance> findEmpPerformance(HttpServletRequest request,
+			HttpServletResponse response) {
 		try {
 			System.out.println("in method");
 
@@ -261,15 +260,14 @@ public class ReportController {
 			String projectId = request.getParameter("projectId");
 			System.out.println("ProjectID" + projectId);
 
-			RestTemplate restTemplate = new RestTemplate(); 
-			
+			RestTemplate restTemplate = new RestTemplate();
+
 			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
 
 			map.add("empId", empId);
 			map.add("projectId", projectId);
 
-			empPerformance = restTemplate.postForObject(Constants.url + "/getEmployeePerformance", map,
-					List.class);
+			empPerformance = restTemplate.postForObject(Constants.url + "/getEmployeePerformance", map, List.class);
 
 			System.out.println("empPerformance []" + empPerformance.toString());
 
@@ -336,6 +334,51 @@ public class ReportController {
 		}
 
 		return projectPhaseTrackingList;
+	}
+
+	@RequestMapping(value = "/getInfoForEmployeeGraph", method = RequestMethod.GET)
+	public @ResponseBody List<RemainingTaskGraph> getInfoForEmployeeGraph(HttpServletRequest request,
+			HttpServletResponse response) {
+
+		ModelAndView model = new ModelAndView("project/showEmployeeGraph");
+		List<RemainingTaskGraph> remainingTaskGraphlist = null;
+		try {
+
+			RemainingTaskGraph[] res = rest.getForObject(Constants.url + "/getEmpRemainingHours",
+					RemainingTaskGraph[].class);
+
+			remainingTaskGraphlist = new ArrayList<RemainingTaskGraph>(Arrays.asList(res));
+			model.addObject("enqInfo", remainingTaskGraphlist);
+
+			System.out.println("res" + remainingTaskGraphlist.toString());
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return remainingTaskGraphlist;
+	}
+
+	@RequestMapping(value = "/getProjectHoursGraph", method = RequestMethod.GET)
+	public @ResponseBody List<ProjectHours> getProjectHoursGraph(HttpServletRequest request,
+			HttpServletResponse response) {
+
+		ModelAndView model = new ModelAndView("project/showProjectsGraph");
+		List<ProjectHours> projectHoursGraphlist = null;
+		try {
+
+			ProjectHours[] res = rest.getForObject(Constants.url + "/getProjectHours", ProjectHours[].class);
+
+			projectHoursGraphlist = new ArrayList<ProjectHours>(Arrays.asList(res));
+			model.addObject("enqInfo", projectHoursGraphlist);
+
+			System.out.println("res" + projectHoursGraphlist.toString());
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return projectHoursGraphlist;
 	}
 
 }
