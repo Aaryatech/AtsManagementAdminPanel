@@ -49,9 +49,9 @@ public class HomeController {
 	List<GetTask> assignedTask = new ArrayList<GetTask>();
 	List<GetTask> inprogress = new ArrayList<GetTask>();
 	List<GetTask> completed = new ArrayList<GetTask>();
-	GetTaskList assignedTaskDetails = new GetTaskList();
-	GetTaskList inprogressTaskDetails = new GetTaskList();
 	List<GetTask> getTaskList = new ArrayList<GetTask>();
+	GetTaskList assignedTaskDetails = new GetTaskList();
+	GetTaskList inprogressTaskDetails = new GetTaskList(); 
 	GetTaskList forwardTaskDetails = new GetTaskList();
 
 	@RequestMapping(value = "/", method = RequestMethod.GET)
@@ -101,6 +101,38 @@ public class HomeController {
 					HttpSession session = request.getSession();
 					session.setAttribute("employee", loginResponse.getEmployee());
 					session.setAttribute("UserDetail", loginResponse);
+					
+					 
+					LoginResponse login = (LoginResponse) session.getAttribute("UserDetail");
+					System.out.println("user Id " + login.getEmployee().getEmpId());
+					  map = new LinkedMultiValueMap<String, Object>();
+					map.add("developerId", login.getEmployee().getEmpId());
+					GetTask[] taskList = rest.postForObject(Constants.url + "masters/allTaskByDeveloperId", map,
+							GetTask[].class);
+
+					getTaskList = new ArrayList<GetTask>(Arrays.asList(taskList));
+
+					System.out.println("task list size " + getTaskList.size());
+					assignedTask.clear();
+					inprogress.clear();
+					completed.clear(); 
+
+					// System.out.println("getTaskList ----"+getTaskList);
+
+					for (int i = 0; i < getTaskList.size(); i++) {
+						if (getTaskList.get(i).getDevStatus() == 1) {
+
+							assignedTask.add(getTaskList.get(i));
+
+						} else if (getTaskList.get(i).getDevStatus() == 2) {
+
+							inprogress.add(getTaskList.get(i));
+						} else if (getTaskList.get(i).getDevStatus() == 3) {
+
+							completed.add(getTaskList.get(i));
+						}
+
+					}
 
 				} else {
 
@@ -185,6 +217,9 @@ public class HomeController {
 
 	@RequestMapping(value = "/showAssignedTask", method = RequestMethod.GET)
 	public ModelAndView assignedTask(HttpServletRequest request, HttpServletResponse response) {
+		
+		Constants.mainAct = 5;
+		Constants.subAct = 51;
 
 		ModelAndView model = new ModelAndView("project/assignedTaskList");
 
@@ -253,6 +288,9 @@ public class HomeController {
 
 	@RequestMapping(value = "/showInprogessPage", method = RequestMethod.GET)
 	public ModelAndView showInprogessPage(HttpServletRequest request, HttpServletResponse response) {
+		
+		Constants.mainAct = 5;
+		Constants.subAct = 52;
 
 		ModelAndView model = new ModelAndView("project/inprogressList");
 
@@ -327,6 +365,9 @@ public class HomeController {
 
 	@RequestMapping(value = "/showForwardPage", method = RequestMethod.GET)
 	public ModelAndView showForwardPage(HttpServletRequest request, HttpServletResponse response) {
+		
+		Constants.mainAct = 5;
+		Constants.subAct = 53;
 
 		ModelAndView model = new ModelAndView("project/forwardList");
 

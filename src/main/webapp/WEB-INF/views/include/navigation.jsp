@@ -451,6 +451,61 @@
 					</ul>  --%> 
 					
 				<c:choose>
+							<c:when test="${Constants.mainAct==5}">
+								<li class="active">
+							</c:when>
+
+							<c:otherwise>
+								<li>
+							</c:otherwise>
+						</c:choose>	 
+				<a href="#" class="dropdown-toggle"> <i class="fa fa-list"></i>
+					<span>User TasK Detail</span> <b class="arrow fa fa-angle-right"></b>
+				</a>
+				<!-- BEGIN Submenu -->
+				<ul class="submenu">
+				
+					<c:choose>
+								<c:when test="${Constants.subAct==51}">
+									<li class="active">
+								</c:when>
+								<c:otherwise>
+									<li>
+								</c:otherwise>
+							</c:choose> 
+				  	<a href="${pageContext.request.contextPath}/showAssignedTask">Assign Task</a>
+					</li>
+					 <c:choose>
+								<c:when test="${Constants.subAct==52}">
+									<li class="active">
+								</c:when>
+								<c:otherwise>
+									<li>
+								</c:otherwise>
+							</c:choose> 
+					<a href="${pageContext.request.contextPath}/showInprogessPage">Inprogress Task</a>
+					</li>
+					
+					<c:choose>
+								<c:when test="${Constants.subAct==53}">
+									<li class="active">
+								</c:when>
+								<c:otherwise>
+									<li>
+								</c:otherwise>
+							</c:choose> 
+					<a href="${pageContext.request.contextPath}/showForwardPage">Forwork Task To Another</a>
+					</li>
+						
+
+
+				</ul>
+				 
+				<!-- END Submenu -->
+				</li>
+				
+				
+				<c:choose>
 							<c:when test="${Constants.mainAct==4}">
 								<li class="active">
 							</c:when>
