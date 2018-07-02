@@ -173,7 +173,7 @@
 											<textarea type="text" name="remark" class="form-control"
 												placeholder="Reason" id="reason" required></textarea>
 										</div>
-									</div>
+									</div><br>
 									<br>
 
 									<div class=" box-content">
@@ -191,13 +191,16 @@
 						</div>
 
 					</div>
+					
 				</div>
-</div>
-
-				<!-- END Main Content -->
+				
+</div> 
 				<footer>
 				<p>2018 © AARYATECH SOLUTIONS</p>
-				</footer>
+				</footer> 
+				<!-- END Main Content -->
+				
+				
 
 				<a id="btn-scrollup" class="btn btn-circle btn-lg" href="#"><i
 					class="fa fa-chevron-up"></i></a>
