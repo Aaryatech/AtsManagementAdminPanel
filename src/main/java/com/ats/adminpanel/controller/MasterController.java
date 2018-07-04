@@ -1,7 +1,9 @@
 package com.ats.adminpanel.controller;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -20,12 +22,14 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.ats.adminpanel.common.Constants;
+import com.ats.adminpanel.common.DateConvertor;
 import com.ats.adminpanel.model.Employee;
 import com.ats.adminpanel.model.GetFormList;
 import com.ats.adminpanel.model.GetProjects;
 import com.ats.adminpanel.model.GetTask;
 import com.ats.adminpanel.model.Info;
 import com.ats.adminpanel.model.LoginResponse;
+import com.ats.adminpanel.model.SupportTask;
 import com.ats.adminpanel.model.Task;
 import com.ats.adminpanel.model.TaskType;
 
@@ -430,6 +434,96 @@ public class MasterController {
 		}
 
 		return model;
+	}
+	
+	@RequestMapping(value = "/insertSupportTask", method = RequestMethod.GET)
+	public ModelAndView insertSupportTask(HttpServletRequest request, HttpServletResponse response) {
+		 
+		ModelAndView model = new ModelAndView("masters/insertSupportTask");
+		try {
+			HttpSession session = request.getSession();
+			LoginResponse login = (LoginResponse) session.getAttribute("UserDetail");
+
+			System.out.println("user Id " + login.getEmployee().getEmpId());
+			
+			GetProjects[] projArray = rest.getForObject(Constants.url + "masters/getProjectList", GetProjects[].class); 
+			List<GetProjects> projList = new ArrayList<GetProjects>(Arrays.asList(projArray)); 
+			model.addObject("projList", projList);
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return model;
+	}
+	
+	@RequestMapping(value = "/submitSupportTask", method = RequestMethod.POST)
+	public String submitSupportTask(HttpServletRequest request, HttpServletResponse response) {
+
+		try {
+			HttpSession session = request.getSession();
+			LoginResponse login = (LoginResponse) session.getAttribute("UserDetail");
+			System.out.println("user Id " + login.getEmployee().getEmpId());
+
+			int projectId = Integer.parseInt(request.getParameter("projectId"));
+			String suppId = request.getParameter("suppId");
+			String workDate = request.getParameter("workDate");
+			String taskHours = request.getParameter("taskHours");
+			String disc = request.getParameter("disc");
+			String takeAway = request.getParameter("takeAway"); 
+			String moduleName = request.getParameter("moduleName"); 
+			
+			Date date = new Date();
+			SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd");
+
+			SupportTask supportTask = new SupportTask();
+			if (suppId.equalsIgnoreCase("") || suppId.equalsIgnoreCase(null))
+				supportTask.setSuppId(0);
+			else
+				supportTask.setSuppId(Integer.parseInt(suppId));
+			supportTask.setProjectId(projectId);
+			supportTask.setEmpId(login.getEmployee().getEmpId());
+			supportTask.setWorkDate(DateConvertor.convertToYMD(workDate));
+			supportTask.setDescription(disc);
+			supportTask.setRequiredHrs(taskHours);
+			supportTask.setTakeAway(takeAway);
+			supportTask.setModuleName(moduleName);
+			supportTask.setDate(sf.format(date));
+			
+			
+			SupportTask res = rest.postForObject(Constants.url + "/masters/saveSupportTask", supportTask, SupportTask.class);
+
+			System.out.println("res " + res);
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return "redirect:/insertSupportTask";
+	}
+	
+	@RequestMapping(value = "/viewSupportTaskByEmpId", method = RequestMethod.GET)
+	@ResponseBody
+	public List<SupportTask> viewSupportTaskByEmpId(HttpServletRequest request, HttpServletResponse response) {
+		   
+		List<SupportTask> viewSupportTaskByEmpId = new ArrayList<>();
+		try {
+			HttpSession session = request.getSession();
+			LoginResponse login = (LoginResponse) session.getAttribute("UserDetail");
+ 
+			MultiValueMap<String, Object> map = new LinkedMultiValueMap<>();
+			map.add("empId", login.getEmployee().getEmpId());
+
+			SupportTask[] supportTask = rest.postForObject(Constants.url + "/masters/getSupportTaskByEmpiId",map, SupportTask[].class);
+			viewSupportTaskByEmpId = new ArrayList<SupportTask>(Arrays.asList(supportTask));
+
+			 
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return viewSupportTaskByEmpId;
 	}
 
 }

@@ -4679,7 +4679,7 @@ div.tagsinput .not_valid {
 .sidebar-collapsed .nav-list > li.open:hover > a    {color: #fff;}
 
 .navbar {
-    background: #226686; border-bottom:1px solid #226686;
+    background: #0099db; border-bottom:1px solid #0099db;
 }
 .flaty-nav > li > a > .badge {
     border-color: #58b1fc;
@@ -4707,7 +4707,7 @@ div.tagsinput .not_valid {
 .nav-list .search-form,
 .nav-list .search-pan input,
 #nav-horizontal.nav-xs > li > a,
-.nav-list > li > a                                  {background-color: #226686;}    /* Sidebar Background */
+.nav-list > li > a                                  {background-color: #0099db;}    /* Sidebar Background */
 .nav-list .search-form:hover,
 .nav-list .search-form:hover .search-pan input,
 .nav-list > li.open > a,
@@ -4725,12 +4725,12 @@ div.tagsinput .not_valid {
 #sidebar-collapse > [class*="fa-"]:hover,
 .sidebar-collapsed .nav-list > li:hover > a,
 .sidebar-collapsed .nav-list .search-pan input,
-.sidebar-collapsed .nav-list > li > a > span        {background-color: #343690;}    /* LI: Hover */
+.sidebar-collapsed .nav-list > li > a > span        {background-color: #14759e;}    /* LI: Hover */
 .nav-list > li > a:focus,
-.nav-list > li > a:hover                            {background-color: #343690!important;}
+.nav-list > li > a:hover                            {background-color: #14759e!important;}
 #nav-horizontal.nav-xs > li .dropdown-menu,
 #nav-horizontal.nav-xs > li .dropdown-navbar > li:hover,
-.nav-list > li .submenu                             {background-color: #343690!important;}    /* Submenu Background */
+.nav-list > li .submenu                             {background-color: #407975!important;}    /* Submenu Background */
 #sidebar-collapse > [class*="fa-"],
 #nav-horizontal.nav-xs > li .dropdown-menu > li > a:focus,
 #nav-horizontal.nav-xs > li .dropdown-menu > li > a:hover,
@@ -4741,7 +4741,7 @@ div.tagsinput .not_valid {
 .nav-list > li .submenu > li > ul > li.active > a,
 .nav-list > li .submenu > li > a:focus,
 .nav-list > li .submenu > li > a:hover,
-.nav-list > li .submenu > li.active > a             {background-color: #180686;}    /* Submenu Hover */
+.nav-list > li .submenu > li.active > a             {background-color: #22919a;}    /* Submenu Hover */
 .nav-list > li.active > a:after                     {border-right-color: #e9f0f9;}
 .login-page:before,
 .error-page:before,
