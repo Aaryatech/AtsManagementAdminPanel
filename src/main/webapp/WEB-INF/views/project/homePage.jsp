@@ -32,9 +32,12 @@
 	href="${pageContext.request.contextPath}/resources/img/favicon.png">
 </head>
 
-<body>
+<body onload="showChart()">
 	<!-- BEGIN Container -->
 	<jsp:include page="/WEB-INF/views/include/header.jsp"></jsp:include>
+	<c:url var="getProjectHoursGraph" value="/getProjectHoursGraph" />
+
+	<c:url var="getInfoForEmployeeGraph" value="/getInfoForEmployeeGraph" />
 
 
 	<div class="container" id="main-container">
@@ -75,6 +78,7 @@
 
 
 			<!-- BEGIN Tiles -->
+
 			<div class="row">
 
 
@@ -149,47 +153,36 @@
 										</div>
 									</div>
 								</div>
-							</div>
-						</div>
-						<div class="col-md-6">
-							<div class="row">
-								<a href="${pageContext.request.contextPath}/showEmployeeGraph" />
-								<div class="col-md-6">
-									<div class="tile tile-orange">
-										<div class="img">
-											<i class="fa fa-comments"></i>
-										</div>
-										<div class="content">
-											<p class="big"></p>
-											<p class="title">Employee Graph</p>
-										</div>
-									</div>
-								</div>
+								</a>
 							</div>
 						</div>
 
-						<div class="col-md-6">
-							<div class="row">
-								<a href="${pageContext.request.contextPath}/showProjectsGraph" />
-								<div class="col-md-6">
-									<div class="tile tile-orange">
-										<div class="img">
-											<i class="fa fa-comments"></i>
-										</div>
-										<div class="content">
-											<p class="big"></p>
-											<p class="title">Projects Graph</p>
-										</div>
-									</div>
-								</div>
-							</div>
-						</div>
 					</div>
 
 
 				</div>
 			</div>
+			<br> <br>
+			<div id="breadcrumbs">
+				<ul class="breadcrumb">
+					<li class="active"><b>Project Graph</b></li>
+				</ul>
+			</div>
+			<div id="chart">
 
+				<div id="chart_div" style="width: 100%; height: 500px;"></div>
+			</div>
+			<br> <br>
+
+			<div id="breadcrumbs">
+				<ul class="breadcrumb">
+					<li class="active"><b>Employee Graph</b></li>
+				</ul>
+			</div>
+			<div id="chart1">
+
+				<div id="chart_div1" style="width: 100%; height: 500px;"></div>
+			</div>
 
 			<footer>
 			<p>2018 © SONA ELECTRICALS.</p>
@@ -205,6 +198,194 @@
 	<!--basic scripts-->
 	<script
 		src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+	<script
+		src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+	<script type="text/javascript">
+		function showChart() {
+
+			$("#chart_div").empty();
+
+			document.getElementById('chart').style.display = "block";
+
+			$
+					.getJSON(
+							'${getProjectHoursGraph}',
+							{
+								ajax : 'true',
+
+							},
+							function(data) {
+
+								if (data == "") {
+									alert("No records found !!");
+
+								}
+								var i = 0;
+
+								google.charts.load('current', {
+									'packages' : [ 'corechart', 'bar' ]
+								});
+								google.charts.setOnLoadCallback(drawStuff);
+
+								function drawStuff() {
+
+									var chartDiv = document
+											.getElementById('chart_div');
+									document.getElementById("chart_div").style.border = "thin dotted red";
+									var dataTable = new google.visualization.DataTable();
+
+									dataTable.addColumn('string',
+											'Project Name'); // Implicit domain column.
+									dataTable.addColumn('number',
+											'Task Planned Hours'); // Implicit data column.
+
+									dataTable.addColumn('number',
+											'Actual Required Hours');
+
+									$.each(data, function(key, item) {
+
+										dataTable.addRows([ [ item.projectName,
+												item.taskPlannedHrs,
+												item.actualReqHrs ]
+
+										]);
+									})
+
+									var materialOptions = {
+										
+										chart : {
+											title : 'Project Report',
+											subtitle : 'Project '
+										},
+										axes : {
+											y : {
+												distance : {
+													label : ''
+												}, // Left y-axis.
+												brightness : {
+													side : 'right',
+													label : 'Employee Data'
+												}
+											// Right y-axis.
+											}
+										}
+									};
+
+									function drawMaterialChart() {
+										var materialChart = new google.charts.Bar(
+												chartDiv);
+										materialChart
+												.draw(
+														dataTable,
+														google.charts.Bar
+																.convertOptions(materialOptions));
+										// button.innerText = 'Change to Classic';
+										// button.onclick = drawClassicChart;
+									}
+
+									drawMaterialChart();
+								}
+								;
+
+							});
+
+			showChart1();
+
+		}
+	</script>
+
+	<script type="text/javascript"
+		src="https://www.gstatic.com/charts/loader.js"></script>
+	<script type="text/javascript">
+		function showChart1() {
+
+			$("#chart_div1").empty();
+
+			document.getElementById('chart1').style.display = "block";
+
+			$
+					.getJSON(
+							'${getInfoForEmployeeGraph}',
+							{
+								ajax : 'true',
+
+							},
+							function(data) {
+
+								if (data == "") {
+									alert("No records found !!");
+
+								}
+								var i = 0;
+
+								google.charts.load('current', {
+									'packages' : [ 'corechart', 'bar' ]
+								});
+								google.charts.setOnLoadCallback(drawStuff);
+
+								function drawStuff() {
+
+									var chartDiv = document
+											.getElementById('chart_div1');
+									document.getElementById("chart_div1").style.border = "thin dotted red";
+									var dataTable = new google.visualization.DataTable();
+
+									dataTable.addColumn('string',
+											'Employee Name'); // Implicit domain column.
+									dataTable.addColumn('number',
+											'Task Planned Hours'); // Implicit data column.
+
+									$.each(data, function(key, item) {
+
+										dataTable.addRows([ [ item.empName,
+												item.taskPlannedHrs ]
+
+										]);
+									})
+
+									var materialOptions = {
+									
+										chart : {
+											title : 'Employe Report',
+											subtitle : 'Employee '
+										},
+										axes : {
+											y : {
+												distance : {
+													label : ''
+												}, // Left y-axis.
+												brightness : {
+													side : 'right',
+													label : 'Employee Data'
+												}
+											// Right y-axis.
+											}
+										}
+									};
+
+									function drawMaterialChart() {
+										var materialChart = new google.charts.Bar(
+												chartDiv);
+										materialChart
+												.draw(
+														dataTable,
+														google.charts.Bar
+																.convertOptions(materialOptions));
+										// button.innerText = 'Change to Classic';
+										// button.onclick = drawClassicChart;
+									}
+
+									drawMaterialChart();
+								}
+								;
+
+							});
+
+		}
+	</script>
+
 	<script>
 		window.jQuery
 				|| document

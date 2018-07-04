@@ -41,12 +41,12 @@ public class ReportController {
 	EmpAllocatedWork empAllocatedWork = new EmpAllocatedWork();
 	List<EmpPerformance> empPerformance = new ArrayList<EmpPerformance>();
 	List<DevelopmentHrsProwise> developmentHrsProwiseList = null;
-
+	List<ProjectHours> projectHoursGraphlist;
 	List<ProjectPhaseTracking> projectPhaseTrackingList;
 
 	@RequestMapping(value = "/viewEmpConsumptionReport", method = RequestMethod.GET)
 	public ModelAndView viewEmpConsumptionReport(HttpServletRequest request, HttpServletResponse response) {
-		
+
 		Constants.mainAct = 3;
 		Constants.subAct = 31;
 
@@ -67,7 +67,7 @@ public class ReportController {
 
 	@RequestMapping(value = "/viewEmpAllocatedWorkReport", method = RequestMethod.GET)
 	public ModelAndView viewEmpAllocatedWorkReport(HttpServletRequest request, HttpServletResponse response) {
-		
+
 		Constants.mainAct = 3;
 		Constants.subAct = 32;
 
@@ -88,7 +88,7 @@ public class ReportController {
 
 	@RequestMapping(value = "/viewEmpPerformanceReport", method = RequestMethod.GET)
 	public ModelAndView viewEmpPerformanceReport(HttpServletRequest request, HttpServletResponse response) {
-		
+
 		Constants.mainAct = 3;
 		Constants.subAct = 33;
 
@@ -109,7 +109,7 @@ public class ReportController {
 
 	@RequestMapping(value = "/viewDevelopmentHrsReport", method = RequestMethod.GET)
 	public ModelAndView viewDevelopmentHrsReport(HttpServletRequest request, HttpServletResponse response) {
-		
+
 		Constants.mainAct = 3;
 		Constants.subAct = 34;
 
@@ -128,7 +128,7 @@ public class ReportController {
 
 	@RequestMapping(value = "/viewProjectPhaseTrackingReport", method = RequestMethod.GET)
 	public ModelAndView viewProjectPhaseTrackingReport(HttpServletRequest request, HttpServletResponse response) {
-		
+
 		Constants.mainAct = 3;
 		Constants.subAct = 35;
 
@@ -355,7 +355,7 @@ public class ReportController {
 	public @ResponseBody List<RemainingTaskGraph> getInfoForEmployeeGraph(HttpServletRequest request,
 			HttpServletResponse response) {
 
-		ModelAndView model = new ModelAndView("project/showEmployeeGraph");
+		ModelAndView model = new ModelAndView("project/homePage");
 		List<RemainingTaskGraph> remainingTaskGraphlist = null;
 		try {
 
@@ -378,8 +378,8 @@ public class ReportController {
 	public @ResponseBody List<ProjectHours> getProjectHoursGraph(HttpServletRequest request,
 			HttpServletResponse response) {
 
-		ModelAndView model = new ModelAndView("project/showProjectsGraph");
-		List<ProjectHours> projectHoursGraphlist = null;
+		ModelAndView model = new ModelAndView("project/homePage");
+
 		try {
 
 			ProjectHours[] res = rest.getForObject(Constants.url + "/getProjectHours", ProjectHours[].class);
