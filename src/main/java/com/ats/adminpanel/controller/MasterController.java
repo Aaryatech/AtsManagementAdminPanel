@@ -516,8 +516,7 @@ public class MasterController {
 
 			SupportTask[] supportTask = rest.postForObject(Constants.url + "/masters/getSupportTaskByEmpiId",map, SupportTask[].class);
 			viewSupportTaskByEmpId = new ArrayList<SupportTask>(Arrays.asList(supportTask));
-
-			 
+ 
 
 		} catch (Exception e) {
 			e.printStackTrace();
