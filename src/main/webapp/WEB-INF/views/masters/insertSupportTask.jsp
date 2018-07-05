@@ -2,16 +2,16 @@
 	pageEncoding="UTF-8"%><%@ taglib
 	uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
-	 <link rel="stylesheet" type="text/css"
+<link rel="stylesheet" type="text/css"
 	href="${pageContext.request.contextPath}/resources/assets/bootstrap-datepicker/css/datepicker.css" />
 <link rel="stylesheet" type="text/css"
 	href="${pageContext.request.contextPath}/resources/assets/bootstrap-daterangepicker/daterangepicker.css" />
 
-	<jsp:include page="/WEB-INF/views/include/header.jsp"></jsp:include>
-	<body>
-	
-	 
-<c:url var="getFormListByProjectId" value="/getFormListByProjectId"></c:url> 
+<jsp:include page="/WEB-INF/views/include/header.jsp"></jsp:include>
+<body>
+
+
+	<c:url var="viewSupportTaskByEmpId" value="/viewSupportTaskByEmpId"></c:url>
 
 
 	<!-- BEGIN Sidebar -->
@@ -36,13 +36,13 @@
 				<h1>
 					<i class="fa fa-file-o"></i>Support Task
 				</h1>
-				
+
 				<!-- <h4>Bill for franchises</h4> -->
 			</div>
 		</div>
 		<!-- END Page Title -->
 
-		
+
 		<!-- BEGIN Main Content -->
 		<div class="box" id="addTask">
 			<div class="box-title">
@@ -50,212 +50,223 @@
 					<i class="fa fa-bars"></i>Support Task
 				</h3>
 				<div class="box-tool">
-				<a  onclick="showTaskList()">Support Task List</a> 
+					<a onclick="showTaskList()">Support Task List</a>
 				</div>
 
-			</div> 
-			
-			<form  id="validation-form" class="form-horizontal"
-						action="${pageContext.request.contextPath}/submitSupportTask" method="post">
+			</div>
+
+			<form id="validation-form" class="form-horizontal"
+				action="${pageContext.request.contextPath}/submitSupportTask"
+				method="post">
 				<div class=" box-content">
-				
-				<div class="box-content">
-							
-								<div class="col-md-2">Select Project*</div>
-									<div class="col-md-3">
-									 <select id="projectId" name="projectId" class="form-control chosen" required>
-									 <option value=""></option>
-									 
-											 <c:forEach items="${projList}" var="projList" varStatus="count">
-													 <c:choose>
-													 	<c:when test="${projList.projectId==task.projectId}">
-													 		 <option value="${projList.projectId}" selected>${projList.projectName}</option>
-													 	</c:when>
-													 </c:choose> 
-											</c:forEach>
-										<c:forEach items="${projList}" var="projList" varStatus="count">
-													 <option value="${projList.projectId}">${projList.projectName}</option>
-												</c:forEach>
-									 </select>
-									</div>
-									<div class="col-md-1"></div>
-									
-								 <div class="col-md-2">Module Name*</div>
-									<div class="col-md-3">
-									<input type="text" id="moduleName" value="${task.taskName}" name="moduleName" class="form-control"   placeholder="Module Name" required/>
-									<input type="hidden" id="suppId" value="${task.taskId}" name="suppId" />
-									</div>
-								
-				 
-							</div><br>
-							
-							<div class="box-content">
-							 
-								<div class="col-md-2">Date*</div>
-									<div class="col-md-3">
-										<input type="text" name="workDate"
-											value="${editEmployee.empJoiningDate}"
-											placeholder="Date" id="workDate"
-											class="form-control date-picker" required />
-								</div>
-								
-								<div class="col-md-1"></div>
-								
-								<div class="col-md-2">Task Hours*</div>
-									<div class="col-md-3">
-									<input type="text" id="taskHours" value="${task.taskPlannedHrs}" pattern="[+-]?([0-9]*[.])?[0-9]+" name="taskHours" class="form-control"   placeholder=" Task Hours " required/>
-									</div>
-				 
-							</div><br>
-							
-							<div class="box-content">
-							
-								<div class="col-md-2">Description*</div>
-									<div class="col-md-3">
-									<input type="text" id="disc" value="${task.taskDescription}" name="disc" class="form-control"   placeholder="Task Description " required/>
-									</div>
-									<div class="col-md-1"></div>
-									
-								<div class="col-md-2">Take Away</div>
-									<div class="col-md-3">
-									<input type="text" id="takeAway" value="${task.taskPlannedHrs}" name="takeAway" class="form-control"   placeholder="Take Away"  />
-									</div>
-								
-				 
-							</div><br>
-							
-							
-							<div class=" box-content">
-					<div class="col-md-12" style="text-align: center">
-						<input type="submit" class="btn btn-info" onclick="check()" value="Submit" id="submit"  >
-					 
+
+					<div class="box-content">
+
+						<div class="col-md-2">Select Project*</div>
+						<div class="col-md-3">
+							<select id="projectId" name="projectId"
+								class="form-control chosen" required>
+								<option value=""></option>
+
+								<c:forEach items="${projList}" var="projList" varStatus="count">
+									<c:choose>
+										<c:when test="${projList.projectId==editSupport.projectId}">
+											<option value="${projList.projectId}" selected>${projList.projectName}</option>
+										</c:when>
+									</c:choose>
+								</c:forEach>
+								<c:forEach items="${projList}" var="projList" varStatus="count">
+									<option value="${projList.projectId}">${projList.projectName}</option>
+								</c:forEach>
+							</select>
+						</div>
+
+						<div class="col-md-1"></div>
+
+						<div class="col-md-2">Module Name*</div>
+						<div class="col-md-3">
+							<input type="text" id="moduleName"
+								value="${editSupport.moduleName}" name="moduleName"
+								class="form-control" placeholder="Module Name" required /> <input
+								type="hidden" id="suppId" value="${editSupport.suppId}"
+								name="suppId" />
+						</div>
 
 
 					</div>
+					<br>
+
+					<div class="box-content">
+
+						<div class="col-md-2">Date*</div>
+						<div class="col-md-3">
+							<input type="text" name="workDate" value="${date}"
+								placeholder="Date" id="workDate"
+								class="form-control date-picker" required />
+						</div>
+
+						<div class="col-md-1"></div>
+
+						<div class="col-md-2">Task Hours*</div>
+						<div class="col-md-3">
+							<input type="text" id="taskHours"
+								value="${editSupport.requiredHrs}"
+								pattern="[+-]?([0-9]*[.])?[0-9]+" name="taskHours"
+								class="form-control" placeholder=" Task Hours " required />
+						</div>
+
+					</div>
+					<br>
+
+					<div class="box-content">
+
+						<div class="col-md-2">Description*</div>
+						<div class="col-md-3">
+							<input type="text" id="disc" value="${editSupport.description}"
+								name="disc" class="form-control" placeholder="Task Description "
+								required />
+						</div>
+						<div class="col-md-1"></div>
+
+						<div class="col-md-2">Take Away</div>
+						<div class="col-md-3">
+							<input type="text" id="takeAway" value="${editSupport.takeAway}"
+								name="takeAway" class="form-control" placeholder="Take Away" />
+						</div>
+
+
+					</div>
+					<br>
+
+
+					<div class=" box-content">
+						<div class="col-md-12" style="text-align: center">
+							<input type="submit" class="btn btn-info" onclick="check()"
+								value="Submit" id="submit">
+
+
+
+						</div>
+					</div>
+					<div class="box-content"></div>
+					<div class="box-content"></div>
+
+
+
 				</div>
-							<div class="box-content">
-							</div>
-							<div class="box-content">
-							</div>
-				 
-					  		  
+
+			</form>
 
 		</div>
-		
-				 </form>
-	 
-	</div>
-	
-	<div class="box" id="supportTaskList" style="display: none">
+
+		<div class="box" id="supportTaskList" style="display: none">
 			<div class="box-title">
 				<h3>
 					<i class="fa fa-bars"></i>Date Wise
 				</h3>
 				<div class="box-tool">
-				<a  onclick="showTaskList()">Insert Support Task</a> 
-				 
-							</div>
+					<a onclick="showTaskList()">Insert Support Task</a>
 
-			</div>
-			<div class=" box-content"> 
-			
-						<div class="form-group">
-									<label class="col-sm-3 col-lg-2 control-label">From Date:</label>
-									<div class="col-sm-5 col-lg-3 controls">
-										<input class="form-control date-picker" id="from_date" size="16"
-											 type="text" name="from_date" required />
-									
-										</div>
-										
-										<label class="col-sm-3 col-lg-2 control-label">To Date:</label>
-									<div class="col-sm-5 col-lg-3 controls">
-										<input class="form-control date-picker" id="to_date" size="16"
-											 type="text" name="to_date" required />
-									
-										</div>
-										
-										
-										</div><br>
-			
+				</div>
+
 			</div>
 			<div class=" box-content">
-								<div class="form-group">
-								
-								<div align="center" class="form-group">
-									<!-- <div class="col-sm-25 col-sm-offset-3 col-lg-30 col-lg-offset-0"> -->
-										<input type="button" class="btn btn-primary" value="All Record" id="searchmixall"
-											onclick="pending()"> 
 
-									<!-- </div><br> -->
-									
-									<div align="center" id="loader" style="display: none">
+				<div class="form-group">
+					<label class="col-sm-3 col-lg-2 control-label">From Date:</label>
+					<div class="col-sm-5 col-lg-3 controls">
+						<input class="form-control date-picker" id="fromDate" size="16"
+							type="text" name="fromDate" required />
 
-									<span>
-										<h4>
-											<font color="#343690">Loading</font>
-										</h4>
-									</span> <span class="l-1"></span> <span class="l-2"></span> <span
-										class="l-3"></span> <span class="l-4"></span> <span
-										class="l-5"></span> <span class="l-6"></span>
-								</div>	
-									
-									
-								</div>
-								</div>
-								</div>
-			 
-				<div class=" box-content">
-					<div class="row">
-						<div class="col-md-12 table-responsive">
-						 <input type="hidden" name="flag" id="flag" value="${flag}">
-							<table class="table table-bordered table-striped fill-head "
-								style="width: 100%" id="table_grid1">
-								<thead>
-								
-									<tr>
-										<th>Sr.No.</th>
-										
-										<th>MRN No.</th>
-										<th>Gate Entry Date</th>
-										<th>Supplier Name</th>
-										<th>lrNo</th>
-										<th>Vehical No.</th>
-										<th>Transport</th>
-										<th>Status</th>
-										<th>Edit Gate Entry</th>
+					</div>
 
-									</tr>
-								</thead>
-								<tbody> 
+					<label class="col-sm-3 col-lg-2 control-label">To Date:</label>
+					<div class="col-sm-5 col-lg-3 controls">
+						<input class="form-control date-picker" id="toDate" size="16"
+							type="text" name="toDate" required />
 
-								</tbody>
-							</table>
-						</div>
 					</div>
 
 
-</div>
-
-		 
-
-		 
-	 
+				</div>
+				<br>
 
 			</div>
-	 <footer>
-	<p>2018 © AARYATECH SOLUTIONS</p>
-	</footer>
+			<div class=" box-content">
+				<div class="form-group">
+
+					<div align="center" class="form-group">
+						<!-- <div class="col-sm-25 col-sm-offset-3 col-lg-30 col-lg-offset-0"> -->
+						<input type="button" class="btn btn-primary" value="All Record"
+							id="searchmixall" onclick="pending()">
+
+						<!-- </div><br> -->
+
+						<div align="center" id="loader" style="display: none">
+
+							<span>
+								<h4>
+									<font color="#343690">Loading</font>
+								</h4>
+							</span> <span class="l-1"></span> <span class="l-2"></span> <span
+								class="l-3"></span> <span class="l-4"></span> <span class="l-5"></span>
+							<span class="l-6"></span>
+						</div>
+
+
+					</div>
+				</div>
+			</div>
+
+			<div class=" box-content">
+				<div class="row">
+					<div class="col-md-12 table-responsive">
+						<input type="hidden" name="flag" id="flag" value="${flag}">
+						<table class="table table-bordered table-striped fill-head "
+							style="width: 100%" id="table_grid1">
+							<thead>
+
+								<tr>
+									<th>Sr.No.</th>
+
+									<th>Project Name</th>
+									<th>Employee Name</th>
+									<th>Module Name</th>
+									<th>Work Date</th>
+									<th>Action</th>
+
+								</tr>
+							</thead>
+							<tbody>
+
+							</tbody>
+						</table>
+					</div>
+				</div>
+
+
+			</div>
+
+
+
+
+
+
+		</div>
+		<footer>
+			<p>2018 © AARYATECH SOLUTIONS</p>
+		</footer>
 	</div>
 	<!-- END Main Content -->
 
-	
+
 
 	<a id="btn-scrollup" class="btn btn-circle btn-lg" href="#"><i
 		class="fa fa-chevron-up"></i></a>
 
- 
 
-	
+
+
 
 	<!--basic scripts-->
 	<script
@@ -307,43 +318,107 @@
 		src="${pageContext.request.contextPath}/resources/assets/bootstrap-wysihtml5/bootstrap-wysihtml5.js"></script>
 	<script type="text/javascript"
 		src="${pageContext.request.contextPath}/resources/assets/ckeditor/ckeditor.js"></script>
-		
+
 
 	<!--flaty scripts-->
 	<script src="${pageContext.request.contextPath}/resources/js/flaty.js"></script>
-	 <script type="text/javascript" src="${pageContext.request.contextPath}/resources/assets/data-tables/jquery.dataTables.js"></script>
-        <script type="text/javascript" src="${pageContext.request.contextPath}/resources/assets/data-tables/bootstrap3/dataTables.bootstrap.js"></script>
-		
-		<script type="text/javascript">
-		
-		function check()
-		{
-			var projectId = $("#projectId").val(); 
-			
-			if(projectId=="" || projectId==null)
+	<script type="text/javascript"
+		src="${pageContext.request.contextPath}/resources/assets/data-tables/jquery.dataTables.js"></script>
+	<script type="text/javascript"
+		src="${pageContext.request.contextPath}/resources/assets/data-tables/bootstrap3/dataTables.bootstrap.js"></script>
+
+	<script type="text/javascript">
+		function check() {
+			var projectId = $("#projectId").val();
+
+			if (projectId == "" || projectId == null)
 				alert("Select Project ");
-		  
-			 
+
 		}
-		var div=0
+		var div = 0
 		function showTaskList()
+
 		{
-			if(div==0)
-			{
+			if (div == 0) {
 				$('#addTask').hide();
 				$("#supportTaskList").show();
-				div=1;
-			}
-			else if(div==1)
-			{
+				div = 1;
+			} else if (div == 1) {
 				$('#addTask').show();
 				$("#supportTaskList").hide();
-				div=0;
+				div = 0;
 			}
-			 
+
 		}
-		
-		</script>
-		
+	</script>
+
+	<script type="text/javascript">
+		function pending() {
+			var fromDate = $("#fromDate").val();
+			var toDate = $("#toDate").val();
+
+			$
+					.getJSON(
+							'${viewSupportTaskByEmpId}',
+
+							{
+
+								fromDate : fromDate,
+								toDate : toDate,
+								ajax : 'true'
+
+							},
+							function(data) {
+
+								alert(data)
+								$('#table_grid1 td').remove();
+								if (data == "") {
+									alert("No records found !!");
+
+								}
+
+								$
+										.each(
+												data,
+												function(key, itemList) {
+
+													var tr = $('<tr></tr>');
+													tr.append($('<td></td>')
+															.html(key + 1));
+													tr
+															.append($(
+																	'<td></td>')
+																	.html(
+																			itemList.projectName));
+													tr
+															.append($(
+																	'<td></td>')
+																	.html(
+																			itemList.empName));
+													tr
+															.append($(
+																	'<td></td>')
+																	.html(
+																			itemList.moduleName))
+
+													tr
+															.append($(
+																	'<td></td>')
+																	.html(
+																			itemList.workDate))
+													tr
+															.append($(
+																	'<td></td>')
+																	.html(
+																			' <a href="${pageContext.request.contextPath}/editSupport/'+itemList.suppId+'" class="btn bnt-primary"> <i class="fa fa-list"></i></a> '));
+													$('#table_grid1 tbody')
+															.append(tr);
+
+												})
+
+							});
+		}
+	</script>
+
 </body>
 </html>

@@ -26,6 +26,7 @@ import com.ats.adminpanel.common.DateConvertor;
 import com.ats.adminpanel.model.Employee;
 import com.ats.adminpanel.model.GetFormList;
 import com.ats.adminpanel.model.GetProjects;
+import com.ats.adminpanel.model.GetSupportTask;
 import com.ats.adminpanel.model.GetTask;
 import com.ats.adminpanel.model.Info;
 import com.ats.adminpanel.model.LoginResponse;
@@ -42,7 +43,7 @@ public class MasterController {
 
 	@RequestMapping(value = "/addEmployee", method = RequestMethod.GET)
 	public ModelAndView addEmployee(HttpServletRequest request, HttpServletResponse response) {
-		
+
 		Constants.mainAct = 1;
 		Constants.subAct = 11;
 
@@ -111,7 +112,7 @@ public class MasterController {
 
 	@RequestMapping(value = "/allEmployeeList", method = RequestMethod.GET)
 	public ModelAndView allEmployeeList(HttpServletRequest request, HttpServletResponse response) {
-		
+
 		Constants.mainAct = 1;
 		Constants.subAct = 12;
 
@@ -178,7 +179,7 @@ public class MasterController {
 
 	@RequestMapping(value = "/formListForAssignTask", method = RequestMethod.GET)
 	public ModelAndView formListForAssignTask(HttpServletRequest request, HttpServletResponse response) {
-		
+
 		Constants.mainAct = 2;
 		Constants.subAct = 21;
 
@@ -295,7 +296,7 @@ public class MasterController {
 
 	@RequestMapping(value = "/assignSpecialTask", method = RequestMethod.GET)
 	public ModelAndView assignSpecialTask(HttpServletRequest request, HttpServletResponse response) {
-		
+
 		Constants.mainAct = 2;
 		Constants.subAct = 22;
 
@@ -322,7 +323,7 @@ public class MasterController {
 
 	@RequestMapping(value = "/viewAllSpecialTask", method = RequestMethod.GET)
 	public ModelAndView viewAllSpecialTask(HttpServletRequest request, HttpServletResponse response) {
-		
+
 		Constants.mainAct = 2;
 		Constants.subAct = 23;
 
@@ -435,19 +436,19 @@ public class MasterController {
 
 		return model;
 	}
-	
+
 	@RequestMapping(value = "/insertSupportTask", method = RequestMethod.GET)
 	public ModelAndView insertSupportTask(HttpServletRequest request, HttpServletResponse response) {
-		 
+
 		ModelAndView model = new ModelAndView("masters/insertSupportTask");
 		try {
 			HttpSession session = request.getSession();
 			LoginResponse login = (LoginResponse) session.getAttribute("UserDetail");
 
 			System.out.println("user Id " + login.getEmployee().getEmpId());
-			
-			GetProjects[] projArray = rest.getForObject(Constants.url + "masters/getProjectList", GetProjects[].class); 
-			List<GetProjects> projList = new ArrayList<GetProjects>(Arrays.asList(projArray)); 
+
+			GetProjects[] projArray = rest.getForObject(Constants.url + "masters/getProjectList", GetProjects[].class);
+			List<GetProjects> projList = new ArrayList<GetProjects>(Arrays.asList(projArray));
 			model.addObject("projList", projList);
 
 		} catch (Exception e) {
@@ -456,7 +457,7 @@ public class MasterController {
 
 		return model;
 	}
-	
+
 	@RequestMapping(value = "/submitSupportTask", method = RequestMethod.POST)
 	public String submitSupportTask(HttpServletRequest request, HttpServletResponse response) {
 
@@ -470,9 +471,9 @@ public class MasterController {
 			String workDate = request.getParameter("workDate");
 			String taskHours = request.getParameter("taskHours");
 			String disc = request.getParameter("disc");
-			String takeAway = request.getParameter("takeAway"); 
-			String moduleName = request.getParameter("moduleName"); 
-			
+			String takeAway = request.getParameter("takeAway");
+			String moduleName = request.getParameter("moduleName");
+
 			Date date = new Date();
 			SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd");
 
@@ -489,9 +490,9 @@ public class MasterController {
 			supportTask.setTakeAway(takeAway);
 			supportTask.setModuleName(moduleName);
 			supportTask.setDate(sf.format(date));
-			
-			
-			SupportTask res = rest.postForObject(Constants.url + "/masters/saveSupportTask", supportTask, SupportTask.class);
+
+			SupportTask res = rest.postForObject(Constants.url + "/masters/saveSupportTask", supportTask,
+					SupportTask.class);
 
 			System.out.println("res " + res);
 
@@ -501,28 +502,73 @@ public class MasterController {
 
 		return "redirect:/insertSupportTask";
 	}
-	
+
 	@RequestMapping(value = "/viewSupportTaskByEmpId", method = RequestMethod.GET)
 	@ResponseBody
-	public List<SupportTask> viewSupportTaskByEmpId(HttpServletRequest request, HttpServletResponse response) {
-		   
-		List<SupportTask> viewSupportTaskByEmpId = new ArrayList<>();
+	public List<GetSupportTask> viewSupportTaskByEmpId(HttpServletRequest request, HttpServletResponse response) {
+
+		List<GetSupportTask> viewSupportTaskByEmpId = new ArrayList<>();
 		try {
 			HttpSession session = request.getSession();
 			LoginResponse login = (LoginResponse) session.getAttribute("UserDetail");
- 
+
+			String fromDate = request.getParameter("fromDate");
+			String ymdFromDate = DateConvertor.convertToYMD(fromDate);
+			String toDate = request.getParameter("toDate");
+			String ymdToDate = DateConvertor.convertToYMD(toDate);
+
 			MultiValueMap<String, Object> map = new LinkedMultiValueMap<>();
 			map.add("empId", login.getEmployee().getEmpId());
+			map.add("fromDate", ymdFromDate);
+			map.add("toDate", ymdToDate);
 
-			SupportTask[] supportTask = rest.postForObject(Constants.url + "/masters/getSupportTaskByEmpiId",map, SupportTask[].class);
-			viewSupportTaskByEmpId = new ArrayList<SupportTask>(Arrays.asList(supportTask));
- 
+			GetSupportTask[] supportTask = rest.postForObject(Constants.url + "/masters/getSupportTaskByEmpId", map,
+					GetSupportTask[].class);
+
+			viewSupportTaskByEmpId = new ArrayList<GetSupportTask>(Arrays.asList(supportTask));
+
+			for (int i = 0; i < viewSupportTaskByEmpId.size(); i++)
+
+			{
+				String date = viewSupportTaskByEmpId.get(i).getWorkDate();
+				viewSupportTaskByEmpId.get(i).setWorkDate(DateConvertor.convertToDMY(date));
+			}
+			System.err.println(viewSupportTaskByEmpId.toString());
 
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 
 		return viewSupportTaskByEmpId;
+	}
+
+	@RequestMapping(value = "/editSupport/{suppId}", method = RequestMethod.GET)
+	public ModelAndView editSupport(@PathVariable int suppId, HttpServletRequest request,
+			HttpServletResponse response) {
+
+		ModelAndView model = new ModelAndView("masters/insertSupportTask");
+		try {
+			HttpSession session = request.getSession();
+			LoginResponse login = (LoginResponse) session.getAttribute("UserDetail");
+			System.out.println("user Id " + login.getEmployee().getEmpId());
+
+			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+			map.add("suppId", suppId);
+			GetSupportTask editSupport = rest.postForObject(Constants.url + "/masters/getSupportTaskBySuppId", map,
+					GetSupportTask.class);
+			model.addObject("editSupport", editSupport);
+			String date = DateConvertor.convertToDMY(editSupport.getWorkDate());
+			model.addObject("date", date);
+
+			GetProjects[] projArray = rest.getForObject(Constants.url + "masters/getProjectList", GetProjects[].class);
+			List<GetProjects> projList = new ArrayList<GetProjects>(Arrays.asList(projArray));
+			model.addObject("projList", projList);
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return model;
 	}
 
 }

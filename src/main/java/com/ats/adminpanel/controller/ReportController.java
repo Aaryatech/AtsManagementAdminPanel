@@ -7,7 +7,6 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.util.LinkedMultiValueMap;
@@ -25,13 +24,14 @@ import com.ats.adminpanel.model.EmpAllocatedWork;
 import com.ats.adminpanel.model.EmpConReport;
 import com.ats.adminpanel.model.EmpPerformance;
 import com.ats.adminpanel.model.Employee;
-import com.ats.adminpanel.model.GetTaskList;
-import com.ats.adminpanel.model.PhaseTask;
+
 import com.ats.adminpanel.model.PhaseType;
 import com.ats.adminpanel.model.Project;
 import com.ats.adminpanel.model.ProjectHours;
 import com.ats.adminpanel.model.ProjectPhaseTracking;
 import com.ats.adminpanel.model.RemainingTaskGraph;
+import com.ats.adminpanel.model.SupportTask;
+import com.ats.adminpanel.model.SupportTaskReport;
 
 @Controller
 public class ReportController {
@@ -43,6 +43,8 @@ public class ReportController {
 	List<DevelopmentHrsProwise> developmentHrsProwiseList = null;
 	List<ProjectHours> projectHoursGraphlist;
 	List<ProjectPhaseTracking> projectPhaseTrackingList;
+	List<SupportTaskReport> supportTaskList;
+	SupportTaskReport supportTask = new SupportTaskReport();
 
 	@RequestMapping(value = "/viewEmpConsumptionReport", method = RequestMethod.GET)
 	public ModelAndView viewEmpConsumptionReport(HttpServletRequest request, HttpServletResponse response) {
@@ -394,6 +396,67 @@ public class ReportController {
 		}
 
 		return projectHoursGraphlist;
+	}
+
+	@RequestMapping(value = "/supportTaskReport", method = RequestMethod.GET)
+	public ModelAndView supportTaskReport(HttpServletRequest request, HttpServletResponse response) {
+
+		ModelAndView model = new ModelAndView("reports/supportTask");
+
+		RestTemplate restTemplate = new RestTemplate();
+		Employee[] Employee = restTemplate.getForObject(Constants.url + "/masters/getAllEmpList", Employee[].class);
+		List<Employee> empList = new ArrayList<Employee>(Arrays.asList(Employee));
+
+		Project[] project = restTemplate.getForObject(Constants.url + "/masters/getAllProjectList", Project[].class);
+		List<Project> projectList = new ArrayList<Project>(Arrays.asList(project));
+
+		model.addObject("projectList", projectList);
+		model.addObject("empList", empList);
+		return model;
+
+	}
+
+	@RequestMapping(value = "/findSupportTask", method = RequestMethod.GET)
+	public @ResponseBody List<SupportTaskReport> findSupportTask(HttpServletRequest request,
+			HttpServletResponse response) {
+		
+		
+		
+		
+		try {
+			System.out.println("in method");
+			supportTask = new SupportTaskReport();
+			String empId = request.getParameter("empId");
+			System.out.println("EmpID" + empId);
+
+			String fromDate = request.getParameter("fromDate");
+			System.out.println("fromDate" + fromDate);
+
+			String toDate = request.getParameter("toDate");
+			System.out.println("toDate" + toDate);
+
+			int projectId = Integer.parseInt(request.getParameter("projectId"));
+			System.out.println("ProjectID" + projectId);
+
+			RestTemplate restTemplate = new RestTemplate();
+
+			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+
+			System.out.println("else");
+			map.add("fromDate", DateConvertor.convertToYMD(fromDate));
+			map.add("toDate", DateConvertor.convertToYMD(toDate));
+			map.add("empId", empId);
+			map.add("projectId", projectId);
+
+			supportTaskList = restTemplate.postForObject(Constants.url + "/getSupportTaskReport", map, List.class);
+
+			System.out.println("supportTaskList []" + supportTaskList.toString());
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return supportTaskList;
 	}
 
 }

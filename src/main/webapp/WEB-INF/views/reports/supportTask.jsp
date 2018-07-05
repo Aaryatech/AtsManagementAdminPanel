@@ -52,7 +52,7 @@
 
 
 
-<c:url var="findEmpConsumption" value="/findEmpConsumption" />
+<c:url var="findSupportTask" value="/findSupportTask" />
 </head>
 
 <style type="text/css">
@@ -101,7 +101,7 @@ table, th, td {
 					<div class="box" id="todayslist">
 						<div class="box-title">
 							<h3>
-								<i class="fa fa-table"></i>Employee Consumption Report
+								<i class="fa fa-table"></i>Support Task Report
 							</h3>
 							<div class="box-tool">
 								<a data-action="collapse" href="#"><i
@@ -112,45 +112,9 @@ table, th, td {
 
 						<div class=" box-content" align="center">
 							<div class="box-content" align="center">
+								<div class="box-content" align="left">
 
-
-								<div class="row" align="center">
-
-									<div class="col-md-2">Select Employee *</div>
-									<div class="col-md-3">
-										<select name="empId" id="empId" class="form-control chosen"
-											required>
-
-											<option value="" selected></option>
-											<c:forEach items="${empList}" var="empList" varStatus="count">
-												<option value="${empList.empId}">${empList.empName}</option>
-
-											</c:forEach>
-										</select>
-									</div>
-								</div>
-
-								<br>
-								<div class="row" align="center">
-
-									<div class="col-md-2">Select Project</div>
-									<div class="col-md-3">
-										<select name="proId" id="proId" class="form-control chosen"
-											required>
-
-											<option value="0" >Select Project</option>
-											<c:forEach items="${projectList}" var="projectList"
-												varStatus="count">
-												<option value="${projectList.projectId}">${projectList.projectName}</option>
-
-											</c:forEach>
-										</select>
-									</div>
-								</div>
-								<br>OR
-								<div class="box-content">
-
-									<div class="col-md-2">From Date</div>
+									<div class="col-md-2">From Date*</div>
 									<div class="col-md-3">
 										<input type="text" name="fromDate"
 											value="${editEmployee.empJoiningDate}"
@@ -159,8 +123,9 @@ table, th, td {
 									</div>
 
 									<div class="box-content">
+										<div class="col-md-1"></div>
 
-										<div class="col-md-2">To Date</div>
+										<div class="col-md-2">To Date*</div>
 										<div class="col-md-3">
 											<input type="text" name="toDate"
 												value="${editEmployee.empJoiningDate}" placeholder="To Date"
@@ -168,18 +133,48 @@ table, th, td {
 										</div>
 
 									</div>
-									<br>
-
-
-
 								</div>
-								<br>
+								<div class="box-content">
+									<div class="col-md-1"></div>
+									<div class="col-md-2" align="left">Select Employee *</div>
+									<div class="col-md-3">
+										<select name="empId" id="empId" class="form-control chosen"
+											align="left" required>
+											<option value="0">All</option>
 
-								<div class=" box-content">
-									<div class="col-md-12" style="text-align: center">
-										<input type="submit" class="btn btn-info" value="SEARCH"
-											id="submit" onclick="search()">
+											<c:forEach items="${empList}" var="empList" varStatus="count">
+												<option value="${empList.empId}">${empList.empName}</option>
 
+											</c:forEach>
+										</select>
+									</div>
+
+
+									<div class="box-content">
+										<div class="col-md-1"></div>
+
+										<div class="col-md-2">Select Project*</div>
+										<div class="col-md-3">
+											<select name="projectId" id="projectId"
+												class="form-control chosen" required>
+
+												<option value="0">All</option>
+												<c:forEach items="${projectList}" var="projectList"
+													varStatus="count">
+													<option value="${projectList.projectId}">${projectList.projectName}</option>
+
+												</c:forEach>
+											</select>
+										</div>
+									</div>
+									<br> <br>
+
+									<div class=" box-content">
+										<div class="col-md-12" style="text-align: center">
+											<input type="submit" class="btn btn-info" value="SEARCH"
+												id="submit" onclick="search()">
+
+										</div>
 									</div>
 								</div>
 							</div>
@@ -194,8 +189,8 @@ table, th, td {
 											<tr>
 												<th>Sr No</th>
 												<th>Project Name</th>
-												<th>Task Planned Hrs</th>
-												<th>Actual Required Hrs</th>
+												<th>Employee Name</th>
+												<th>Required Hrs</th>
 
 											</tr>
 										</thead>
@@ -219,8 +214,8 @@ table, th, td {
 				</div>
 			</div>
 			<footer>
-	<p>2018 © AARYATECH SOLUTIONS</p>
-	</footer>
+			<p>2018 © AARYATECH SOLUTIONS</p>
+			</footer>
 			<!-- END Main Content -->
 
 
@@ -295,131 +290,80 @@ table, th, td {
 	<script type="text/javascript"
 		src="${pageContext.request.contextPath}/resources/assets/bootstrap-daterangepicker/daterangepicker.js"></script>
 
-
-	<script type="text/javascript">
-		function passwordValidation() {
-
-			var pass = document.getElementById("password").value;
-			var pass1 = document.getElementById("rePassword").value;
-
-			if (pass != "" && pass1 != "") {
-				if (pass != pass1) {
-					alert("Password Not Matched ");
-					document.getElementById("submit").disabled = true;
-				} else {
-					document.getElementById("submit").disabled = false;
-
-				}
-
-			}
-		}
-	</script>
 	<script type="text/javascript">
 		function search() {
-
-			//document.getElementById('btn_pdf').style.display = "block";
-			var empId = document.getElementById("empId").value;
-			var proId = document.getElementById("proId").value;
-			var fromDate = document.getElementById("fromDate").value;
-			var toDate = document.getElementById("toDate").value;
+			var fromDate = $("#fromDate").val();
+			var toDate = $("#toDate").val();
+			var empId = $("#empId").val();
+			var projectId = $("#projectId").val();
 
 			if (validate() == true) {
-				//alert("true");
-				$.getJSON('${findEmpConsumption}', {
 
-					empId : empId,
-					proId : proId,
+				$.getJSON('${findSupportTask}', {
 					fromDate : fromDate,
 					toDate : toDate,
-					ajax : 'true',
+					empId : empId,
+					projectId : projectId,
+					ajax : 'true'
 
 				}, function(data) {
+
+					alert(data)
 					$('#table1 td').remove();
-					var tr = $('<tr></tr>');
-					tr.append($('<td></td>').html(1));
-					tr.append($('<td></td>').html(data.projectName));
-					tr.append($('<td></td>').html(data.taskPlannedHrs));
-					tr.append($('<td></td>').html(data.actualReqHrs));
-					$('#table1 tbody').append(tr).trigger('update');
+					if (data == "") {
+						alert("No records found !!");
 
-					//alert("ala"+data);
+					}
 
-				}
+					$.each(data, function(key, itemList) {
 
-				);
+						var tr = $('<tr></tr>');
+						tr.append($('<td></td>').html(key + 1));
+						tr.append($('<td></td>').html(itemList.projectName));
+						tr.append($('<td></td>').html(itemList.empName));
+						tr.append($('<td></td>').html(itemList.requiredHrs))
+
+						$('#table1 tbody').append(tr);
+
+					})
+
+				});
 			}
-
 		}
 	</script>
+
 	<script type="text/javascript">
-	
-	function validate() {
-
-		var fromDate = $("#fromDate").val();
-		var toDate = $("#toDate").val();
-		var empId = $("#empId").val();
-		var proId = $("#proId").val();
-		
-		/* alert(" proId " + proId);
-		alert(" fromDate " + fromDate);
-		alert(" toDate " + toDate); */
-
-		var isValid = true;
-
-		if (empId == "" || empId == null) {
-			alert("Please select employee");
-			isValid = false;
-
-		} 
-		else 
-		{
-			if (proId != 0) 
-				{
-				//alert("Please select project OR Dates");
-				isValid = true;
-				}
-			
-			
-			else if ( fromDate != "" && toDate != "") 
-			{
-				isValid = true;
-			}
-			else
-				{
-				alert("Select Any One");
-				isValid = false;
-				}
-		}
-		 
-return isValid;
-	}
-		/* function validate() {
+		function validate() {
 
 			var fromDate = $("#fromDate").val();
 			var toDate = $("#toDate").val();
 			var empId = $("#empId").val();
-			var proId = $("#proId").val();
+			var projectId = $("#projectId").val();
+
+			/* alert(" proId " + proId);
+			alert(" fromDate " + fromDate);
+			alert(" toDate " + toDate); */
 
 			var isValid = true;
 
-			if (empId == "" || empId == null) {
+			if (fromDate == "" || fromDate == null || toDate == ""
+					|| toDate == "null") {
+				alert("Please select Date");
+				isValid = false;
+
+			}
+
+			else if (empId == "" || empId == null) {
 				alert("Please select employee");
 				isValid = false;
 
-			} else if (proId == "" || proId == null || fromDate == ""
-					|| fromDate == null || toDate == "" || toDate == null) {
-
-				alert("Please select project OR Dates");
+			} else if (projectId == "" || projectId == null) {
+				alert("Please select Project");
 				isValid = false;
-			} else {
-
-
-				
-				
 			}
 
-		} */
+			return isValid;
+		}
 	</script>
-
 </body>
 </html>
