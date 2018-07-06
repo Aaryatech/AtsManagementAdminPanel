@@ -37,7 +37,7 @@
 	<!-- BEGIN Container -->
 	<jsp:include page="/WEB-INF/views/include/header.jsp"></jsp:include>
 
-	<c:url var="getProjectHoursGraph" value="/getProjectHoursGraph" />
+	<c:url var="getEmployeeProGraph" value="/getEmployeeProGraph" />
 
 
 	<div class="container" id="main-container">
@@ -102,7 +102,7 @@
 			</div>
 
 			<footer>
-			<p>2018 © SONA ELECTRICALS.</p>
+			<p>2018 © ATS.</p>
 			</footer>
 
 			<a id="btn-scrollup" class="btn btn-circle btn-lg" href="#"><i
@@ -113,8 +113,8 @@
 	</div>
 	<!-- END Container -->
 	<!--basic scripts-->
-	<script
-		src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+	<script type="text/javascript"
+		src="https://www.gstatic.com/charts/loader.js"></script>
 
 	<script type="text/javascript">
 		function showChart() {
@@ -123,92 +123,55 @@
 
 			document.getElementById('chart').style.display = "block";
 
-			$
-					.getJSON(
-							'${getProjectHoursGraph}',
-							{
-								ajax : 'true',
+			$.getJSON('${getEmployeeProGraph}', {
+				ajax : 'true',
 
-							},
-							function(data) {
+			}, function(data) {
 
-								if (data == "") {
-									alert("No records found !!");
+				if (data == "") {
+					alert("No records found !!");
 
-								}
-								var i = 0;
+				}
+				google.charts.load('current', {
+					'packages' : [ 'corechart' ]
+				});
+				google.charts.setOnLoadCallback(drawVisualization);
 
-								google.charts.load('current', {
-									'packages' : [ 'corechart', 'bar' ]
-								});
-								google.charts.setOnLoadCallback(drawStuff);
+				function drawVisualization() {
+					var data = google.visualization.arrayToDataTable([
+							[ 'Genre', 'Fantasy & Sci Fi', 'Romance',
+									'Mystery/Crime', 'General', 'Western',
+									'Literature', {
+										role : 'annotation'
+									} ], [ '2010', 10, 24, 20, 32, 18, 5, '' ],
+							[ '2020', 16, 22, 23, 30, 16, 9, '' ],
+							[ '2030', 28, 19, 29, 30, 12, 13, '' ] ]);
 
-								function drawStuff() {
+					var options = {
+						width : 600,
+						height : 400,
+						legend : {
+							position : 'top',
+							maxLines : 3
+						},
+						bar : {
+							groupWidth : '75%'
+						},
+						isStacked : true,
+					};
 
-									var chartDiv = document
-											.getElementById('chart_div');
-									document.getElementById("chart_div").style.border = "thin dotted red";
-									var dataTable = new google.visualization.DataTable();
+					var chart = new google.visualization.ColumnChart(document
+							.getElementById('chart_div'));
+					chart.draw(data, options);
+				}
 
-									dataTable.addColumn('string',
-											'Project Name'); // Implicit domain column.
-									dataTable.addColumn('number',
-											'Task Planned Hours'); // Implicit data column.
-
-									dataTable.addColumn('number',
-											'Actual Required Hours');
-
-									$.each(data, function(key, item) {
-
-										dataTable.addRows([ [ item.projectName,
-												item.taskPlannedHrs,
-												item.actualReqHrs ]
-
-										]);
-									})
-
-									var materialOptions = {
-										width : 700,
-										chart : {
-											title : 'Project Report',
-											subtitle : 'Project '
-										},
-										axes : {
-											y : {
-												distance : {
-													label : ''
-												}, // Left y-axis.
-												brightness : {
-													side : 'right',
-													label : 'Employee Data'
-												}
-											// Right y-axis.
-											}
-										}
-									};
-
-									function drawMaterialChart() {
-										var materialChart = new google.charts.Bar(
-												chartDiv);
-										materialChart
-												.draw(
-														dataTable,
-														google.charts.Bar
-																.convertOptions(materialOptions));
-										// button.innerText = 'Change to Classic';
-										// button.onclick = drawClassicChart;
-									}
-
-									drawMaterialChart();
-								}
-								;
-
-							});
+			});
 
 		}
 	</script>
 
-	
+	<script type="text/javascript"
+		src="https://www.gstatic.com/charts/loader.js"></script>
 	<script>
 		window.jQuery
 				|| document

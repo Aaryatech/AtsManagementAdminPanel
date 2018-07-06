@@ -19,12 +19,12 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.ats.adminpanel.common.Constants;
 import com.ats.adminpanel.common.DateConvertor;
+import com.ats.adminpanel.graph.model.EmployeeGraph;
 import com.ats.adminpanel.model.DevelopmentHrsProwise;
 import com.ats.adminpanel.model.EmpAllocatedWork;
 import com.ats.adminpanel.model.EmpConReport;
 import com.ats.adminpanel.model.EmpPerformance;
 import com.ats.adminpanel.model.Employee;
-
 import com.ats.adminpanel.model.PhaseType;
 import com.ats.adminpanel.model.Project;
 import com.ats.adminpanel.model.ProjectHours;
@@ -419,10 +419,7 @@ public class ReportController {
 	@RequestMapping(value = "/findSupportTask", method = RequestMethod.GET)
 	public @ResponseBody List<SupportTaskReport> findSupportTask(HttpServletRequest request,
 			HttpServletResponse response) {
-		
-		
-		
-		
+
 		try {
 			System.out.println("in method");
 			supportTask = new SupportTaskReport();
@@ -459,4 +456,39 @@ public class ReportController {
 		return supportTaskList;
 	}
 
+	@RequestMapping(value = "/showEmpGraph", method = RequestMethod.GET)
+	public @ResponseBody ModelAndView showEmpGraph(HttpServletRequest request, HttpServletResponse response) {
+
+		ModelAndView model = new ModelAndView("project/empGraph");
+
+		try {
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return model;
+	}
+
+	@RequestMapping(value = "/getEmployeeProGraph", method = RequestMethod.GET)
+	public @ResponseBody List<EmployeeGraph> getEmployeeProGraph(HttpServletRequest request,
+			HttpServletResponse response) {
+		List<EmployeeGraph> employeeGraphList = null;
+		ModelAndView model = new ModelAndView("project/empGraph");
+
+		try {
+
+			EmployeeGraph[] res = rest.getForObject(Constants.url + "/getEmployeeGraph", EmployeeGraph[].class);
+
+			employeeGraphList = new ArrayList<EmployeeGraph>(Arrays.asList(res));
+			model.addObject("empGraph", employeeGraphList);
+
+			System.out.println("employeeGraphList[]" + employeeGraphList.toString());
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return employeeGraphList;
+	}
 }
