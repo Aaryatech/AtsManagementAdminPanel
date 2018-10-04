@@ -1,11 +1,11 @@
 package com.ats.adminpanel.graph.model;
 
 import java.util.List;
-
+  
 public class EmployeeGraph {
 
 	List<ProjectList> projectList;
-
+	 
 	List<EmployeeListWithActualHrs> employeeListWithActualHrsList;
 
 	public List<ProjectList> getProjectList() {

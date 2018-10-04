@@ -126,9 +126,9 @@
 			$.getJSON('${getEmployeeProGraph}', {
 				ajax : 'true',
 
-			}, function(data) {
+			}, function(emp) {
 
-				if (data == "") {
+				if (emp == "") {
 					alert("No records found !!");
 
 				}
@@ -138,15 +138,62 @@
 				google.charts.setOnLoadCallback(drawVisualization);
 
 				function drawVisualization() {
-					var data = google.visualization.arrayToDataTable([
+					/* var data = google.visualization.arrayToDataTable([
 							[ 'Genre', 'Fantasy & Sci Fi', 'Romance',
 									'Mystery/Crime', 'General', 'Western',
 									'Literature', {
 										role : 'annotation'
 									} ], [ '2010', 10, 24, 20, 32, 18, 5, '' ],
 							[ '2020', 16, 22, 23, 30, 16, 9, '' ],
-							[ '2030', 28, 19, 29, 30, 12, 13, '' ] ]);
-
+							[ '2030', 28, 19, 29, 30, 12, 13, '' ] ]); */
+						/* var project = "";
+							
+							for(var i=0;i<emp.projectList.length;i++)
+							{
+							project = project+","+emp.projectList[i].projectName;
+							} */
+							var data=[];	
+							var temp=[];
+							var finalData=[];
+							 
+							data.push([]);
+							
+							data[0].push( new Array(emp.projectList.length+2));
+							data[0][0]="[Genre"; 
+							 
+							 for (var i = 1; i <= emp.projectList.length; i++) {
+								  
+								 data[0][i]=emp.projectList[i-1].projectName;  
+							       
+							  }
+							 
+							 data[0][emp.projectList.length+1]="{role : 'annotation' }]";
+							 
+							 
+							  
+							 
+							 for (var i = 1; i <= emp.employeeListWithActualHrsList.length; i++) {
+								 
+								 data.push([]);
+								 data[i].push( new Array(emp.employeeListWithActualHrsList[i-1].actualHrsList.length+2));
+								 
+								 data[i][0]="["+emp.employeeListWithActualHrsList[i-1].empName;
+								 
+								  
+								  
+							      for (var j = 1; j <= emp.employeeListWithActualHrsList[i-1].actualHrsList.length; j++) {
+							    	  
+							    	  data[i][j]=emp.employeeListWithActualHrsList[i-1].actualHrsList[j-1].actualReqHrs;
+							    	  
+							      }
+							     
+							      
+							      data[i][emp.employeeListWithActualHrsList[i-1].actualHrsList.length+1]="'']";
+							       
+							  }
+							 alert(data);  
+					var dat = google.visualization.arrayToDataTable(data);
+ 
 					var options = {
 						width : 600,
 						height : 400,
@@ -162,7 +209,7 @@
 
 					var chart = new google.visualization.ColumnChart(document
 							.getElementById('chart_div'));
-					chart.draw(data, options);
+					chart.draw(dat, options);
 				}
 
 			});

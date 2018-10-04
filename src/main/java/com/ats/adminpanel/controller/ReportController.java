@@ -471,24 +471,24 @@ public class ReportController {
 	}
 
 	@RequestMapping(value = "/getEmployeeProGraph", method = RequestMethod.GET)
-	public @ResponseBody List<EmployeeGraph> getEmployeeProGraph(HttpServletRequest request,
+	public @ResponseBody EmployeeGraph getEmployeeProGraph(HttpServletRequest request,
 			HttpServletResponse response) {
-		List<EmployeeGraph> employeeGraphList = null;
+		
+		EmployeeGraph employeeGraph = new EmployeeGraph();
 		ModelAndView model = new ModelAndView("project/empGraph");
 
 		try {
 
-			EmployeeGraph[] res = rest.getForObject(Constants.url + "/getEmployeeGraph", EmployeeGraph[].class);
+			employeeGraph = rest.getForObject(Constants.url + "/getEmployeeProjectGraph", EmployeeGraph.class);
 
-			employeeGraphList = new ArrayList<EmployeeGraph>(Arrays.asList(res));
-			model.addObject("empGraph", employeeGraphList);
+			 
 
-			System.out.println("employeeGraphList[]" + employeeGraphList.toString());
+			System.out.println("employeeGraph " + employeeGraph.toString());
 
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 
-		return employeeGraphList;
+		return employeeGraph;
 	}
 }
