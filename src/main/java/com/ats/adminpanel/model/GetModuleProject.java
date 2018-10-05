@@ -1,21 +1,20 @@
 package com.ats.adminpanel.model;
-
+ 
 
 public class GetModuleProject {
 	
 	
-	private int moduleId;
-	
-	private int projectId;
+	private int moduleId; 
+	private int projectId; 
+	private String moduleName; 
+	private String moduleDesc; 
+	String projectName; 
+	private String phaseName; 
+	private String techName; 
+	private int techId; 
+	private int phaseId;
+	private int delStatus;
 	 
-	private String moduleName;
-	
-	private String moduleDesc;
-	
-	String projectName;
-	
-	
-
 	public int getModuleId() {
 		return moduleId;
 	}
@@ -56,10 +55,52 @@ public class GetModuleProject {
 		this.projectName = projectName;
 	}
 
+	public String getPhaseName() {
+		return phaseName;
+	}
+
+	public void setPhaseName(String phaseName) {
+		this.phaseName = phaseName;
+	}
+
+	public String getTechName() {
+		return techName;
+	}
+
+	public void setTechName(String techName) {
+		this.techName = techName;
+	}
+
+	public int getTechId() {
+		return techId;
+	}
+
+	public void setTechId(int techId) {
+		this.techId = techId;
+	}
+
+	public int getPhaseId() {
+		return phaseId;
+	}
+
+	public void setPhaseId(int phaseId) {
+		this.phaseId = phaseId;
+	}
+
+	public int getDelStatus() {
+		return delStatus;
+	}
+
+	public void setDelStatus(int delStatus) {
+		this.delStatus = delStatus;
+	}
+
 	@Override
 	public String toString() {
 		return "GetModuleProject [moduleId=" + moduleId + ", projectId=" + projectId + ", moduleName=" + moduleName
-				+ ", moduleDesc=" + moduleDesc + ", projectName=" + projectName + "]";
+				+ ", moduleDesc=" + moduleDesc + ", projectName=" + projectName + ", phaseName=" + phaseName
+				+ ", techName=" + techName + ", techId=" + techId + ", phaseId=" + phaseId + ", delStatus=" + delStatus
+				+ "]";
 	}
 
 	

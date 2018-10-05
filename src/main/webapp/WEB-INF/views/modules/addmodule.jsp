@@ -53,46 +53,108 @@
 
 							<div>
 								<div class="box-content">
-									<form action="postModule" method="post" class="form-horizontal"
+									<form action="${pageContext.request.contextPath}/postModule" method="post" class="form-horizontal"
 										id="validation-form" method="post">
 
-										<div class="form-group">
-											<label class="col-sm-3 col-lg-2 control-label">
-												Project Name</label>
-											<div class="col-sm-6 col-lg-4 controls">
-												<select name="proj_name" id="proj_name" class="form-control"
+										<div class="box-content">
+											<div class="col-md-2" >
+												Project Name</div>
+											<div class="col-md-3">
+												<select name="proj_name" id="proj_name" class="form-control chosen"
 													placeholder="Project" data-rule-required="true">
-													<option value="0">Select Project</option>
-													<c:forEach items="${projList}" var="projList"
-												varStatus="count">
-												<option value="${projList.projectId}"><c:out value="${projList.projectName}"/></option>
+													<option value="">Select Project</option>
+													<c:forEach items="${projList}" var="projList" >
+													<c:choose>
+														<c:when test="${projList.projectId==editModule.projectId}">
+															<option value="${projList.projectId}" selected><c:out value="${projList.projectName}"/></option>
+														</c:when>
+														<c:otherwise>
+															<option value="${projList.projectId}"><c:out value="${projList.projectName}"/></option>
+														</c:otherwise>
+													</c:choose>
+												
 											</c:forEach>
 												</select>
 											</div>
-
-											<div class="form-group">
-												<label class="col-sm-3 col-lg-2 control-label">
-													Module Name</label>
-												<div class="col-sm-6 col-lg-4 controls">
+											
+											<input type="hidden" name="moduleId" id="moduleId" value="${editModule.moduleId}"/>
+											
+											 <div class="col-md-1" ></div>
+												<div class="col-md-2" >
+													Module Name</div>
+												<div class="col-md-3">
 													<input type="text" name="mod_name" id="mod_name"
 														class="form-control" placeholder="Module Name"
-														data-rule-required="true" required />
+														data-rule-required="true" value="${editModule.moduleName}" required />
 												</div>
-											</div>
+											 
 										</div>
-										<div class="form-group">
-											<label class="col-sm-3 col-lg-2 control-label">Description</label>
-											<div class="col-sm-6 col-lg-4 controls">
-												<textarea name="module_desc" id="module_desc"
-													style="width: 300px;"></textarea>
-											</div>
+										<br>
+										
+										<div class="box-content">
+											<div class="col-md-2" >
+												Select Technology</div>
+											<div class="col-md-3">
+												<select name="techId" id="techId" class="form-control chosen"
+													  data-rule-required="true">
+													<option value="">Select Technology</option>
+													
+													<c:forEach items="${techList}" var="techList" >
+													<c:choose>
+														<c:when test="${techList.techId==editModule.techId}">
+															<option value="${techList.techId}" selected><c:out value="${techList.techName}"/></option>
+														</c:when>
+														<c:otherwise>
+															<option value="${techList.techId}"><c:out value="${techList.techName}"/></option>
+														</c:otherwise>
+													</c:choose>
+												
+											</c:forEach>
+												</select>
 											</div>
 											
-											<div style="text-align: center;">
-
-										<input type="submit" onclick="validateQty()"
-											class="btn btn-info" value="Add Module">
-									</div>
+									<div class="col-md-1" ></div>
+											 <div class="col-md-2" >
+												Select Phase</div>
+											<div class="col-md-3">
+												<select name="phaseId" id="phaseId" class="form-control chosen"
+													  data-rule-required="true">
+													<option value="">Select Phase</option>
+													<c:forEach items="${phaseTypeList}" var="phaseTypeList" >
+													<c:choose>
+														<c:when test="${phaseTypeList.mPhaseId==editModule.phaseId}">
+															<option value="${phaseTypeList.mPhaseId}" selected><c:out value="${phaseTypeList.phaseName}"/></option>
+														</c:when>
+														<c:otherwise>
+															<option value="${phaseTypeList.mPhaseId}"><c:out value="${phaseTypeList.phaseName}"/></option>
+														</c:otherwise>
+													</c:choose>
+												
+											</c:forEach>
+												</select>
+											</div>
+											 
+										</div>
+										<br><br>
+										
+										<div class="box-content">
+											<div class="col-md-2">Description</div>
+											<div class="col-md-9">
+												<input name="module_desc" placeholder="Module Description" class="form-control" id="module_desc"
+													value="${editModule.moduleDesc}" required/> 
+											</div>
+											</div><br> <br>
+											
+											<input type="hidden" name="flag" id="flag" value="0"/>
+											
+											<div class="row">
+						<div class="col-md-12" style="text-align: center">
+						 
+					<input type="submit" id="Submit" onclick="validation()" class="btn btn-info" value="Add Module">
+					<input type="button" onclick="setSaveAndNext()" class="btn btn-info" value="Save And Next">
+						</div>
+					</div>
+											 
 									</form>
 								</div>
 
@@ -107,6 +169,8 @@
                 <th style="width:18px">Sr No</th>
                 <th>Project Name</th>
                 <th>Module Name</th>
+                <th>Technology Name</th>
+                <th>Phase Name</th>
                 <th>Action</th>
             </tr>
         </thead>
@@ -116,9 +180,17 @@
 														<td>${count.index+1}</td>
 														<td>${modProj.projectName}</td>
 														<td>${modProj.moduleName}</td>
-														<td><a
-															href="${pageContext.request.contextPath}/showAddNewForm/${modProj.projectId}/
-															${modProj.projectName}/${modProj.moduleName}/${modProj.moduleId}"
+														<td>${modProj.techName}</td>
+														<td>${modProj.phaseName}</td>
+														<td>
+														<a
+															href="${pageContext.request.contextPath}/editModule/${modProj.moduleId}"
+															class="btn bnt-primary"> <i class="fa fa-edit"></i></a>
+														<a
+															href="${pageContext.request.contextPath}/deleteModule/${modProj.moduleId}"
+															class="btn bnt-primary"> <i class="fa fa-trash-o"></i></a>
+														<a
+															href="${pageContext.request.contextPath}/showAddNewForm/${modProj.moduleId}"
 															class="btn bnt-primary"> <i class="fa fa-list"></i></a> </td>
 														
 													</tr>
@@ -183,7 +255,54 @@
   <!--page specific plugin scripts-->
         <script type="text/javascript" src="${pageContext.request.contextPath}/resources/assets/data-tables/jquery.dataTables.js"></script>
         <script type="text/javascript" src="${pageContext.request.contextPath}/resources/assets/data-tables/bootstrap3/dataTables.bootstrap.js"></script>
+<script type="text/javascript">
 
+function setSaveAndNext()
+{
+	 if(validation()==true){
+		document.getElementById("flag").value=1;
+		var button = document.getElementById('Submit');
+	    button.form.submit();
+	 }
+	 
+}
+
+function validation()
+{
+	    
+	var projectName = document.getElementById("proj_name").value;
+	var mod_name = document.getElementById("mod_name").value;
+	var techId = document.getElementById("techId").value;
+	var phaseId = document.getElementById("phaseId").value;
+	var module_desc = document.getElementById("module_desc").value;
+	  
+	var isValid=true;
+	
+	if(projectName=="" || projectName==null){
+		isValid=false;
+		alert("Select Project ");
+	}
+	else if(mod_name=="" || mod_name==null){
+		isValid=false;
+		alert("Enter Module Name ");
+	}
+	else if(techId=="" || techId==null){
+		isValid=false;
+		alert("Select Technology ");
+	}
+	else if(phaseId=="" || phaseId==null){
+		isValid=false;
+		alert("Select Phase ");
+	}
+	else if(module_desc=="" || module_desc==null){
+		isValid=false;
+		alert("Enter Description ");
+	}
+	
+	return isValid;
+}
+
+</script>
 </body>
 </html>
 

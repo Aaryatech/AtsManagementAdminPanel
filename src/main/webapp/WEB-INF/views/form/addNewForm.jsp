@@ -53,8 +53,8 @@
 							</div>
 							<br>
 							<div class="box-title" align="center">
-								<h4>Project :${projName}</h4>
-								<h4>Module :${modName}</h4>
+								<h4>PROJECT NAME : ${projName}, MODULE NAME : ${modName}</h4>
+								<h4>MODULE DESCRIPTION : ${getModuleProject.moduleDesc}</h4>
 							</div>
 							<div>
 								<div class="box-content">
@@ -79,12 +79,12 @@
 										<input	type="hidden" name="spcompname" id="spcompname">
 										
 
-										<div class="form-group">
-											<label class="col-sm-3 col-lg-2 control-label"> Form
-												Type</label>
-											<div class="col-sm-6 col-lg-4 controls">
-												<select name="form_type" id="form_type" class="form-control"
-													placeholder="Project" data-rule-required="true">
+										<div class="box-content">
+											<div class="col-md-2"> Form
+												Type</div>
+											<div class="col-md-3">
+												<select name="form_type" id="form_type" class="form-control chosen" 
+												 data-rule-required="true">
 													<option value="0">Form Type</option>
 													<c:forEach items="${formTypeList}" var="formType"
 														varStatus="count">
@@ -92,31 +92,32 @@
 													</c:forEach>
 												</select>
 											</div>
-
-											<div class="form-group">
-												<label class="col-sm-3 col-lg-2 control-label">Form
-													Name</label>
-												<div class="col-sm-6 col-lg-4 controls">
+											
+											<div class="col-md-1"></div> 
+												<div class="col-md-2">Form
+													Name</div>
+												<div class="col-md-3">
 													<input type="text" name="form_name" id="form_name"
 														class="form-control" placeholder="Form Name"
 														data-rule-required="true" required />
 												</div>
+											 
+										</div><br>
+										
+										<div class="box-content">
+											<div class="col-md-2">Description</div>
+											<div class="col-md-9">
+												<input name="form_desc" id="form_desc"
+													class="form-control" placeholder="Description" /> 
 											</div>
-										</div>
-										<div class="form-group">
-											<label class="col-sm-3 col-lg-2 control-label">Description</label>
-											<div class="col-sm-6 col-lg-4 controls">
-												<textarea name="form_desc" id="form_desc"
-													style="width: 1000px;"></textarea>
-											</div>
-										</div>
+										</div><br>
 
 
-										<div class="form-group">
-											<label class="col-sm-3 col-lg-2 control-label"> UI
-												Complexity Type</label>
-											<div class="col-sm-6 col-lg-4 controls">
-												<select name="ui_comp" id="ui_comp" class="form-control"
+										<div class="box-content">
+											<div class="col-md-2"> UI
+												Complexity Type</div>
+											<div class="col-md-3">
+												<select name="ui_comp" id="ui_comp" class="form-control chosen"
 													placeholder="UI Complexity" data-rule-required="true"
 													onchange="getValue(1)">
 													<option value="0">UI Type</option>
@@ -131,12 +132,12 @@
 												</select>
 											</div>
 
-											<div class="form-group">
-												<label class="col-sm-3 col-lg-2 control-label"> Web
-													Service Complexity Type</label>
-												<div class="col-sm-6 col-lg-4 controls">
+											 <div class="col-md-1"></div>
+												<div class="col-md-2"> Web
+													Service Complexity Type</div>
+												<div class="col-md-3">
 													<select name="web_serv_comp" id="web_serv_comp"
-														onchange="getValue(2)" class="form-control"
+														onchange="getValue(2)" class="form-control chosen"
 														placeholder="Web Service" data-rule-required="true">
 														<option value="0">Web Service Type</option>
 														<c:forEach items="${taskTypeList}" var="taskType"
@@ -150,15 +151,15 @@
 													</select>
 												</div>
 
-											</div>
-										</div>
+											 
+										</div><br>
 
-										<div class="form-group">
-											<label class="col-sm-3 col-lg-2 control-label">
-												Consumption Complexity Type</label>
-											<div class="col-sm-6 col-lg-4 controls">
+										<div class="box-content">
+											<div class="col-md-2">
+												Consumption Complexity Type</div>
+											<div class="col-md-3">
 												<select name="consume_comp" id="consume_comp"
-													class="form-control" placeholder="UI Complexity"
+													class="form-control chosen" placeholder="UI Complexity"
 													onchange="getValue(3)" data-rule-required="true">
 													<option value="0">Consumption Type</option>
 													<c:forEach items="${taskTypeList}" var="taskType"
@@ -172,12 +173,12 @@
 												</select>
 											</div>
 
-											<div class="form-group">
-												<label class="col-sm-3 col-lg-2 control-label"> Unit
-													Testing Complexity Type</label>
-												<div class="col-sm-6 col-lg-4 controls">
+											<div class="col-md-1"></div>
+												<div class="col-md-2"> Unit
+													Testing Complexity Type</div>
+												<div class="col-md-3">
 													<select name="unit_test_comp" id="unit_test_comp"
-														onchange="getValue(4)" class="form-control"
+														onchange="getValue(4)" class="form-control chosen"
 														placeholder="Web Service" data-rule-required="true">
 														<option value="0">Unit Testing Type</option>
 														<c:forEach items="${taskTypeList}" var="taskType"
@@ -191,15 +192,15 @@
 													</select>
 												</div>
 
-											</div>
-										</div>
+											 
+										</div><br> 
 
-										<div class="form-group">
-											<label class="col-sm-3 col-lg-2 control-label">
+										<div class="box-content">
+											<label class="col-md-2">
 												Special Function Type</label>
-											<div class="col-sm-6 col-lg-4 controls">
+											<div class="col-md-3">
 												<select name="sp_func_comp" id="sp_func_comp"
-													class="form-control" onchange="getValue(5)"
+													class="form-control chosen" onchange="getValue(5)"
 													placeholder="Special Function" data-rule-required="true">
 													<option value="0">Special Function Type</option>
 													<c:forEach items="${taskTypeList}" var="taskType"
@@ -212,7 +213,7 @@
 													</c:forEach>
 												</select>
 											</div>
-										</div>
+										</div><br><br><br>
 
 										<div style="text-align: center;">
 
@@ -221,42 +222,88 @@
 										</div>
 
 									</form>
-								</div>
-
-								<!-- <div class="col-md-9"></div>
-								<label for="search" class="col-md-3" id="search"> <i
-									class="fa fa-search" style="font-size: 20px"></i> <input
-									type="text" id="myInput" onkeyup="myFunction()"
-									placeholder="Search.." title="Type in a name">
-								</label> <br>
- -->
-								<div class="box-content">
-
-									<br /> <br />
-									<div class="clearfix"></div>
-									<div class="table-responsive" style="border: 0">
-										<table class="table table-advance" id="table1">
-											<thead>
-												<tr>
-													<th style="width: 18px">Sr No</th>
-													<th>Task Name</th>
-													<th>Description</th>
-												</tr>
-											</thead>
-											<tbody>
-												<c:forEach items="${taskList}" var="taskList" varStatus="count">
-													<tr class="table-flag-blue">
-														<td>${count.index+1}</td>
-														<td>${taskList.taskName}</td>
-														<td><c:out value="${taskList.taskDescription}"></c:out></td>
-														
-													</tr>
-												</c:forEach>
-												
-											</tbody>
-										</table>
+								</div><br>
+								
+								<hr>
+  
+								 <c:forEach items="${formListWTaskList}" var="formListWTaskList" varStatus="count">
+                                    <div class="box">      
+                                    <div class="box-content">
+ 							<div class="row">
+									<div class="col-md-2"><b>Form Name:</b> </div>
+									<div class="col-md-2">
+								${formListWTaskList.formName}
 									</div>
+									
+									<div class="col-md-1"><b>Type:</b></div>
+									<div class="col-md-2">
+										${formListWTaskList.formTypeName} 
+									</div>
+									  
+									 
 								</div>
+							<br>
+							 </div>
+                              <div class="row" >
+                        <div class="col-md-12">
+                        
+                        			<div class="" id="todayslist">
+						<div class="box-title" style="background-color: #b6d1f2;">
+							<h3>
+								<i class="fa fa-table"></i>Form Task
+							</h3>
+							<div class="box-tool">
+								  <a data-action="collapse" href="#"><i
+									class="fa fa-chevron-up"></i></a>
+							</div>
+
+						</div>
+ 
+					<div class="box-content">
+
+					 
+					<div class="table-responsive" style="border: 1px;border: 1px Solid lightblue;">
+						<table class="table table-advance" id="table1">  
+									<thead>
+										<tr class="bgpink">
+										<th style="width:2%;">Sr</th>
+											<th class="col-md-2">Task Name</th>
+											<th class="col-md-7">Task Description</th>
+											<th class="col-md-1">Task Plan Hours</th>
+											<th class="col-md-3">Task Type Name</th> 
+										</tr>
+									</thead>
+									<tbody>
+
+									  <c:forEach items="${formListWTaskList.taskList}" var="taskList" varStatus="countt">
+											<tr>
+												<td ><c:out value="${countt.index+1}" /></td>
+												<td ><c:out value="${taskList.taskName}" /></td>
+												<td ><c:out value="${taskList.taskDescription}" /></td>
+												<td ><c:out value="${taskList.taskPlannedHrs}" /></td>
+ 												<td ><c:out value="${taskList.taskTypeName}" /></td> 
+										        <td >
+										         
+										      </td>
+										
+											</tr>
+										</c:forEach>  
+										</tbody>
+
+								</table>
+  
+					</div>
+				</div>
+							 
+
+
+						</div>
+                                </div>
+                            </div></div><br><br>
+                            </c:forEach>
+								
+								
+								
 							</div>
 						</div>
 					</div>
@@ -327,7 +374,7 @@ function getValue(value){
 	 */
 	
 	if(value==1){
-		alert("value="+value);
+		//alert("value="+value);
 		
 		var uicompName=$("#ui_comp option:selected").html();
 		var prevValue=	document.getElementById("uicname").value;
@@ -340,7 +387,7 @@ function getValue(value){
 	}
 	
 	if(value==2){
-		alert("value="+value);
+		//alert("value="+value);
 		
 		var uicompName=$("#web_serv_comp option:selected").html();
 		var prevValue=	document.getElementById("webcomname").value;
@@ -351,7 +398,7 @@ function getValue(value){
 	}
 	
 	if(value==3){
-		alert("value="+value);
+		//alert("value="+value);
 		
 		var uicompName=$("#consume_comp option:selected").html();
 		var prevValue=	document.getElementById("testcomname").value;
@@ -362,7 +409,7 @@ function getValue(value){
 	}
 	
 	if(value==4){
-		alert("value="+value);
+		//alert("value="+value);
 		var uicompName=$("#unit_test_comp option:selected").html();
 		var prevValue=	document.getElementById("testcomname").value;
 		//alert("prev Value " +prevValue);
@@ -372,7 +419,7 @@ function getValue(value){
 	}
 	
 	if(value==5){
-		alert("value="+value);
+		//alert("value="+value);
 		
 		var uicompName=$("#sp_func_comp option:selected").html();
 		var prevValue=	document.getElementById("spcompname").value;

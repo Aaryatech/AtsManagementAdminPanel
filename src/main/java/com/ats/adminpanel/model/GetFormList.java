@@ -1,5 +1,7 @@
 package com.ats.adminpanel.model;
- 
+
+import java.util.List;
+  
 public class GetFormList {
 	
 	 
@@ -11,6 +13,8 @@ public class GetFormList {
 	private String moduleName; 
 	private int form_type_id; 
 	private String formTypeName;
+	List<GetTask> taskList;
+	
 	public int getFormId() {
 		return formId;
 	}
@@ -59,11 +63,18 @@ public class GetFormList {
 	public void setFormTypeName(String formTypeName) {
 		this.formTypeName = formTypeName;
 	}
+	
+	public List<GetTask> getTaskList() {
+		return taskList;
+	}
+	public void setTaskList(List<GetTask> taskList) {
+		this.taskList = taskList;
+	}
 	@Override
 	public String toString() {
 		return "GetFormList [formId=" + formId + ", formName=" + formName + ", projectId=" + projectId
 				+ ", projectName=" + projectName + ", moduleId=" + moduleId + ", moduleName=" + moduleName
-				+ ", form_type_id=" + form_type_id + ", formTypeName=" + formTypeName + "]";
+				+ ", form_type_id=" + form_type_id + ", formTypeName=" + formTypeName + ", taskList=" + taskList + "]";
 	}
 	
 	

@@ -20,9 +20,11 @@ import com.ats.adminpanel.common.DateConvertor;
 import com.ats.adminpanel.model.Employee;
 import com.ats.adminpanel.model.FormType;
 import com.ats.adminpanel.model.Forms;
+import com.ats.adminpanel.model.GetFormList;
 import com.ats.adminpanel.model.GetModuleProject;
 import com.ats.adminpanel.model.GetPhaseTask;
 import com.ats.adminpanel.model.GetProjects;
+import com.ats.adminpanel.model.Info;
 import com.ats.adminpanel.model.LoginResponse;
 import com.ats.adminpanel.model.Module;
 import com.ats.adminpanel.model.PhaseTask;
@@ -30,6 +32,7 @@ import com.ats.adminpanel.model.PhaseType;
 import com.ats.adminpanel.model.Project;
 import com.ats.adminpanel.model.Task;
 import com.ats.adminpanel.model.TaskType;
+import com.ats.adminpanel.model.tx.Technology;
 
 @Controller
 public class ProjectController {
@@ -172,6 +175,7 @@ public class ProjectController {
 
 		ModelAndView model = new ModelAndView("modules/addmodule");
 
+		try {
 		List<GetModuleProject> modAndProjList;
 
 		List<GetProjects> projList;
@@ -189,6 +193,76 @@ public class ProjectController {
 		modAndProjList = new ArrayList<GetModuleProject>(Arrays.asList(modProjArray));
 
 		model.addObject("modAndProjList", modAndProjList);
+		
+		PhaseType[] phaseArray = restTemplate.getForObject(Constants.url + "masters/getAllPhaseTypeList",
+				PhaseType[].class);
+
+		List<PhaseType> phaseTypeList = new ArrayList<PhaseType>(Arrays.asList(phaseArray));
+
+		model.addObject("phaseTypeList", phaseTypeList);
+
+		Technology[] techArray = restTemplate.getForObject(Constants.url + "/getAllTechList", Technology[].class);
+
+		List<Technology> techList = new ArrayList<Technology>(Arrays.asList(techArray));
+
+		model.addObject("techList", techList);
+		
+		}catch (Exception e) {
+			e.getStackTrace();
+		}
+
+		return model;
+
+	}
+	 
+	
+	@RequestMapping(value = "/editModule/{moduleId}", method = RequestMethod.GET)
+	public ModelAndView editModule(@PathVariable int moduleId, HttpServletRequest request, HttpServletResponse response) {
+ 
+		ModelAndView model = new ModelAndView("modules/addmodule");
+
+		try {
+			
+			MultiValueMap<String, Object> map = new LinkedMultiValueMap<>();
+			map.add("moduleId", moduleId); 
+			GetModuleProject editModule = restTemplate.postForObject(Constants.url + "masters/getModuleByModuleId",map,
+					GetModuleProject.class);
+			model.addObject("editModule", editModule);
+			
+		List<GetModuleProject> modAndProjList;
+
+		List<GetProjects> projList;
+
+		GetProjects[] projArray = restTemplate.getForObject(Constants.url + "masters/getProjectList",
+				GetProjects[].class);
+
+		projList = new ArrayList<GetProjects>(Arrays.asList(projArray));
+
+		model.addObject("projList", projList);
+
+		GetModuleProject[] modProjArray = restTemplate.getForObject(Constants.url + "masters/getModuleProject",
+				GetModuleProject[].class);
+
+		modAndProjList = new ArrayList<GetModuleProject>(Arrays.asList(modProjArray));
+
+		model.addObject("modAndProjList", modAndProjList);
+		
+		PhaseType[] phaseArray = restTemplate.getForObject(Constants.url + "masters/getAllPhaseTypeList",
+				PhaseType[].class);
+
+		List<PhaseType> phaseTypeList = new ArrayList<PhaseType>(Arrays.asList(phaseArray));
+
+		model.addObject("phaseTypeList", phaseTypeList);
+
+		Technology[] techArray = restTemplate.getForObject(Constants.url + "/getAllTechList", Technology[].class);
+
+		List<Technology> techList = new ArrayList<Technology>(Arrays.asList(techArray));
+
+		model.addObject("techList", techList);
+		
+		}catch (Exception e) {
+			e.printStackTrace();
+		}
 
 		return model;
 
@@ -197,6 +271,7 @@ public class ProjectController {
 	@RequestMapping(value = "/postModule", method = RequestMethod.POST)
 	public String postModule(HttpServletRequest request, HttpServletResponse response) {
 
+		String ret = new String();
 		try {
 
 			String projId = request.getParameter("proj_name");
@@ -204,17 +279,59 @@ public class ProjectController {
 			String modName = request.getParameter("mod_name");
 
 			int intProjId = Integer.parseInt((projId));
+			int techId = Integer.parseInt(request.getParameter("techId"));
+			int phaseId = Integer.parseInt(request.getParameter("phaseId"));
+			int flag = Integer.parseInt(request.getParameter("flag"));
+			String moduleId = request.getParameter("moduleId") ;
+			
 			Module module = new Module();
 
+			if(moduleId.equalsIgnoreCase("") || moduleId.equalsIgnoreCase(null)) {
+				module.setModuleId(0);
+			}
+			else {
+				module.setModuleId(Integer.parseInt(moduleId));
+			}
 			module.setModuleDesc(modDesc);
 			module.setModuleName(modName);
 			module.setProjectId(intProjId);
-
+			module.setPhaseId(phaseId);
+			module.setTechId(techId);
+			
+			
 			Module moduleResponse = restTemplate.postForObject(
 					com.ats.adminpanel.common.Constants.url + "masters/saveModule", module, Module.class);
 
 			System.err.println("Module Insert Response " + moduleResponse.toString());
+			
+			if(flag==0) {
+				ret="redirect:/showAddNewModule";
+			}
+			else {
+				ret="redirect:/showAddNewForm/"+moduleResponse.getModuleId();
+			}
 
+		} catch (Exception e) {
+
+			System.err.println("Exc in Module Insert " + e.getMessage());
+			e.printStackTrace();
+
+		}
+		return ret;
+	}
+	
+	@RequestMapping(value = "/deleteModule/{moduleId}", method = RequestMethod.GET)
+	public String deleteModule(@PathVariable int moduleId,HttpServletRequest request, HttpServletResponse response) {
+
+		 
+		try {
+ 
+			MultiValueMap<String, Object> map = new LinkedMultiValueMap<>();
+			map.add("moduleId", moduleId); 
+			Info delete = restTemplate.postForObject(Constants.url + "masters/deleteModule", map, Info.class);
+
+			System.err.println("Module delete Response " + delete);
+			 
 		} catch (Exception e) {
 
 			System.err.println("Exc in Module Insert " + e.getMessage());
@@ -224,13 +341,17 @@ public class ProjectController {
 		return "redirect:/showAddNewModule";
 	}
 
-	@RequestMapping(value = "/showAddNewForm/{projId}/{projName}/{modName}/{modId}", method = RequestMethod.GET)
-	public ModelAndView showAddNewForm(HttpServletRequest request, HttpServletResponse response,
-			@PathVariable int projId, @PathVariable String projName, @PathVariable String modName,
-			@PathVariable int modId) {
+	@RequestMapping(value = "/showAddNewForm/{moduleId}", method = RequestMethod.GET)
+	public ModelAndView showAddNewForm(@PathVariable int moduleId,HttpServletRequest request, HttpServletResponse response) {
 
 		ModelAndView model = new ModelAndView("form/addNewForm");
 		try {
+			
+			MultiValueMap<String, Object> map = new LinkedMultiValueMap<>();
+			map.add("moduleId", moduleId); 
+			GetModuleProject getModuleProject = restTemplate.postForObject(Constants.url + "masters/getModuleByModuleId",map,
+					GetModuleProject.class); 
+			
 			List<FormType> formTypeList;
 
 			FormType[] formTypeArray = restTemplate.getForObject(Constants.url + "masters/getAllFormType",
@@ -249,13 +370,20 @@ public class ProjectController {
 
 			model.addObject("taskTypeList", taskTypeList);
 
-			model.addObject("projName", projName);
-			model.addObject("projId", projId);
+			model.addObject("projName", getModuleProject.getProjectName());
+			model.addObject("projId", getModuleProject.getProjectId());
 
-			model.addObject("modName", modName);
-			model.addObject("modId", modId);
+			model.addObject("modName", getModuleProject.getModuleName());
+			model.addObject("modId", getModuleProject.getModuleId());
+			model.addObject("getModuleProject", getModuleProject);
 
-			model.addObject("taskList", responseTaskList);
+			 
+			 
+			GetFormList[] getFormList = restTemplate.postForObject(Constants.url + "masters/getFormAndTaskListByModuleId",map,
+					GetFormList[].class); 
+			
+			List<GetFormList> formListWTaskList = new ArrayList<GetFormList>(Arrays.asList(getFormList));
+			model.addObject("formListWTaskList", formListWTaskList);
 
 		} catch (Exception e) {
 
@@ -393,7 +521,7 @@ public class ProjectController {
 			e.printStackTrace();
 
 		}
-		return "redirect:/showAddNewForm/" + projId + "/" + projName + "/" + modName + "/" + modId;
+		return "redirect:/showAddNewForm/"+modId;
 	}
 
 	@RequestMapping(value = "/projectManagementTask/{projectId}", method = RequestMethod.GET)
