@@ -305,4 +305,36 @@ public class TxController {
 		return "redirect:/showAddComplexity";
 	}
 
+	@RequestMapping(value = "/showAddComplexOption", method = RequestMethod.GET)
+	public ModelAndView showAddComplexOption(HttpServletRequest request, HttpServletResponse response) {
+
+		ModelAndView model = new ModelAndView("masters/addComplexOption");
+		try {
+			PhaseType[] phaseArray = restTemplate.getForObject(Constants.url + "masters/getAllPhaseTypeList",
+					PhaseType[].class);
+
+			phaseTypeList = new ArrayList<PhaseType>(Arrays.asList(phaseArray));
+
+			model.addObject("phaseTypeList", phaseTypeList);
+
+			GetTech[] techArray = restTemplate.getForObject(Constants.url + "/getAllTechPhaseList", GetTech[].class);
+
+			techList = new ArrayList<GetTech>(Arrays.asList(techArray));
+
+			model.addObject("techList", techList);
+
+			GetComplexity[] compArray = restTemplate.getForObject(Constants.url + "/getAllComplexityList",
+					GetComplexity[].class);
+
+			compList = new ArrayList<GetComplexity>(Arrays.asList(compArray));
+
+			model.addObject("compList", compList);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return model;
+
+	}
+
 }
