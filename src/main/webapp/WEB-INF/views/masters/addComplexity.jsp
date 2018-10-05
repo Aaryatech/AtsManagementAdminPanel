@@ -29,7 +29,7 @@
 				<div class="page-title">
 					<div>
 						<h1>
-							<i class="fa fa-file-o"></i>Add Technology
+							<i class="fa fa-file-o"></i>Add Complexity
 						</h1>
 
 					</div>
@@ -42,7 +42,7 @@
 						<div class="box">
 							<div class="box-title">
 								<h3>
-									<i class="fa fa-bars"></i>Technology Details
+									<i class="fa fa-bars"></i>Complexity Details
 								</h3>
 								<div class="box-tool">
 									<!-- <a href="">Back to List</a> <a data-action="collapse" href="#"><i
@@ -54,26 +54,47 @@
 							<div>
 								<div class="box-content">
 									<form
-										action="${pageContext.request.contextPath}/insertTechnology"
+										action="${pageContext.request.contextPath}/insertComplexity"
 										method="post" class="form-horizontal" id="validation-form"
 										method="post">
 
 										<div class="form-group">
 											<label class="col-sm-3 col-lg-2 control-label">
-												Technology Name</label>
+												Complexity Name</label>
 											<div class="col-sm-6 col-lg-4 controls">
-												<input type="text" name="techName" id="techName"
-													class="form-control" placeholder="Technology Name"
-													data-rule-required="true" value="${editTech.techName}"
-													required /> <input type="hidden" name="techId" id="techId"
-													value="${editTech.techId}" />
+												<input type="text" name="cmplxName" id="cmplxName"
+													class="form-control" placeholder="Complexity Name"
+													data-rule-required="true" value="${editCmplx.cmplxName}"
+													required /> <input type="hidden" name="cmplxId"
+													id="cmplxId" value="${editCmplx.cmplxId}" />
 											</div>
 
-											<label class="col-sm-3 col-lg-2 control-label">Description</label>
+
+											<label class="col-sm-3 col-lg-2 control-label">Select
+												Technology </label>
 											<div class="col-sm-6 col-lg-4 controls">
-												<textarea name="descTech" id="descTech"
-													style="width: 300px;">${editTech.techDesc}</textarea>
+												<select name="techId" id="techId"
+													class="form-control chosen" placeholder="Technology"
+													required>
+													<option value="">Select Technology</option>
+													<c:forEach items="${techList}" var="techList"
+														varStatus="count">
+														<c:choose>
+															<c:when test="${techList.techId==editTech.techId}">
+																<option value="${techList.techId}" selected><c:out
+																		value="${techList.techName}" /></option>
+															</c:when>
+															<c:otherwise>
+																<option value="${techList.techId}"><c:out
+																		value="${techList.techName}" /></option>
+															</c:otherwise>
+														</c:choose>
+
+
+													</c:forEach>
+												</select>
 											</div>
+
 										</div>
 
 
@@ -104,6 +125,32 @@
 													</c:forEach>
 												</select>
 											</div>
+
+											<label class="col-sm-3 col-lg-2 control-label">Select
+												Form Type </label>
+											<div class="col-sm-6 col-lg-4 controls">
+												<select name="formTypeId" id="formTypeId"
+													class="form-control chosen" placeholder="Form" required>
+													<option value="">Select Form Type</option>
+													<c:forEach items="${formList}" var="formList"
+														varStatus="count">
+														<c:choose>
+															<c:when
+																test="${formList.formTypeId==editTech.formTypeId}">
+																<option value="${formList.formTypeId}" selected><c:out
+																		value="${formList.formTypeName}" /></option>
+															</c:when>
+															<c:otherwise>
+																<option value="${formList.formTypeId}"><c:out
+																		value="${formList.formTypeName}" /></option>
+															</c:otherwise>
+														</c:choose>
+
+
+													</c:forEach>
+												</select>
+											</div>
+
 										</div>
 										<div style="text-align: center;">
 

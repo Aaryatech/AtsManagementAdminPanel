@@ -12,17 +12,27 @@ import javax.servlet.http.HttpServletResponse;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.ats.adminpanel.common.Constants;
+import com.ats.adminpanel.model.FormType;
+import com.ats.adminpanel.model.Info;
 import com.ats.adminpanel.model.PhaseType;
+import com.ats.adminpanel.model.tx.Complexity;
+import com.ats.adminpanel.model.tx.GetTech;
 import com.ats.adminpanel.model.tx.Technology;
 
 @Controller
 public class TxController {
+
+	List<PhaseType> phaseTypeList;
+
+	List<GetTech> techList;
+	List<FormType> formList;
 
 	RestTemplate restTemplate = new RestTemplate();
 	MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
@@ -31,23 +41,24 @@ public class TxController {
 	public ModelAndView showAddTechnology(HttpServletRequest request, HttpServletResponse response) {
 
 		ModelAndView model = new ModelAndView("masters/addTech");
+		try {
+			PhaseType[] phaseArray = restTemplate.getForObject(Constants.url + "masters/getAllPhaseTypeList",
+					PhaseType[].class);
 
-		List<PhaseType> phaseTypeList;
+			phaseTypeList = new ArrayList<PhaseType>(Arrays.asList(phaseArray));
 
-		List<Technology> techList;
+			model.addObject("phaseTypeList", phaseTypeList);
 
-		PhaseType[] phaseArray = restTemplate.getForObject(Constants.url + "masters/getAllPhaseTypeList",
-				PhaseType[].class);
+			GetTech[] techArray = restTemplate.getForObject(Constants.url + "/getAllTechPhaseList", GetTech[].class);
 
-		phaseTypeList = new ArrayList<PhaseType>(Arrays.asList(phaseArray));
+			techList = new ArrayList<GetTech>(Arrays.asList(techArray));
 
-		model.addObject("phaseTypeList", phaseTypeList);
+			model.addObject("techList", techList);
 
-		Technology[] techArray = restTemplate.getForObject(Constants.url + "/getAllTechList", Technology[].class);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 
-		techList = new ArrayList<Technology>(Arrays.asList(techArray));
-
-		model.addObject("techList", techList);
 		return model;
 
 	}
@@ -85,6 +96,130 @@ public class TxController {
 					tech, Technology.class);
 
 			System.err.println("Project Insert Response " + info.toString());
+		} catch (Exception e) {
+			System.err.println("Exc in Proj Insert " + e.getMessage());
+			e.printStackTrace();
+
+		}
+
+		return "redirect:/showAddTechnology";
+	}
+
+	@RequestMapping(value = "/editTech/{techId}", method = RequestMethod.GET)
+	public ModelAndView editEmp(@PathVariable int techId, HttpServletRequest request, HttpServletResponse response) {
+
+		ModelAndView model = new ModelAndView("masters/addTech");
+		try {
+
+			PhaseType[] phaseArray = restTemplate.getForObject(Constants.url + "masters/getAllPhaseTypeList",
+					PhaseType[].class);
+
+			phaseTypeList = new ArrayList<PhaseType>(Arrays.asList(phaseArray));
+			model.addObject("phaseTypeList", phaseTypeList);
+
+			map.add("techId", techId);
+			Technology editTech = restTemplate.postForObject(Constants.url + "/techByTechId", map, Technology.class);
+			model.addObject("editTech", editTech);
+
+			GetTech[] techArray = restTemplate.getForObject(Constants.url + "/getAllTechPhaseList", GetTech[].class);
+
+			techList = new ArrayList<GetTech>(Arrays.asList(techArray));
+
+			model.addObject("techList", techList);
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return model;
+	}
+
+	@RequestMapping(value = "/deleteTech/{techId}", method = RequestMethod.GET)
+	public String deleteEmp(@PathVariable int techId, HttpServletRequest request, HttpServletResponse response) {
+
+		try {
+
+			map.add("techId", techId);
+			Info info = restTemplate.postForObject(Constants.url + "/deleteTech", map, Info.class);
+
+			System.out.println("info " + info);
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return "redirect:/showAddTechnology";
+	}
+
+	@RequestMapping(value = "/showAddComplexity", method = RequestMethod.GET)
+	public ModelAndView showAddComplexity(HttpServletRequest request, HttpServletResponse response) {
+
+		ModelAndView model = new ModelAndView("masters/addComplexity");
+		try {
+			PhaseType[] phaseArray = restTemplate.getForObject(Constants.url + "masters/getAllPhaseTypeList",
+					PhaseType[].class);
+
+			phaseTypeList = new ArrayList<PhaseType>(Arrays.asList(phaseArray));
+
+			model.addObject("phaseTypeList", phaseTypeList);
+
+			GetTech[] techArray = restTemplate.getForObject(Constants.url + "/getAllTechPhaseList", GetTech[].class);
+
+			techList = new ArrayList<GetTech>(Arrays.asList(techArray));
+
+			model.addObject("techList", techList);
+
+			FormType[] formArray = restTemplate.getForObject(Constants.url + "masters/getAllFormType",
+					FormType[].class);
+
+			formList = new ArrayList<FormType>(Arrays.asList(formArray));
+
+			model.addObject("formList", formList);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return model;
+
+	}
+
+	@RequestMapping(value = "/insertComplexity", method = RequestMethod.POST)
+	public String insertComplexity(HttpServletRequest request, HttpServletResponse response) {
+
+		ModelAndView model = new ModelAndView("masters/addComplexity");
+
+		try {
+			Date now = new Date();
+
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+
+			String techId = request.getParameter("techId");
+			String cmplxId = request.getParameter("cmplxId");
+
+			String formTypeId = request.getParameter("formTypeId");
+
+			String cmplxName = request.getParameter("cmplxName");
+			String descTech = request.getParameter("descTech");
+			String mPhaseId = request.getParameter("mPhaseId");
+
+			Complexity comp = new Complexity();
+
+			if (cmplxId == "" || cmplxId == null)
+				comp.setCmplxId(0);
+			else
+				comp.setTechId(Integer.parseInt(techId));
+			comp.setCmplxId(Integer.parseInt(cmplxId));
+			comp.setFormTypeId(Integer.parseInt(formTypeId));
+			comp.setmPhaseId(Integer.parseInt(mPhaseId));
+
+			comp.setIsUsed(1);
+			comp.setCmplxDate(sdf.format(now));
+			comp.setCmplxName(cmplxName);
+
+			Complexity info = restTemplate.postForObject(com.ats.adminpanel.common.Constants.url + "/saveTechnology",
+					comp, Complexity.class);
+			System.out.println("Complexity Insertion " + info.toString());
+
 		} catch (Exception e) {
 			System.err.println("Exc in Proj Insert " + e.getMessage());
 			e.printStackTrace();
