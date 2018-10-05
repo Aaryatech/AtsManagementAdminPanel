@@ -80,7 +80,7 @@
 													<c:forEach items="${techList}" var="techList"
 														varStatus="count">
 														<c:choose>
-															<c:when test="${techList.techId==editTech.techId}">
+															<c:when test="${techList.techId==editCmplx.techId}">
 																<option value="${techList.techId}" selected><c:out
 																		value="${techList.techName}" /></option>
 															</c:when>
@@ -111,7 +111,7 @@
 														varStatus="count">
 														<c:choose>
 															<c:when
-																test="${phaseTypeList.mPhaseId==editTech.mPhaseId}">
+																test="${phaseTypeList.mPhaseId==editCmplx.mPhaseId}">
 																<option value="${phaseTypeList.mPhaseId}" selected><c:out
 																		value="${phaseTypeList.phaseName}" /></option>
 															</c:when>
@@ -136,7 +136,7 @@
 														varStatus="count">
 														<c:choose>
 															<c:when
-																test="${formList.formTypeId==editTech.formTypeId}">
+																test="${formList.formTypeId==editCmplx.formTypeId}">
 																<option value="${formList.formTypeId}" selected><c:out
 																		value="${formList.formTypeName}" /></option>
 															</c:when>
@@ -171,26 +171,29 @@
 											<thead>
 												<tr>
 													<th>Sr No</th>
+													<th>Complexity Name</th>
 													<th>Technology Name</th>
-													<th>Technology Description</th>
+													<th>Form Type Name</th>
 													<th>Phase Name</th>
 
 													<th>Action</th>
 												</tr>
 											</thead>
 											<tbody>
-												<c:forEach items="${techList}" var="techList"
+												<c:forEach items="${compList}" var="compList"
 													varStatus="count">
 													<tr class="table-flag-blue">
 														<td>${count.index+1}</td>
-														<td>${techList.techName}</td>
-														<td>${techList.techDesc}</td>
-														<td>${techList.phaseName}</td>
+														<td>${compList.cmplxName}</td>
+														<td>${compList.techName}</td>
+														<td>${compList.formTypeName}</td>
+														<td>${compList.phaseName}</td>
+
 
 														<td><a
-															href="${pageContext.request.contextPath}/editTech/${techList.techId}"><span
+															href="${pageContext.request.contextPath}/editComp/${compList.cmplxId}"><span
 																class="glyphicon glyphicon-edit"></span></a> <a
-															href="${pageContext.request.contextPath}/deleteTech/${techList.techId}"
+															href="${pageContext.request.contextPath}/deleteComp/${compList.cmplxId}"
 															onClick="return confirm('Are you sure want to delete this record');"><span
 																class="glyphicon glyphicon-remove"></span></a></td>
 													</tr>

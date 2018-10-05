@@ -23,6 +23,7 @@ import com.ats.adminpanel.model.FormType;
 import com.ats.adminpanel.model.Info;
 import com.ats.adminpanel.model.PhaseType;
 import com.ats.adminpanel.model.tx.Complexity;
+import com.ats.adminpanel.model.tx.GetComplexity;
 import com.ats.adminpanel.model.tx.GetTech;
 import com.ats.adminpanel.model.tx.Technology;
 
@@ -33,6 +34,8 @@ public class TxController {
 
 	List<GetTech> techList;
 	List<FormType> formList;
+
+	List<GetComplexity> compList;
 
 	RestTemplate restTemplate = new RestTemplate();
 	MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
@@ -175,6 +178,13 @@ public class TxController {
 			formList = new ArrayList<FormType>(Arrays.asList(formArray));
 
 			model.addObject("formList", formList);
+
+			GetComplexity[] compArray = restTemplate.getForObject(Constants.url + "/getAllComplexityList",
+					GetComplexity[].class);
+
+			compList = new ArrayList<GetComplexity>(Arrays.asList(compArray));
+
+			model.addObject("compList", compList);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -191,24 +201,29 @@ public class TxController {
 		try {
 			Date now = new Date();
 
+			int cmplxId = 0;
+
 			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 
 			String techId = request.getParameter("techId");
-			String cmplxId = request.getParameter("cmplxId");
 
 			String formTypeId = request.getParameter("formTypeId");
 
 			String cmplxName = request.getParameter("cmplxName");
-			String descTech = request.getParameter("descTech");
 			String mPhaseId = request.getParameter("mPhaseId");
 
 			Complexity comp = new Complexity();
 
-			if (cmplxId == "" || cmplxId == null)
-				comp.setCmplxId(0);
-			else
-				comp.setTechId(Integer.parseInt(techId));
-			comp.setCmplxId(Integer.parseInt(cmplxId));
+			try {
+				cmplxId = Integer.parseInt(request.getParameter("cmplxId"));
+
+			} catch (Exception e) {
+				// TODO: handle exception
+				cmplxId = 0;
+			}
+
+			comp.setTechId(Integer.parseInt(techId));
+			comp.setCmplxId(cmplxId);
 			comp.setFormTypeId(Integer.parseInt(formTypeId));
 			comp.setmPhaseId(Integer.parseInt(mPhaseId));
 
@@ -216,7 +231,7 @@ public class TxController {
 			comp.setCmplxDate(sdf.format(now));
 			comp.setCmplxName(cmplxName);
 
-			Complexity info = restTemplate.postForObject(com.ats.adminpanel.common.Constants.url + "/saveTechnology",
+			Complexity info = restTemplate.postForObject(com.ats.adminpanel.common.Constants.url + "/saveComplexity",
 					comp, Complexity.class);
 			System.out.println("Complexity Insertion " + info.toString());
 
@@ -226,7 +241,68 @@ public class TxController {
 
 		}
 
-		return "redirect:/showAddTechnology";
+		return "redirect:/showAddComplexity";
+	}
+
+	@RequestMapping(value = "/editComp/{cmplxId}", method = RequestMethod.GET)
+	public ModelAndView editComp(@PathVariable int cmplxId, HttpServletRequest request, HttpServletResponse response) {
+
+		ModelAndView model = new ModelAndView("masters/addComplexity");
+		try {
+
+			PhaseType[] phaseArray = restTemplate.getForObject(Constants.url + "masters/getAllPhaseTypeList",
+					PhaseType[].class);
+
+			phaseTypeList = new ArrayList<PhaseType>(Arrays.asList(phaseArray));
+			model.addObject("phaseTypeList", phaseTypeList);
+
+			FormType[] formArray = restTemplate.getForObject(Constants.url + "masters/getAllFormType",
+					FormType[].class);
+
+			formList = new ArrayList<FormType>(Arrays.asList(formArray));
+
+			model.addObject("formList", formList);
+
+			GetTech[] techArray = restTemplate.getForObject(Constants.url + "/getAllTechPhaseList", GetTech[].class);
+
+			techList = new ArrayList<GetTech>(Arrays.asList(techArray));
+
+			model.addObject("techList", techList);
+
+			GetComplexity[] compArray = restTemplate.getForObject(Constants.url + "/getAllComplexityList",
+					GetComplexity[].class);
+
+			compList = new ArrayList<GetComplexity>(Arrays.asList(compArray));
+
+			model.addObject("compList", compList);
+
+			map.add("cmplxId", cmplxId);
+			GetComplexity editCmplx = restTemplate.postForObject(Constants.url + "/compByCmplxId", map,
+					GetComplexity.class);
+			model.addObject("editCmplx", editCmplx);
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return model;
+	}
+
+	@RequestMapping(value = "/deleteComp/{cmplxId}", method = RequestMethod.GET)
+	public String deleteComp(@PathVariable int cmplxId, HttpServletRequest request, HttpServletResponse response) {
+
+		try {
+
+			map.add("cmplxId", cmplxId);
+			Info info = restTemplate.postForObject(Constants.url + "/deleteComplexity", map, Info.class);
+
+			System.out.println("info " + info);
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return "redirect:/showAddComplexity";
 	}
 
 }
