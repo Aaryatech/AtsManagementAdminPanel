@@ -10,6 +10,10 @@ public class FormType {
 	
 	
 	private int isUsed;
+	
+	
+	private int mPhaseId;
+	private int techId;
 
 	public int getFormTypeId() {
 		return formTypeId;
@@ -35,12 +39,27 @@ public class FormType {
 		this.isUsed = isUsed;
 	}
 
+	public int getmPhaseId() {
+		return mPhaseId;
+	}
+
+	public void setmPhaseId(int mPhaseId) {
+		this.mPhaseId = mPhaseId;
+	}
+
+	public int getTechId() {
+		return techId;
+	}
+
+	public void setTechId(int techId) {
+		this.techId = techId;
+	}
+
 	@Override
 	public String toString() {
-		return "FormType [formTypeId=" + formTypeId + ", formTypeName=" + formTypeName + ", isUsed=" + isUsed + "]";
+		return "FormType [formTypeId=" + formTypeId + ", formTypeName=" + formTypeName + ", isUsed=" + isUsed
+				+ ", mPhaseId=" + mPhaseId + ", techId=" + techId + "]";
 	}
-	
-	
 	
 	 
 }

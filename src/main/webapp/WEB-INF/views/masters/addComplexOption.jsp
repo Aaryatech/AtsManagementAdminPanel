@@ -6,8 +6,7 @@
 <link rel="stylesheet"
 	href="${pageContext.request.contextPath}/resources/css/tableSearch.css">
 <body>
-	<c:url var="getRmSubCategory" value="/getRmSubCategory" />
-	<c:url var="getRmCategory" value="/getRmCategory" />
+	<c:url var="getComplexityData" value="/getComplexityData" />
 	<div>
 		<div class="container" id="main-container">
 
@@ -54,7 +53,7 @@
 							<div>
 								<div class="box-content">
 									<form
-										action="${pageContext.request.contextPath}/insertComplexity"
+										action="${pageContext.request.contextPath}/insertComplexOption"
 										method="post" class="form-horizontal" id="validation-form"
 										method="post">
 
@@ -65,7 +64,8 @@
 												Phase </label>
 											<div class="col-sm-6 col-lg-4 controls">
 												<select name="mPhaseId" id="mPhaseId"
-													class="form-control chosen" placeholder="Phase" required>
+													class="form-control chosen" placeholder="Phase"
+													multiple="multiple">
 													<option value="">Select Phase</option>
 													<c:forEach items="${phaseTypeList}" var="phaseTypeList"
 														varStatus="count">
@@ -92,7 +92,7 @@
 											<div class="col-sm-6 col-lg-4 controls">
 												<select name="techId" id="techId"
 													class="form-control chosen" placeholder="Technology"
-													required>
+													multiple="multiple">
 													<option value="">Select Technology</option>
 													<c:forEach items="${techList}" var="techList"
 														varStatus="count">
@@ -114,12 +114,16 @@
 
 										</div>
 
+										<div class=" box-content">
+											<div class="col-md-12" style="text-align: center">
+												<input type="button" class="btn btn-info" value="SEARCH"
+													id="submit" onclick="search()">
 
-										<div style="text-align: center;">
 
-											<input type="submit" onclick="validateQty()"
-												class="btn btn-info" value="Search">
+
+											</div>
 										</div>
+
 										<div class="form-group"></div>
 
 
@@ -128,10 +132,59 @@
 												Complexity Option Name</label>
 											<div class="col-sm-6 col-lg-4 controls">
 												<input type="text" name="cmplxOptName" id="cmplxOptName"
-													class="form-control" placeholder="Complexity Option Name"
-													data-rule-required="true" value="${editCmplx.cmplxName}"
-													required /> <input type="hidden" name="cmplxId"
-													id="cmplxId" value="${editCmplx.cmplxId}" />
+													class="form-control" placeholder="Complexity Option Name" />
+												<input type="hidden" name="cmplxId" id="cmplxId"
+													value="${editCmplx.cmplxId}" />
+											</div>
+										</div>
+
+
+
+
+
+										<div class="box-content">
+
+											<br /> <br />
+											<div class="clearfix"></div>
+											<div class="table-responsive" style="border: 0">
+												<table class="table table-advance" id="table1">
+													<thead>
+														<tr>
+															<th>Sr No</th>
+															<th>Complexity Name</th>
+															<th>Technology Name</th>
+															<th>Form Type Name</th>
+															<th>Phase Name</th>
+															<th>Allocated Hours</th>
+
+															<!-- <th>Action</th> -->
+														</tr>
+													</thead>
+													<tbody>
+														<c:forEach items="${compList}" var="compList"
+															varStatus="count">
+															<tr class="table-flag-blue">
+																<td>${count.index+1}</td>
+																<td>${compList.cmplxName}</td>
+																<td>${compList.techName}</td>
+																<td>${compList.formTypeName}</td>
+																<td>${compList.phaseName}</td>
+
+																<td><input class="form-control" id="allocatedHrs"
+																	placeholder="Allocated Hours" type="number" value="0"
+																	name="allocatedHrs${compList.cmplxId}" min="0"></td>
+																<%-- <td><a
+															href="${pageContext.request.contextPath}/editComp/${compList.cmplxId}"><span
+																class="glyphicon glyphicon-edit"></span></a> <a
+															href="${pageContext.request.contextPath}/deleteComp/${compList.cmplxId}"
+															onClick="return confirm('Are you sure want to delete this record');"><span
+																class="glyphicon glyphicon-remove"></span></a></td> --%>
+															</tr>
+														</c:forEach>
+
+
+													</tbody>
+												</table>
 											</div>
 										</div>
 										<div style="text-align: center;">
@@ -141,111 +194,136 @@
 										</div>
 									</form>
 								</div>
-
-
-
-								<div class="box-content">
-
-									<br /> <br />
-									<div class="clearfix"></div>
-									<div class="table-responsive" style="border: 0">
-										<table class="table table-advance" id="table1">
-											<thead>
-												<tr>
-													<th>Sr No</th>
-													<th>Complexity Name</th>
-													<th>Technology Name</th>
-													<th>Form Type Name</th>
-													<th>Phase Name</th>
-
-													<th>Action</th>
-												</tr>
-											</thead>
-											<tbody>
-												<c:forEach items="${compList}" var="compList"
-													varStatus="count">
-													<tr class="table-flag-blue">
-														<td>${count.index+1}</td>
-														<td>${compList.cmplxName}</td>
-														<td>${compList.techName}</td>
-														<td>${compList.formTypeName}</td>
-														<td>${compList.phaseName}</td>
-
-
-														<td><a
-															href="${pageContext.request.contextPath}/editComp/${compList.cmplxId}"><span
-																class="glyphicon glyphicon-edit"></span></a> <a
-															href="${pageContext.request.contextPath}/deleteComp/${compList.cmplxId}"
-															onClick="return confirm('Are you sure want to delete this record');"><span
-																class="glyphicon glyphicon-remove"></span></a></td>
-													</tr>
-												</c:forEach>
-
-
-											</tbody>
-										</table>
-									</div>
-								</div>
 							</div>
 						</div>
 					</div>
+					<footer>
+						<p>2018 © AARYATECH SOLUTIONS</p>
+					</footer>
 				</div>
-				<footer>
-					<p>2018 © AARYATECH SOLUTIONS</p>
-				</footer>
+				<!-- END Main Content -->
+
+
+				<a id="btn-scrollup" class="btn btn-circle btn-lg" href="#"><i
+					class="fa fa-chevron-up"></i></a>
 			</div>
-			<!-- END Main Content -->
-
-
-			<a id="btn-scrollup" class="btn btn-circle btn-lg" href="#"><i
-				class="fa fa-chevron-up"></i></a>
+			<!-- END Content -->
 		</div>
-		<!-- END Content -->
-	</div>
-	<!-- END Container -->
+		<!-- END Container -->
 
-	<!--basic scripts-->
-	<script
-		src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
-	<script>
-		window.jQuery
-				|| document
-						.write('<script src="${pageContext.request.contextPath}/resources/assets/jquery/jquery-2.0.3.min.js"><\/script>')
-	</script>
-	<script
-		src="${pageContext.request.contextPath}/resources/assets/bootstrap/js/bootstrap.min.js"></script>
-	<script
-		src="${pageContext.request.contextPath}/resources/assets/jquery-slimscroll/jquery.slimscroll.min.js"></script>
-	<script
-		src="${pageContext.request.contextPath}/resources/assets/jquery-cookie/jquery.cookie.js"></script>
+		<!--basic scripts-->
+		<script
+			src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+		<script>
+			window.jQuery
+					|| document
+							.write('<script src="${pageContext.request.contextPath}/resources/assets/jquery/jquery-2.0.3.min.js"><\/script>')
+		</script>
+		<script
+			src="${pageContext.request.contextPath}/resources/assets/bootstrap/js/bootstrap.min.js"></script>
+		<script
+			src="${pageContext.request.contextPath}/resources/assets/jquery-slimscroll/jquery.slimscroll.min.js"></script>
+		<script
+			src="${pageContext.request.contextPath}/resources/assets/jquery-cookie/jquery.cookie.js"></script>
 
 
-	<!--page specific plugin scripts-->
-	<script type="text/javascript"
-		src="${pageContext.request.contextPath}/resources/assets/jquery-validation/dist/jquery.validate.min.js"></script>
+		<!--page specific plugin scripts-->
+		<script type="text/javascript"
+			src="${pageContext.request.contextPath}/resources/assets/jquery-validation/dist/jquery.validate.min.js"></script>
 
-	<!--flaty scripts-->
-	<script src="${pageContext.request.contextPath}/resources/js/flaty.js"></script>
+		<!--flaty scripts-->
+		<script src="${pageContext.request.contextPath}/resources/js/flaty.js"></script>
 
-	<!--page specific plugin scripts-->
-	<script
-		src="${pageContext.request.contextPath}/resources/assets/chosen-bootstrap/chosen.jquery.min.js"></script>
+		<!--page specific plugin scripts-->
+		<script
+			src="${pageContext.request.contextPath}/resources/assets/chosen-bootstrap/chosen.jquery.min.js"></script>
 
-	<script type="text/javascript"
-		src="${pageContext.request.contextPath}/resources/assets/bootstrap-datepicker/js/bootstrap-datepicker.js"></script>
-	<script type="text/javascript"
-		src="${pageContext.request.contextPath}/resources/assets/bootstrap-daterangepicker/date.js"></script>
-	<script type="text/javascript"
-		src="${pageContext.request.contextPath}/resources/assets/bootstrap-daterangepicker/daterangepicker.js"></script>
-	<!--page specific plugin scripts-->
-	<script type="text/javascript"
-		src="${pageContext.request.contextPath}/resources/assets/data-tables/jquery.dataTables.js"></script>
-	<script type="text/javascript"
-		src="${pageContext.request.contextPath}/resources/assets/data-tables/bootstrap3/dataTables.bootstrap.js"></script>
+		<script type="text/javascript"
+			src="${pageContext.request.contextPath}/resources/assets/bootstrap-datepicker/js/bootstrap-datepicker.js"></script>
+		<script type="text/javascript"
+			src="${pageContext.request.contextPath}/resources/assets/bootstrap-daterangepicker/date.js"></script>
+		<script type="text/javascript"
+			src="${pageContext.request.contextPath}/resources/assets/bootstrap-daterangepicker/daterangepicker.js"></script>
+		<!--page specific plugin scripts-->
+		<script type="text/javascript"
+			src="${pageContext.request.contextPath}/resources/assets/data-tables/jquery.dataTables.js"></script>
+		<script type="text/javascript"
+			src="${pageContext.request.contextPath}/resources/assets/data-tables/bootstrap3/dataTables.bootstrap.js"></script>
 
 
 
+		<script type="text/javascript">
+			function search() {
+				alert("hii");
+				/* $('#table1 tbody').empty(); */
+				var mPhaseId = document.getElementById("mPhaseId").value;
+				var techId = document.getElementById("techId").value;
 
+				alert("mPhaseId" + mPhaseId);
+
+				alert("techId" + techId);
+
+				$
+						.getJSON(
+								'${getComplexityData}',
+								{
+									mPhaseId : mPhaseId,
+									techId : techId,
+
+									ajax : 'true',
+
+								},
+								function(data) {
+									$('#table1 td').remove();
+									alert(data);
+
+									if (data == "") {
+										alert("No Record Found ");
+									}
+									$
+											.each(
+													data,
+													function(key, itemList) {
+
+														var tr = $('<tr></tr>');
+														tr
+																.append($(
+																		'<td></td>')
+																		.html(
+																				key + 1));
+														tr
+																.append($(
+																		'<td></td>')
+																		.html(
+																				itemList.cmplxName));
+														tr
+																.append($(
+																		'<td></td>')
+																		.html(
+																				itemList.techName));
+														tr
+																.append($(
+																		'<td></td>')
+																		.html(
+																				itemList.formTypeName));
+														tr
+																.append($(
+																		'<td></td>')
+																		.html(
+																				itemList.phaseName));
+														tr
+																.append($('<td > <input type="text"  id= allocatedHrs'+itemList.cmplxId+ ' class="form-control"  name=allocatedHrs'+ itemList.cmplxId+' ></td>'));
+														$('#table1 tbody')
+																.append(tr);
+
+													})
+
+								}
+
+						);
+
+			}
+		</script>
 </body>
 </html>
 
