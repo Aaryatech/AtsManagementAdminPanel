@@ -12,6 +12,7 @@
 
 
 	<c:url var="viewSupportTaskByEmpId" value="/viewSupportTaskByEmpId"></c:url>
+	<c:url var="getModuleByProjectId" value="/getModuleByProjectId"></c:url>
 
 
 	<!-- BEGIN Sidebar -->
@@ -65,7 +66,8 @@
 						<div class="col-md-2">Select Project*</div>
 						<div class="col-md-3">
 							<select id="projectId" name="projectId"
-								class="form-control chosen" required>
+								onchange="getModIdByProjectId()" class="form-control chosen"
+								required>
 								<option value=""></option>
 
 								<c:forEach items="${projList}" var="projList" varStatus="count">
@@ -83,15 +85,23 @@
 
 						<div class="col-md-1"></div>
 
-						<div class="col-md-2">Module Name*</div>
+						<div class="col-md-2">Select Module*</div>
 						<div class="col-md-3">
-							<input type="text" id="moduleName"
-								value="${editSupport.moduleName}" name="moduleName"
+							<select id="moduleId" name="moduleId" class="form-control chosen"
+								required>
+								<option value=""></option>
+							</select>
+						</div>
+
+						<%-- 	<div class="col-md-2">Module Name*</div>
+						<div class="col-md-3">
+							<input type="text" id="moduleId"
+								value="${editSupport.moduleName}" name="moduleId"
 								class="form-control" placeholder="Module Name" required /> <input
 								type="hidden" id="suppId" value="${editSupport.suppId}"
 								name="suppId" />
 						</div>
-
+ --%>
 
 					</div>
 					<br>
@@ -120,12 +130,30 @@
 
 					<div class="box-content">
 
-						<div class="col-md-2">Description*</div>
-						<div class="col-md-3">
-							<input type="text" id="disc" value="${editSupport.description}"
-								name="disc" class="form-control" placeholder="Task Description "
-								required />
+						<div class="col-md-2">Select Employee*</div>
+
+						<div class="col-sm-4 col-lg-3 controls">
+							<select name="empId" id="empId" class="form-control chosen"
+								placeholder="Allocation" required>
+								<option value="">Select Employee</option>
+								<c:forEach items="${empList}" var="empList" varStatus="count">
+									<c:choose>
+										<c:when test="${empList.empId==editproject.empId}">
+											<option value="${empList.empId}" selected><c:out
+													value="${empList.empName}" /></option>
+										</c:when>
+										<c:otherwise>
+											<option value="${empList.empId}"><c:out
+													value="${empList.empName}" /></option>
+										</c:otherwise>
+									</c:choose>
+
+
+								</c:forEach>
+							</select>
 						</div>
+
+
 						<div class="col-md-1"></div>
 
 						<div class="col-md-2">Take Away</div>
@@ -136,8 +164,19 @@
 
 
 					</div>
-					<br>
+					<br> <br>
+					<div class="box-content">
+						<div class="col-md-2">Description*</div>
+						<div class="col-sm-4 col-lg-3 controls">
+							<textarea name="disc" id="disc" style="width: 300px;"></textarea>
+						</div>
 
+						<%-- <div class="col-md-3">
+							<input type="text" id="disc" value="${editSupport.description}"
+								name="disc" class="form-control" placeholder="Task Description "
+								required />
+						</div> --%>
+					</div>
 
 					<div class=" box-content">
 						<div class="col-md-12" style="text-align: center">
@@ -230,9 +269,11 @@
 									<th>Sr.No.</th>
 
 									<th>Project Name</th>
-									<th>Employee Name</th>
-									<th>Module Name</th>
-									<th>Work Date</th>
+									<th>Module</th>
+									<th>Employee</th>
+									<th>Date</th>
+									<th>Description</th>
+									<th>Task Hours</th>
 									<th>Action</th>
 
 								</tr>
@@ -390,22 +431,35 @@
 																	'<td></td>')
 																	.html(
 																			itemList.projectName));
-													tr
-															.append($(
-																	'<td></td>')
-																	.html(
-																			itemList.empName));
+
 													tr
 															.append($(
 																	'<td></td>')
 																	.html(
 																			itemList.moduleName))
+													tr
+															.append($(
+																	'<td></td>')
+																	.html(
+																			itemList.empName));
+
+													tr
+															.append($(
+																	'<td></td>')
+																	.html(
+																			itemList.description))
 
 													tr
 															.append($(
 																	'<td></td>')
 																	.html(
 																			itemList.workDate))
+
+													tr
+															.append($(
+																	'<td></td>')
+																	.html(
+																			itemList.requiredHrs))
 													tr
 															.append($(
 																	'<td></td>')
@@ -417,6 +471,33 @@
 												})
 
 							});
+		}
+	</script>
+
+
+	<script type="text/javascript">
+		function getModIdByProjectId() {
+
+			var projectId = document.getElementById("projectId").value;
+
+			$.getJSON('${getModuleByProjectId}', {
+
+				projectId : projectId,
+				ajax : 'true'
+			}, function(data) {
+				alert(data);
+
+				var html = '<option value="">Select Project</option>';
+
+				var len = data.length;
+				for (var i = 0; i < len; i++) {
+					html += '<option value="' + data[i].moduleId + '">'
+							+ data[i].moduleName + ' &nbsp;&nbsp; </option>';
+				}
+				html += '</option>';
+				$('#moduleId').html(html);
+				$("#moduleId").trigger("chosen:updated");
+			});
 		}
 	</script>
 

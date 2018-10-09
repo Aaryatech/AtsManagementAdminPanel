@@ -255,6 +255,101 @@
 								</div>
 								<br>
 
+								<div class="box-content">
+
+									<div class="col-md-2">From Date*</div>
+									<div class="col-md-3">
+										<input type="text" name="fromDate"
+											value="${editEmployee.fromDate}" placeholder="From Date"
+											id="fromDate" class="form-control date-picker" required />
+									</div>
+
+									<div class="col-md-1"></div>
+									<div class="col-md-2">To Date*</div>
+									<div class="col-md-3">
+										<input type="text" name="toDate"
+											value="${editEmployee.toDate}" placeholder="To Date"
+											id="toDate" class="form-control date-picker" required />
+									</div>
+
+
+								</div>
+								<br>
+
+								<div class="box-content">
+
+									<div class="col-md-2">Sick Leave*</div>
+									<div class="col-md-3">
+										<input type="text" name="sickLeave"
+											value="${editEmployee.sickLeave}" class="form-control"
+											placeholder="Sick Leave" required />
+									</div>
+									<div class="col-md-1"></div>
+									<div class="col-md-2">Causal Leave*</div>
+									<div class="col-md-3">
+										<input type="text" name="causalLeave"
+											value="${editEmployee.causalLeave}" class="form-control"
+											placeholder="Causal Leave" required />
+									</div>
+								</div>
+								<br> <br>
+
+								<div class="form-group">
+
+
+
+									<label class="col-sm-3 col-lg-2 control-label">Select
+										Phase </label>
+									<div class="col-sm-4 col-lg-3 controls">
+										<select name="mPhaseId" id="mPhaseId"
+											class="form-control chosen" placeholder="Phase" required>
+											<option value="">Select Phase</option>
+											<c:forEach items="${phaseTypeList}" var="phaseTypeList"
+												varStatus="count">
+												<c:choose>
+													<c:when
+														test="${phaseTypeList.mPhaseId==editEmployee.mPhaseId}">
+														<option value="${phaseTypeList.mPhaseId}" selected><c:out
+																value="${phaseTypeList.phaseName}" /></option>
+													</c:when>
+													<c:otherwise>
+														<option value="${phaseTypeList.mPhaseId}"><c:out
+																value="${phaseTypeList.phaseName}" /></option>
+													</c:otherwise>
+												</c:choose>
+
+
+											</c:forEach>
+										</select>
+									</div>
+
+									<div class="col-md-1"></div>
+									<label class="col-sm-3 col-lg-2 control-label">Select
+										Technology </label>
+									<div class="col-sm-4 col-lg-3 controls">
+										<select name="techId" id="techId" class="form-control chosen"
+											placeholder="Technology" required>
+											<option value="">Select Technology</option>
+											<c:forEach items="${techList}" var="techList"
+												varStatus="count">
+												<c:choose>
+													<c:when test="${techList.techId==editEmployee.techId}">
+														<option value="${techList.techId}" selected><c:out
+																value="${techList.techName}" /></option>
+													</c:when>
+													<c:otherwise>
+														<option value="${techList.techId}"><c:out
+																value="${techList.techName}" /></option>
+													</c:otherwise>
+												</c:choose>
+
+
+											</c:forEach>
+										</select>
+									</div>
+								</div>
+
+								<br>
 
 								<div class=" box-content">
 									<div class="col-md-12" style="text-align: center">

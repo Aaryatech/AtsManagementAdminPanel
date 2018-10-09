@@ -1,6 +1,7 @@
 package com.ats.adminpanel.controller;
 
 import java.text.SimpleDateFormat;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
@@ -30,9 +31,12 @@ import com.ats.adminpanel.model.GetSupportTask;
 import com.ats.adminpanel.model.GetTask;
 import com.ats.adminpanel.model.Info;
 import com.ats.adminpanel.model.LoginResponse;
+import com.ats.adminpanel.model.PhaseType;
 import com.ats.adminpanel.model.SupportTask;
 import com.ats.adminpanel.model.Task;
 import com.ats.adminpanel.model.TaskType;
+import com.ats.adminpanel.model.tx.GetTech;
+import com.ats.adminpanel.model.Module;
 
 @Controller
 @Scope("session")
@@ -40,6 +44,9 @@ public class MasterController {
 
 	RestTemplate rest = new RestTemplate();
 	List<GetTask> taskList = new ArrayList<GetTask>();
+	List<PhaseType> phaseTypeList;
+	List<GetTech> techList;
+	List<Module> moduleList;
 
 	@RequestMapping(value = "/addEmployee", method = RequestMethod.GET)
 	public ModelAndView addEmployee(HttpServletRequest request, HttpServletResponse response) {
@@ -53,6 +60,19 @@ public class MasterController {
 			LoginResponse login = (LoginResponse) session.getAttribute("UserDetail");
 
 			System.out.println("user Id " + login.getEmployee().getEmpId());
+
+			PhaseType[] phaseArray = rest.getForObject(Constants.url + "masters/getAllPhaseTypeList",
+					PhaseType[].class);
+
+			phaseTypeList = new ArrayList<PhaseType>(Arrays.asList(phaseArray));
+
+			model.addObject("phaseTypeList", phaseTypeList);
+
+			GetTech[] techArray = rest.getForObject(Constants.url + "/getAllTechPhaseList", GetTech[].class);
+
+			techList = new ArrayList<GetTech>(Arrays.asList(techArray));
+
+			model.addObject("techList", techList);
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -82,6 +102,14 @@ public class MasterController {
 			int empType = Integer.parseInt(request.getParameter("empType"));
 			String password = request.getParameter("password");
 
+			String fromDate = request.getParameter("fromDate");
+			String toDate = request.getParameter("toDate");
+			float sickLeave = Float.parseFloat(request.getParameter("sickLeave"));
+
+			float causalLeave = Float.parseFloat(request.getParameter("causalLeave"));
+			int mPhaseId = Integer.parseInt(request.getParameter("mPhaseId"));
+			int techId = Integer.parseInt(request.getParameter("techId"));
+
 			Employee employee = new Employee();
 			if (empId == "" || empId == null)
 				employee.setEmpId(0);
@@ -98,6 +126,12 @@ public class MasterController {
 			employee.setEmpType(empType);
 			employee.setEmpPwd(password);
 			employee.setIsUsed(1);
+			employee.setFromDate(fromDate);
+			employee.setToDate(toDate);
+			employee.setCausalLeave(causalLeave);
+			employee.setSickLeave(sickLeave);
+			employee.setmPhaseId(mPhaseId);
+			employee.setTechId(techId);
 
 			Employee res = rest.postForObject(Constants.url + "/masters/saveEmployee", employee, Employee.class);
 
@@ -143,6 +177,19 @@ public class MasterController {
 			HttpSession session = request.getSession();
 			LoginResponse login = (LoginResponse) session.getAttribute("UserDetail");
 			System.out.println("user Id " + login.getEmployee().getEmpId());
+
+			PhaseType[] phaseArray = rest.getForObject(Constants.url + "masters/getAllPhaseTypeList",
+					PhaseType[].class);
+
+			phaseTypeList = new ArrayList<PhaseType>(Arrays.asList(phaseArray));
+
+			model.addObject("phaseTypeList", phaseTypeList);
+
+			GetTech[] techArray = rest.getForObject(Constants.url + "/getAllTechPhaseList", GetTech[].class);
+
+			techList = new ArrayList<GetTech>(Arrays.asList(techArray));
+
+			model.addObject("techList", techList);
 
 			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
 			map.add("empId", empId);
@@ -451,6 +498,12 @@ public class MasterController {
 			List<GetProjects> projList = new ArrayList<GetProjects>(Arrays.asList(projArray));
 			model.addObject("projList", projList);
 
+			List<Employee> empList;
+			Employee[] empArray = rest.getForObject(Constants.url + "masters/getAllEmpList", Employee[].class);
+
+			empList = new ArrayList<Employee>(Arrays.asList(empArray));
+			model.addObject("empList", empList);
+
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -472,7 +525,8 @@ public class MasterController {
 			String taskHours = request.getParameter("taskHours");
 			String disc = request.getParameter("disc");
 			String takeAway = request.getParameter("takeAway");
-			String moduleName = request.getParameter("moduleName");
+			String moduleId = request.getParameter("moduleId");
+			int empId = Integer.parseInt(request.getParameter("empId"));
 
 			Date date = new Date();
 			SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd");
@@ -483,12 +537,12 @@ public class MasterController {
 			else
 				supportTask.setSuppId(Integer.parseInt(suppId));
 			supportTask.setProjectId(projectId);
-			supportTask.setEmpId(login.getEmployee().getEmpId());
+			supportTask.setEmpId(empId);
 			supportTask.setWorkDate(DateConvertor.convertToYMD(workDate));
 			supportTask.setDescription(disc);
 			supportTask.setRequiredHrs(taskHours);
 			supportTask.setTakeAway(takeAway);
-			supportTask.setModuleName(moduleName);
+			supportTask.setModuleName(moduleId);
 			supportTask.setDate(sf.format(date));
 
 			SupportTask res = rest.postForObject(Constants.url + "/masters/saveSupportTask", supportTask,
@@ -569,6 +623,29 @@ public class MasterController {
 		}
 
 		return model;
+	}
+
+	@RequestMapping(value = "/getModuleByProjectId", method = RequestMethod.GET)
+	public @ResponseBody List<Module> getModuleByProjectId(HttpServletRequest request, HttpServletResponse response) {
+		try {
+			System.out.println("in method");
+
+			String projectId = request.getParameter("projectId");
+			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+			map.add("projectId", projectId);
+
+			Module[] moduleListArray = rest.postForObject(Constants.url + "masters/moduleByProjectId", map,
+					Module[].class);
+
+			moduleList = new ArrayList<Module>(Arrays.asList(moduleListArray));
+
+			System.out.println("getCmplxHrsList" + moduleListArray.toString());
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return moduleList;
 	}
 
 }
