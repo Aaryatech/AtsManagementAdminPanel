@@ -13,10 +13,12 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.ModelAndView;
 import com.ats.adminpanel.common.Constants;
 import com.ats.adminpanel.common.DateConvertor;
+import com.ats.adminpanel.model.EmpAllocatedWork;
 import com.ats.adminpanel.model.Employee;
 import com.ats.adminpanel.model.FormType;
 import com.ats.adminpanel.model.Forms;
@@ -24,6 +26,7 @@ import com.ats.adminpanel.model.GetFormList;
 import com.ats.adminpanel.model.GetModuleProject;
 import com.ats.adminpanel.model.GetPhaseTask;
 import com.ats.adminpanel.model.GetProjects;
+import com.ats.adminpanel.model.GetTask;
 import com.ats.adminpanel.model.Info;
 import com.ats.adminpanel.model.LoginResponse;
 import com.ats.adminpanel.model.Module;
@@ -32,6 +35,8 @@ import com.ats.adminpanel.model.PhaseType;
 import com.ats.adminpanel.model.Project;
 import com.ats.adminpanel.model.Task;
 import com.ats.adminpanel.model.TaskType;
+import com.ats.adminpanel.model.tx.CmplxOption;
+import com.ats.adminpanel.model.tx.GetComplexity;
 import com.ats.adminpanel.model.tx.Technology;
 
 @Controller
@@ -341,16 +346,24 @@ public class ProjectController {
 		return "redirect:/showAddNewModule";
 	}
 
+	List<GetComplexity> complexityList = new ArrayList<GetComplexity>();
+	
 	@RequestMapping(value = "/showAddNewForm/{moduleId}", method = RequestMethod.GET)
 	public ModelAndView showAddNewForm(@PathVariable int moduleId,HttpServletRequest request, HttpServletResponse response) {
 
-		ModelAndView model = new ModelAndView("form/addNewForm");
+		ModelAndView model = new ModelAndView("form/addForm");
 		try {
 			
 			MultiValueMap<String, Object> map = new LinkedMultiValueMap<>();
 			map.add("moduleId", moduleId); 
 			GetModuleProject getModuleProject = restTemplate.postForObject(Constants.url + "masters/getModuleByModuleId",map,
 					GetModuleProject.class); 
+			
+			GetFormList[] getFormList = restTemplate.postForObject(Constants.url + "masters/getFormAndTaskListByModuleId",map,
+					GetFormList[].class); 
+			
+			List<GetFormList> formListWTaskList = new ArrayList<GetFormList>(Arrays.asList(getFormList));
+			model.addObject("formListWTaskList", formListWTaskList);
 			
 			List<FormType> formTypeList;
 
@@ -367,7 +380,25 @@ public class ProjectController {
 					TaskType[].class);
 
 			taskTypeList = new ArrayList<TaskType>(Arrays.asList(taskTypeArray));
+			
+			map = new LinkedMultiValueMap<>();
+			map.add("techId", getModuleProject.getTechId());
+			map.add("phaseId", getModuleProject.getPhaseId()); 
+			GetComplexity[] getComplexity = restTemplate.postForObject(Constants.url + "/getHeaderDetailCompByTechId",map,
+					GetComplexity[].class);
 
+			 complexityList = new ArrayList<GetComplexity>(Arrays.asList(getComplexity));
+			
+			map = new LinkedMultiValueMap<>();
+			map.add("techId", getModuleProject.getTechId());
+			map.add("mPhaseId", getModuleProject.getPhaseId()); 
+			Employee[] employee = restTemplate.postForObject(Constants.url + "/masters/employeeByTechIdAndPhaseId",map,
+					Employee[].class); 
+			List<Employee> employeeList = new ArrayList<Employee>(Arrays.asList(employee)); 
+			
+			
+			model.addObject("employeeList", employeeList);
+			model.addObject("complexityList", complexityList);
 			model.addObject("taskTypeList", taskTypeList);
 
 			model.addObject("projName", getModuleProject.getProjectName());
@@ -377,14 +408,7 @@ public class ProjectController {
 			model.addObject("modId", getModuleProject.getModuleId());
 			model.addObject("getModuleProject", getModuleProject);
 
-			 
-			 
-			GetFormList[] getFormList = restTemplate.postForObject(Constants.url + "masters/getFormAndTaskListByModuleId",map,
-					GetFormList[].class); 
-			
-			List<GetFormList> formListWTaskList = new ArrayList<GetFormList>(Arrays.asList(getFormList));
-			model.addObject("formListWTaskList", formListWTaskList);
-
+			  
 		} catch (Exception e) {
 
 			System.err.println("Exce in showing add New Form Page " + e.getMessage());
@@ -393,6 +417,103 @@ public class ProjectController {
 
 		return model;
 
+	}
+	
+	@RequestMapping(value = "/getPlanHoursByvalue", method = RequestMethod.GET)
+	public @ResponseBody CmplxOption getPlanHoursByvalue(HttpServletRequest request,
+			HttpServletResponse response) {
+		
+		CmplxOption cmplxOption = new CmplxOption();
+		
+		try {
+			 
+			int cmplxId = Integer.parseInt(request.getParameter("cmplxId"));
+			int value = Integer.parseInt(request.getParameter("value"));
+			
+			for(int i = 0 ; i<complexityList.size() ; i++) {
+				
+				if(complexityList.get(i).getCmplxId()==cmplxId) {
+					
+					for(int j = 0 ; j<complexityList.get(i).getCmplxOptionList().size() ; j++) {
+						
+						if(value==complexityList.get(i).getCmplxOptionList().get(j).getCmplxOptId()) {
+							
+							cmplxOption = complexityList.get(i).getCmplxOptionList().get(j);
+							break;
+							 
+						}
+						
+						
+					}
+					
+				}
+			}
+			 
+			 
+		} catch (Exception e) {
+			e.printStackTrace();
+			 
+		}
+
+		return cmplxOption;
+	}
+	
+	@RequestMapping(value = "/getEmpAllocatedWorkHours", method = RequestMethod.GET)
+	public @ResponseBody EmpAllocatedWork getEmpAllocatedWorkHours(HttpServletRequest request,
+			HttpServletResponse response) {
+		
+		EmpAllocatedWork empAllocatedWork = new EmpAllocatedWork();
+		
+		try {
+			
+			
+			
+			int empId = Integer.parseInt(request.getParameter("empId"));
+			
+			MultiValueMap<String, Object> map = new LinkedMultiValueMap<>();
+			map.add("empId", empId);
+			map.add("projectId", 0);
+
+				empAllocatedWork = restTemplate.postForObject(Constants.url + "/getEmployeeAllocatedWorkById", map,
+						EmpAllocatedWork.class);
+				System.out.println("EmpConReportById []" + empAllocatedWork.toString());
+			 
+		} catch (Exception e) {
+			e.printStackTrace();
+			empAllocatedWork = new EmpAllocatedWork();
+			empAllocatedWork.setTaskPlannedHrs("0");
+		}
+
+		return empAllocatedWork;
+	}
+	
+	@RequestMapping(value = "/getEmpAllocatedWorkHoursByDate", method = RequestMethod.GET)
+	public @ResponseBody EmpAllocatedWork getEmpAllocatedWorkHoursByDate(HttpServletRequest request,
+			HttpServletResponse response) {
+		
+		EmpAllocatedWork empAllocatedWork = new EmpAllocatedWork();
+		
+		try {
+			
+			
+			
+			int empId = Integer.parseInt(request.getParameter("empId"));
+			String date = request.getParameter("date") ;
+			
+			MultiValueMap<String, Object> map = new LinkedMultiValueMap<>();
+			map.add("empId", empId);
+			map.add("date",DateConvertor.convertToYMD(date)); 
+				empAllocatedWork = restTemplate.postForObject(Constants.url + "/getEmpAllocatedWorkHoursByDate", map,
+						EmpAllocatedWork.class);
+				System.out.println("EmpConReportById []" + empAllocatedWork.toString());
+			 
+		} catch (Exception e) {
+			e.printStackTrace();
+			empAllocatedWork = new EmpAllocatedWork();
+			empAllocatedWork.setTaskPlannedHrs("0");
+		}
+
+		return empAllocatedWork;
 	}
 
 	List<Task> responseTaskList;
@@ -415,13 +536,7 @@ public class ProjectController {
 			String formType = request.getParameter("form_type");
 			String formName = request.getParameter("form_name");
 			String formDesc = request.getParameter("form_desc");
-			String uiComp = request.getParameter("ui_comp");
-
-			String webSerComp = request.getParameter("web_serv_comp");
-			String consumComp = request.getParameter("consume_comp");
-			String unitTestComp = request.getParameter("unit_test_comp");
-			String spFunComp = request.getParameter("sp_func_comp");
-
+			
 			Forms form = new Forms();
 
 			form.setFormDescription(formDesc);
@@ -432,88 +547,68 @@ public class ProjectController {
 
 			Forms formResponse = restTemplate
 					.postForObject(com.ats.adminpanel.common.Constants.url + "masters/saveForm", form, Forms.class);
+			 
 			List<Task> postTaskList = new ArrayList<Task>();
-
-			if (formResponse != null && formResponse.getFormId() > 0) {
-
-				if (Integer.parseInt(uiComp) != 0) {
-					String taskName = request.getParameter("uicname");
-					Task task = new Task();
-
-					task.setProjectId(Integer.parseInt(projId));
-					task.setModuleId(Integer.parseInt(modId));
-					task.setFormId(formResponse.getFormId());
-					task.setTaskName(formName + " " + "UI " + taskName);
-
-					task.setTaskTypeId(Integer.parseInt(uiComp));
-
-					postTaskList.add(task);
+			
+			for(int i = 0 ; i<complexityList.size() ; i++) {
+				
+				int workType = Integer.parseInt(request.getParameter("workType"+complexityList.get(i).getCmplxId()));
+				
+				if(workType!=0) {
+					
+					int devpId = Integer.parseInt(request.getParameter("empId"+complexityList.get(i).getCmplxId()));
+					String requiredHours = request.getParameter("requiredHours"+complexityList.get(i).getCmplxId());
+					
+					if(devpId!=0) {
+						
+						String allocationDate = request.getParameter("allocationDate"+complexityList.get(i).getCmplxId());
+						
+						
+						for(int j=0 ; j<complexityList.get(i).getCmplxOptionList().size() ; j++) {
+							
+							if(complexityList.get(i).getCmplxOptionList().get(j).getCmplxOptId()==workType) {
+							Task task = new Task(); 
+							task.setProjectId(Integer.parseInt(projId));
+							task.setModuleId(Integer.parseInt(modId));
+							task.setFormId(formResponse.getFormId());
+							task.setTaskName(formName + complexityList.get(i).getCmplxName() + complexityList.get(i).getCmplxOptionList().get(j).getCmplxOptName());
+							task.setDeveloperId(devpId);
+							task.setStartDate(DateConvertor.convertToYMD(allocationDate));
+							task.setTaskTypeId(workType); 
+							task.setTaskPlannedHrs(requiredHours);
+							task.setDevStatus(1);
+							postTaskList.add(task);
+							}
+						}
+						
+					}
+					else {
+						
+						for(int j=0 ; j<complexityList.get(i).getCmplxOptionList().size() ; j++) {
+							
+							if(complexityList.get(i).getCmplxOptionList().get(j).getCmplxOptId()==workType) {
+							Task task = new Task(); 
+							task.setProjectId(Integer.parseInt(projId));
+							task.setModuleId(Integer.parseInt(modId));
+							task.setFormId(formResponse.getFormId());
+							task.setTaskName(formName +" "+ complexityList.get(i).getCmplxName() +" "+ complexityList.get(i).getCmplxOptionList().get(j).getCmplxOptName()); 
+							task.setTaskTypeId(workType); 
+							task.setTaskPlannedHrs(requiredHours);
+							task.setDevStatus(0);
+							postTaskList.add(task);
+							}
+						}
+						
+					}
+					
 				}
-
-				if (Integer.parseInt(webSerComp) != 0) {
-					String taskName = request.getParameter("webcomname");
-
-					Task task = new Task();
-
-					task.setProjectId(Integer.parseInt(projId));
-					task.setModuleId(Integer.parseInt(modId));
-					task.setFormId(formResponse.getFormId());
-					task.setTaskName(formName + " " + "WEB SERVICE " + taskName);
-					task.setTaskTypeId(Integer.parseInt(webSerComp));
-
-					postTaskList.add(task);
-
-				}
-				if (Integer.parseInt(consumComp) != 0) {
-					String taskName = request.getParameter("conscompname");
-
-					Task task = new Task();
-
-					task.setProjectId(Integer.parseInt(projId));
-					task.setModuleId(Integer.parseInt(modId));
-					task.setFormId(formResponse.getFormId());
-					task.setTaskName(formName + " " + "CONSUME " + taskName);
-					task.setTaskTypeId(Integer.parseInt(consumComp));
-
-					postTaskList.add(task);
-
-				}
-
-				if (Integer.parseInt(unitTestComp) != 0) {
-					String taskName = request.getParameter("testcomname");
-
-					Task task = new Task();
-
-					task.setProjectId(Integer.parseInt(projId));
-					task.setModuleId(Integer.parseInt(modId));
-					task.setFormId(formResponse.getFormId());
-					task.setTaskName(formName + " " + "UNIT TESTING " + taskName);
-					task.setTaskTypeId(Integer.parseInt(unitTestComp));
-					postTaskList.add(task);
-
-				}
-
-				if (Integer.parseInt(spFunComp) != 0) {
-					String taskName = request.getParameter("spcompname");
-
-					Task task = new Task();
-
-					task.setProjectId(Integer.parseInt(projId));
-					task.setModuleId(Integer.parseInt(modId));
-					task.setFormId(formResponse.getFormId());
-					task.setTaskName(formName + " " + "SPECIAL FUNCTION " + taskName);
-					task.setTaskTypeId(Integer.parseInt(spFunComp));
-
-					postTaskList.add(task);
-
-				}
-
+				
 			}
-
-			responseTaskList = restTemplate.postForObject(com.ats.adminpanel.common.Constants.url + "masters/saveTask",
+			
+			System.err.println("Task List " + postTaskList.toString() + "size " + postTaskList.size());
+			 responseTaskList = restTemplate.postForObject(com.ats.adminpanel.common.Constants.url + "masters/saveTask",
 					postTaskList, List.class);
-
-			System.err.println("Task List " + postTaskList.toString());
+ 
 
 		} catch (Exception e) {
 

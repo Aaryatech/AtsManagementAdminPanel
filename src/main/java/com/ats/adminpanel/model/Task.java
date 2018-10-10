@@ -29,13 +29,13 @@ public class Task {
 	
 	private int assignedBy;
 	
-	private Date startDate;
+	private String startDate;
 	
 	private String startDatetime;
 	
 	private String devComplPer;
 	
-	private Date endDate;
+	private String endDate;
 	
 	private String endDatetime;
 	
@@ -142,11 +142,11 @@ public class Task {
 	public void setAssignedBy(int assignedBy) {
 		this.assignedBy = assignedBy;
 	}
-	public Date getStartDate() {
+	public String getStartDate() {
 		return startDate;
 	}
 
-	public void setStartDate(Date startDate) {
+	public void setStartDate(String startDate) {
 		this.startDate = startDate;
 	}
 
@@ -165,11 +165,11 @@ public class Task {
 	public void setDevComplPer(String devComplPer) {
 		this.devComplPer = devComplPer;
 	}
-	public Date getEndDate() {
+	public String getEndDate() {
 		return endDate;
 	}
 
-	public void setEndDate(Date endDate) {
+	public void setEndDate(String endDate) {
 		this.endDate = endDate;
 	}
 

@@ -1,5 +1,6 @@
 package com.ats.adminpanel.model.tx;
 
+import java.util.List; 
 public class GetComplexity {
 
 	private int cmplxId;
@@ -18,6 +19,8 @@ public class GetComplexity {
 	private int int2;
 	private String varchar1;
 	private String varchar2;
+	
+	List<CmplxOption> cmplxOptionList;
 
 	public int getCmplxId() {
 		return cmplxId;
@@ -123,12 +126,21 @@ public class GetComplexity {
 		this.varchar2 = varchar2;
 	}
 
+	public List<CmplxOption> getCmplxOptionList() {
+		return cmplxOptionList;
+	}
+
+	public void setCmplxOptionList(List<CmplxOption> cmplxOptionList) {
+		this.cmplxOptionList = cmplxOptionList;
+	}
+
 	@Override
 	public String toString() {
 		return "GetComplexity [cmplxId=" + cmplxId + ", cmplxName=" + cmplxName + ", mPhaseId=" + mPhaseId + ", techId="
 				+ techId + ", isUsed=" + isUsed + ", cmplxDate=" + cmplxDate + ", formTypeId=" + formTypeId
 				+ ", phaseName=" + phaseName + ", techName=" + techName + ", formTypeName=" + formTypeName + ", int2="
-				+ int2 + ", varchar1=" + varchar1 + ", varchar2=" + varchar2 + "]";
+				+ int2 + ", varchar1=" + varchar1 + ", varchar2=" + varchar2 + ", cmplxOptionList=" + cmplxOptionList
+				+ "]";
 	}
 
 }

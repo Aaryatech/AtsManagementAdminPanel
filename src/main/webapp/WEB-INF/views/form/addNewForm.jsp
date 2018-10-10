@@ -113,7 +113,7 @@
 										</div><br>
 
 
-										<div class="box-content">
+										<%-- <div class="box-content">
 											<div class="col-md-2"> UI
 												Complexity Type</div>
 											<div class="col-md-3">
@@ -213,8 +213,76 @@
 													</c:forEach>
 												</select>
 											</div>
-										</div><br><br><br>
-
+										</div><br><br><br> --%>
+										
+									<c:forEach items="${complexityList}" var="complexityList" varStatus="count">		
+										<div class="box-content">
+											<div class="col-md-2">
+												${complexityList.cmplxName}</div>
+												<input type="radio" name="workType${complexityList.cmplxId}" value="0" checked>NONE
+												<c:forEach items="${complexityList.cmplxOptionList}" var="cmplxOptionList" >
+												<input type="radio" name="workType${complexityList.cmplxId}" value="${cmplxOptionList.cmplxOptId}" required>${cmplxOptionList.cmplxOptName}
+												
+												</c:forEach>
+										</div> 
+										<div class="box-content">
+											 <div class="col-md-2"></div>
+												<div class="col-md-3">
+												<select name="empId${complexityList.cmplxId}" id="empId${complexityList.cmplxId}"
+													class="form-control chosen" >
+													<option value="">Select Developer</option>
+													<c:forEach items="${employeeList}" var="employeeList" >
+														 
+													<option value="${employeeList.empId}"><c:out value="${employeeList.empName}"/></option>
+														 
+													</c:forEach>
+												</select>
+											</div>
+											
+											<div class="col-md-3">
+												<input type="text" name="allocationDate${complexityList.cmplxId}"
+											 placeholder="Assign Date" id="allocationDate${complexityList.cmplxId}" class="form-control date-picker" required />
+											</div>
+											
+											<div class="col-md-1">
+												<input type="text" name="requiredHours${complexityList.cmplxId}"
+											 placeholder="Required Hours" pattern="[+-]?([0-9]*[.])?[0-9]+" id="requiredHours${complexityList.cmplxId}" class="form-control" title="Required Hours" required />
+											</div>
+											
+										</div><br><br>
+											<%-- <div class="col-md-3">
+												<select name="workType${complexityList.cmplxId}" id="workType${complexityList.cmplxId}"
+													class="form-control chosen" >
+													<option value="">Select Complex Type</option>
+													<c:forEach items="${complexityList.cmplxOptionList}" var="cmplxOptionList" >
+														 
+													<option value="${cmplxOptionList.cmplxOptId}"><c:out value="${cmplxOptionList.cmplxOptName}"/></option>
+														 
+													</c:forEach>
+												</select>
+											</div> --%>
+											 
+											<%-- <div class="col-md-3">
+												<select name="empId${complexityList.cmplxId}" id="empId${complexityList.cmplxId}"
+													class="form-control chosen" >
+													<option value="">Select Developer</option>
+													<c:forEach items="${employeeList}" var="employeeList" >
+														 
+													<option value="${employeeList.empId}"><c:out value="${employeeList.empName}"/></option>
+														 
+													</c:forEach>
+												</select>
+											</div>
+											
+											<div class="col-md-3">
+												<input type="text" name="fromDate"
+											value="${editEmployee.fromDate}" placeholder="Assign Date"
+											id="fromDate" class="form-control date-picker" required />
+											</div> --%>
+											
+										
+										</c:forEach>
+											 <br><br>
 										<div style="text-align: center;">
 
 											<input type="submit" 
@@ -222,15 +290,17 @@
 										</div>
 
 									</form>
-								</div><br>
+								</div> 
 								
 								<hr>
-  
-								 <c:forEach items="${formListWTaskList}" var="formListWTaskList" varStatus="count">
-                                    <div class="box">      
-                                    <div class="box-content">
- 							<div class="row">
-									<div class="col-md-2"><b>Form Name:</b> </div>
+				 	<c:forEach items="${formListWTaskList}" var="formListWTaskList" varStatus="count">	 	
+								 <div class="row">
+									<div class="col-md-12">
+					
+										<div class="box">
+											<div class="box-title">
+												 
+									<div class="col-md-2"><b>${count.index+1}.Form Name:</b> </div>
 									<div class="col-md-2">
 								${formListWTaskList.formName}
 									</div>
@@ -240,30 +310,23 @@
 										${formListWTaskList.formTypeName} 
 									</div>
 									  
-									 
-								</div>
-							<br>
-							 </div>
-                              <div class="row" >
-                        <div class="col-md-12">
-                        
-                        			<div class="" id="todayslist">
-						<div class="box-title" style="background-color: #b6d1f2;">
-							<h3>
-								<i class="fa fa-table"></i>Form Task
-							</h3>
-							<div class="box-tool">
-								  <a data-action="collapse" href="#"><i
-									class="fa fa-chevron-up"></i></a>
-							</div>
-
-						</div>
- 
-					<div class="box-content">
+									  
+									 <div class="box-tool">
+												  <a data-action="collapse" href="#"><i
+														class="fa fa-chevron-down"></i></a>
+												</div>
+							 
+												<br>
+					
+											</div>
+											
+											<div class="box-content" style="display: none;">
+											
+											<div class="box-content">
 
 					 
 					<div class="table-responsive" style="border: 1px;border: 1px Solid lightblue;">
-						<table class="table table-advance" id="table1">  
+						<table class="table table-advance" id="table1${count}">  
 									<thead>
 										<tr class="bgpink">
 										<th style="width:2%;">Sr</th>
@@ -293,17 +356,19 @@
 								</table>
   
 					</div>
-				</div>
+				</div>   
+											</div>
+											</div>
+											
+											
+											</div>
+											</div>
+											
+							 </c:forEach>  
 							 
-
-
-						</div>
-                                </div>
-                            </div></div><br><br>
-                            </c:forEach>
-								
-								
-								
+							  
+  
+								   
 							</div>
 						</div>
 					</div>
