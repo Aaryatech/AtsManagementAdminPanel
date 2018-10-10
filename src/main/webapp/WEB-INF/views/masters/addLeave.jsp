@@ -5,6 +5,8 @@
 <jsp:include page="/WEB-INF/views/include/header.jsp"></jsp:include>
 <link rel="stylesheet"
 	href="${pageContext.request.contextPath}/resources/css/tableSearch.css">
+
+
 <body>
 	<c:url var="getRmSubCategory" value="/getRmSubCategory" />
 	<c:url var="getRmCategory" value="/getRmCategory" />
@@ -113,7 +115,8 @@
 											<div class="col-sm-4 col-lg-3 controls">
 												<input type="text" name="toDate"
 													value="${editEmployee.toDate}" placeholder="To Date"
-													id="toDate" class="form-control date-picker" required />
+													id="toDate" class="form-control date-picker"
+													onblur="calculateDays()" required />
 											</div>
 
 
@@ -127,12 +130,13 @@
 											<div class="col-sm-4 col-lg-3 controls">
 												<div class="col-md-4">
 
-													<input type="radio" name="status" id="status" value="0"
-														checked> Yes
+													<input type="radio" name="aaplyHalfDay" id="aaplyHalfDay"
+														value="0" onclick="calculateDays()" checked> No
 												</div>
 
 												<div class="col-md-4">
-													<input type="radio" name="status" value="1"> No
+													<input type="radio" name="aaplyHalfDay" id="aaplyHalfDay"
+														value="1" onclick="calculateDays()"> Yes
 												</div>
 
 											</div>
@@ -142,8 +146,8 @@
 												No of Days</label>
 											<div class="col-sm-4 col-lg-3 controls">
 												<input type="text" name="totalNoOfDays" id="totalNoOfDays"
-													value="${editEmployee.totalLeaves}" class="form-control"
-													placeholder="Total Leaves " required />
+													class="form-control" placeholder="Total Leaves " readonly
+													required />
 											</div>
 
 
@@ -321,7 +325,40 @@
 		src="${pageContext.request.contextPath}/resources/assets/data-tables/bootstrap3/dataTables.bootstrap.js"></script>
 
 
+	<script type="text/javascript">
+		function calculateDays() {
 
+			var fromDate = $("#fromDate").val();
+			var toDate = $("#toDate").val();
+
+			var aaplyHalfDay = $("#aaplyHalfDay").val();
+
+			var initial = fromDate.split(/\-/).reverse().join('-');
+
+			var end = toDate.split(/\-/).reverse().join('-');
+
+			var diff = daysBetween(initial, end);
+
+			if (aaplyHalfDay == 1) {
+				document.getElementById("totalNoOfDays").value = diff - 0.5;
+			} else if (aaplyHalfDay == 0) {
+				document.getElementById("totalNoOfDays").value = diff;
+
+			}
+		}
+
+		function treatAsUTC(date) {
+			var result = new Date(date);
+			result.setMinutes(result.getMinutes() - result.getTimezoneOffset());
+			return result;
+		}
+
+		function daysBetween(startDate, endDate) {
+			var millisecondsPerDay = 24 * 60 * 60 * 1000;
+			return (treatAsUTC(endDate) - treatAsUTC(startDate))
+					/ millisecondsPerDay;
+		}
+	</script>
 
 </body>
 </html>

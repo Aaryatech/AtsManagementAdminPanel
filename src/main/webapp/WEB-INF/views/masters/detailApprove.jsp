@@ -36,6 +36,7 @@
 				</div>
 				<!-- END Page Title -->
 
+
 				<!-- BEGIN Main Content -->
 				<div class="row">
 					<div class="col-md-12">
@@ -51,13 +52,7 @@
 
 							</div>
 
-							<%-- <div>
-
-
-
-
-
-
+							<div>
 								<div class="box-content">
 									<form action="${pageContext.request.contextPath}/insertLeave"
 										method="post" class="form-horizontal" id="validation-form"
@@ -108,10 +103,6 @@
 
 
 
-
-
-
-
 										<div class="form-group">
 											<label class="col-sm-3 col-lg-2 control-label">Type
 												of Leave </label>
@@ -135,15 +126,15 @@
 													<c:otherwise>
 														<div class="col-md-6">
 
-															<input type="radio" name="type" id="type" value="0"
-																checked> Sick Leave
+															<input type="radio" name="type" id="type" value="0">
+															Sick Leave
 
 
 														</div>
 
 														<div class="col-md-6">
-															<input type="radio" name="type" id="type" value="1">Casual
-															Leave
+															<input type="radio" name="type" id="type" value="1"
+																checked>Casual Leave
 														</div>
 													</c:otherwise>
 												</c:choose>
@@ -173,13 +164,13 @@
 														<div class="col-md-6">
 
 															<input type="radio" name="payLeave" id="payLeave"
-																value="0" checked> With Pay
+																value="0"> With Pay
 
 														</div>
 
 														<div class="col-md-6">
 															<input type="radio" name="payLeave" id="payLeave"
-																value="1"> Without Pay
+																value="1" checked> Without Pay
 														</div>
 													</c:otherwise>
 												</c:choose>
@@ -215,68 +206,7 @@
 								</div>
 
 							</div>
- --%>
-							<div class="box-content">
 
-								<br /> <br />
-								<div class="clearfix"></div>
-								<div class="table-responsive" style="border: 0">
-									<table class="table table-advance" id="table1">
-										<thead>
-											<tr>
-												<th style="width: 18px">Sr No</th>
-												<th>Employee Name</th>
-												<th>Date</th>
-												<th>From Date</th>
-												<th>To Date</th>
-												<th>Total No of Days</th>
-												<th>Status</th>
-												<th>Description</th>
-												<th>Action</th>
-
-											</tr>
-										</thead>
-										<tbody>
-											<c:forEach items="${leaveList}" var="leaveList"
-												varStatus="count">
-												<tr class="table-flag-blue">
-													<td>${count.index+1}</td>
-													<td>${leaveList.empName}</td>
-													<td>${leaveList.date}</td>
-													<td>${leaveList.fromDate}</td>
-													<td>${leaveList.toDate}</td>
-													<td>${leaveList.noOfDays}</td>
-
-													<c:choose>
-														<c:when test="${leaveList.status==0}">
-															<c:set var="modType" value="Pending"></c:set>
-
-														</c:when>
-														<c:when test="${leaveList.status==1}">
-															<c:set var="modType" value="Approve"></c:set>
-
-														</c:when>
-														<c:when test="${leaveList.status==2}">
-															<c:set var="modType" value="Rejected"></c:set>
-
-														</c:when>
-
-													</c:choose>
-													<td>${modType}</td>
-
-													<td>${leaveList.empRemark}</td>
-
-													<td><a
-														href="${pageContext.request.contextPath}/leaveDetails/${leaveList.leaveId}"><span
-															class="glyphicon glyphicon-edit"></span></a></td>
-												</tr>
-											</c:forEach>
-
-
-										</tbody>
-									</table>
-								</div>
-							</div>
 
 						</div>
 					</div>

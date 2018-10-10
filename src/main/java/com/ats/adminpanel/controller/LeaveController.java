@@ -16,6 +16,7 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.client.RestTemplate;
@@ -24,8 +25,10 @@ import org.springframework.web.servlet.ModelAndView;
 import com.ats.adminpanel.common.Constants;
 import com.ats.adminpanel.model.Employee;
 import com.ats.adminpanel.model.LoginResponse;
+import com.ats.adminpanel.model.PhaseType;
 import com.ats.adminpanel.model.leave.ApplyLeave;
 import com.ats.adminpanel.model.leave.GetApplyLeave;
+import com.ats.adminpanel.model.tx.GetTech;
 import com.sun.org.apache.xerces.internal.impl.xpath.regex.ParseException;
 
 @Controller
@@ -90,22 +93,10 @@ public class LeaveController {
 
 			String empRemark = request.getParameter("empRemark");
 			int payLeave = Integer.parseInt(request.getParameter("payLeave"));
-			int status = Integer.parseInt(request.getParameter("status"));
+
 			int type = Integer.parseInt(request.getParameter("type"));
 
 			ApplyLeave leave = new ApplyLeave();
-			SimpleDateFormat myFormat = new SimpleDateFormat("dd-MM-yyyy"); 
-			
-			
-			try { 
-				Date date1 = myFormat.parse(fromDate);
-				 Date date2 = myFormat.parse(toDate);
-				 long diff = date2.getTime() - date1.getTime(); 
-				System.out.println ("Days: " + TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS));
-			} catch (ParseException e) 
-				{ 
-				e.printStackTrace();
-				 }
 
 			if (leaveId == "" || leaveId == null)
 				leave.setLeaveId(0);
@@ -120,7 +111,7 @@ public class LeaveController {
 			leave.setFromDate(fromDate);
 			leave.setToDate(toDate);
 			leave.setPayLeave(payLeave);
-			leave.setStatus(status);
+			leave.setStatus(0);
 			leave.setEmpId(login.getEmployee().getEmpId());
 			leave.setSendTo(sendTo);
 			leave.setType(type);
@@ -138,7 +129,7 @@ public class LeaveController {
 
 		return "redirect:/showAddLeave";
 	}
-	
+
 	@RequestMapping(value = "/showApproveLeave", method = RequestMethod.GET)
 	public ModelAndView showApproveLeave(HttpServletRequest request, HttpServletResponse response) {
 
@@ -148,8 +139,6 @@ public class LeaveController {
 			LoginResponse login = (LoginResponse) session.getAttribute("UserDetail");
 
 			System.out.println("user Id " + login.getEmployee().getEmpId());
-
-			model.addObject("login", login.getEmployee());
 
 			Employee[] empArray = restTemplate.getForObject(Constants.url + "masters/getAllEmpListByType",
 					Employee[].class);
@@ -164,6 +153,24 @@ public class LeaveController {
 
 			leaveList = new ArrayList<GetApplyLeave>(Arrays.asList(leaveArray));
 			model.addObject("leaveList", leaveList);
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return model;
+	}
+
+	@RequestMapping(value = "/leaveDetails/{leaveId}", method = RequestMethod.GET)
+	public ModelAndView editEmp(@PathVariable int leaveId, HttpServletRequest request, HttpServletResponse response) {
+
+		ModelAndView model = new ModelAndView("masters/detailApprove");
+		try {
+			
+			map.add("leaveId", leaveId);
+			GetApplyLeave leaveDetail = restTemplate.postForObject(Constants.url + "/getAllLeaveListByLeaveId", map,
+					GetApplyLeave.class);
+			model.addObject("leaveDetail", leaveDetail);
 
 		} catch (Exception e) {
 			e.printStackTrace();
