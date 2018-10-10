@@ -281,6 +281,31 @@
 								Form Type</a>
 							</li>
 
+							<c:choose>
+								<c:when test="${Constants.subAct==13}">
+									<li class="active">
+								</c:when>
+								<c:otherwise>
+									<li>
+								</c:otherwise>
+							</c:choose>
+							<a href="${pageContext.request.contextPath}/showAddLeave">Add
+								Leave</a>
+							</li>
+
+							<c:choose>
+								<c:when test="${Constants.subAct==13}">
+									<li class="active">
+								</c:when>
+								<c:otherwise>
+									<li>
+								</c:otherwise>
+							</c:choose>
+							<a href="${pageContext.request.contextPath}/showApproveLeave">Approve
+								Leave</a>
+							</li>
+
+
 							<%-- <li> 
 					<a href="${pageContext.request.contextPath}/showAddNewForm">Add Form</a>
 					</li> --%>
