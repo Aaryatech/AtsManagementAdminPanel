@@ -645,8 +645,8 @@ public class TxController {
 			map.add("techId", items1);
 			map.add("cmplxOptId", items2);
 
-			GetCmplxHrs[] getCmplxHrsListArray = restTemplate
-					.getForObject(Constants.url + "/getAllCmplxOptionListAllocatedHrs", GetCmplxHrs[].class);
+			GetCmplxHrs[] getCmplxHrsListArray = restTemplate.postForObject(Constants.url + "/getCompListByIdList", map,
+					GetCmplxHrs[].class);
 
 			getCmplxHrsList = new ArrayList<GetCmplxHrs>(Arrays.asList(getCmplxHrsListArray));
 
@@ -691,15 +691,6 @@ public class TxController {
 			optList = new ArrayList<CmplxOption>(Arrays.asList(optionArray));
 
 			model.addObject("optList", optList);
-
-			/*
-			 * GetCmplxHrs[] cmplxArray = restTemplate.getForObject(Constants.url +
-			 * "/getAllCmplxOptionListAllocatedHrs", GetCmplxHrs[].class);
-			 * 
-			 * getCmplxHrsList = new ArrayList<GetCmplxHrs>(Arrays.asList(cmplxArray));
-			 * 
-			 * model.addObject("cmplxHrsList", getCmplxHrsList);
-			 */
 
 		} catch (Exception e) {
 			e.printStackTrace();
