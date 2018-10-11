@@ -419,28 +419,7 @@ public class ProjectController {
 
 	}
 	
-	@RequestMapping(value = "/deleteTask/{taskId}/{moduleId}", method = RequestMethod.GET)
-	public String deleteTask(@PathVariable int taskId,@PathVariable int moduleId,HttpServletRequest request, HttpServletResponse response) {
-
-		 
-		try {
-			
-			MultiValueMap<String, Object> map = new LinkedMultiValueMap<>();
-			map.add("taskId", taskId); 
-			Info info = restTemplate.postForObject(Constants.url + "masters/deleteTask",map,
-					Info.class); 
-			 System.out.println(info);
-			  
-		} catch (Exception e) {
-
-			System.err.println("Exce in showing add New Form Page " + e.getMessage());
-			e.printStackTrace();
-		}
-
-		return "redirect:/showAddNewForm/"+moduleId;
-
-	}
-	
+	 
 	@RequestMapping(value = "/getPlanHoursByvalue", method = RequestMethod.GET)
 	public @ResponseBody CmplxOption getPlanHoursByvalue(HttpServletRequest request,
 			HttpServletResponse response) {
@@ -629,6 +608,162 @@ public class ProjectController {
 			
 			System.err.println("Task List " + postTaskList.toString() + "size " + postTaskList.size());
 			 responseTaskList = restTemplate.postForObject(com.ats.adminpanel.common.Constants.url + "masters/saveTask",
+					postTaskList, List.class);
+ 
+
+		} catch (Exception e) {
+
+			System.err.println("Exc in postNewFormAndTask  " + e.getMessage());
+			e.printStackTrace();
+
+		}
+		return "redirect:/showAddNewForm/"+modId;
+	}
+	
+	
+	@RequestMapping(value = "/deleteTask/{taskId}/{moduleId}", method = RequestMethod.GET)
+	public String deleteTask(@PathVariable int taskId,@PathVariable int moduleId,HttpServletRequest request, HttpServletResponse response) {
+
+		 
+		try {
+			
+			MultiValueMap<String, Object> map = new LinkedMultiValueMap<>();
+			map.add("taskId", taskId); 
+			Info info = restTemplate.postForObject(Constants.url + "masters/deleteTask",map,
+					Info.class); 
+			 System.out.println(info);
+			  
+		} catch (Exception e) {
+
+			System.err.println("Exce in showing add New Form Page " + e.getMessage());
+			e.printStackTrace();
+		}
+
+		return "redirect:/showAddNewForm/"+moduleId;
+
+	}
+	
+	Task editTask = new Task();
+	@RequestMapping(value = "/editTask/{taskId}/{moduleId}", method = RequestMethod.GET)
+	public ModelAndView editTask(@PathVariable int taskId,@PathVariable int moduleId,HttpServletRequest request, HttpServletResponse response) {
+
+		ModelAndView model = new ModelAndView("form/editTask");
+		
+		try {
+			
+			MultiValueMap<String, Object> map = new LinkedMultiValueMap<>();
+			map.add("taskId", taskId); 
+			editTask = restTemplate.postForObject(Constants.url + "masters/getTaskById",map,
+					Task.class); 
+			 
+			map = new LinkedMultiValueMap<>();
+			map.add("moduleId", moduleId); 
+			GetModuleProject getModuleProject = restTemplate.postForObject(Constants.url + "masters/getModuleByModuleId",map,
+						GetModuleProject.class);
+				
+			map = new LinkedMultiValueMap<>();
+			map.add("techId", getModuleProject.getTechId());
+			map.add("phaseId", getModuleProject.getPhaseId()); 
+			GetComplexity[] getComplexity = restTemplate.postForObject(Constants.url + "/getHeaderDetailCompByTechId",map,
+						GetComplexity[].class);
+
+			complexityList = new ArrayList<GetComplexity>(Arrays.asList(getComplexity));
+			
+			map = new LinkedMultiValueMap<>();
+			map.add("techId", getModuleProject.getTechId());
+			map.add("mPhaseId", getModuleProject.getPhaseId()); 
+			Employee[] employee = restTemplate.postForObject(Constants.url + "/masters/employeeByTechIdAndPhaseId",map,
+					Employee[].class); 
+			List<Employee> employeeList = new ArrayList<Employee>(Arrays.asList(employee)); 
+			
+			try {
+				editTask.setStartDate(DateConvertor.convertToDMY(editTask.getStartDate()));
+			}catch(Exception e) {
+				e.printStackTrace();
+			}
+			
+			model.addObject("employeeList", employeeList); 
+			model.addObject("task", editTask); 
+			model.addObject("complexityList", complexityList);
+			  
+		} catch (Exception e) {
+
+			System.err.println("Exce in showing add New Form Page " + e.getMessage());
+			e.printStackTrace();
+		}
+
+		return model;
+
+	}
+	
+	@RequestMapping(value = "/submitEditTask", method = RequestMethod.POST)
+	public String submitEditTask(HttpServletRequest request, HttpServletResponse response) {
+		 
+		 
+		String modId = null;
+		try {
+
+			 
+			modId = request.getParameter("modId");
+ 
+			List<Task> postTaskList = new ArrayList<Task>();
+			
+			int workType = Integer.parseInt(request.getParameter("workType"));
+			String taskDesc = request.getParameter("taskDesc");
+			int find = 0;
+			
+			for(int i = 0 ; i<complexityList.size() ; i++) {
+				  
+					int devpId = Integer.parseInt(request.getParameter("empId"));
+					String requiredHours = request.getParameter("requiredHours");
+					
+					if(devpId!=0) {
+						
+						String allocationDate = request.getParameter("allocationDate"+complexityList.get(i).getCmplxId());
+						
+						
+						for(int j=0 ; j<complexityList.get(i).getCmplxOptionList().size() ; j++) {
+							
+							if(complexityList.get(i).getCmplxOptionList().get(j).getCmplxOptId()==workType) {
+ 
+								editTask.setDeveloperId(devpId);
+								editTask.setStartDate(DateConvertor.convertToYMD(allocationDate));
+								editTask.setTaskTypeId(workType); 
+								editTask.setTaskPlannedHrs(requiredHours);
+								editTask.setDevStatus(1);
+								editTask.setTaskDescription(taskDesc);
+							postTaskList.add(editTask);
+							find=1;
+							break;
+							}
+						}
+						
+					}
+					else {
+						
+						for(int j=0 ; j<complexityList.get(i).getCmplxOptionList().size() ; j++) {
+							
+							if(complexityList.get(i).getCmplxOptionList().get(j).getCmplxOptId()==workType) {
+								editTask.setTaskTypeId(workType); 
+								editTask.setTaskPlannedHrs(requiredHours);
+								editTask.setDevStatus(0);
+								editTask.setTaskDescription(taskDesc);
+								postTaskList.add(editTask); 
+								find=1;
+								break;
+							}
+						}
+						
+					}
+					 
+				if(find==1) {
+					break;
+				}
+				
+			}
+			
+			System.err.println("Task List " + postTaskList.toString() + "size " + postTaskList.size());
+			 responseTaskList = restTemplate.postForObject(Constants.url + "masters/saveTask",
 					postTaskList, List.class);
  
 
