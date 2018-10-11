@@ -72,7 +72,7 @@
 									<th>Sick Leave</th>
 									<th>Causal Leave</th>
 									<th>Rem Sick Leave</th>
-									<th>RemCausal Leave</th>
+									<th>Rem Causal Leave</th>
 									<th>From Date</th>
 									<th>To Date</th>
 									<th>Action</th>
@@ -91,8 +91,8 @@
 										<td>${empList.empBirthdate}</td>
 										<td>${empList.sickLeave}</td>
 										<td>${empList.causalLeave}</td>
-
-										<td>${empList.usedSickLeave}</td>
+										
+											<td>${empList.usedSickLeave}</td>
 										<td>${empList.usedCasualLeave}</td>
 										<td>${empList.fromDate}</td>
 										<td>${empList.toDate}</td>
