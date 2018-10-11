@@ -419,6 +419,28 @@ public class ProjectController {
 
 	}
 	
+	@RequestMapping(value = "/deleteTask/{taskId}/{moduleId}", method = RequestMethod.GET)
+	public String deleteTask(@PathVariable int taskId,@PathVariable int moduleId,HttpServletRequest request, HttpServletResponse response) {
+
+		 
+		try {
+			
+			MultiValueMap<String, Object> map = new LinkedMultiValueMap<>();
+			map.add("taskId", taskId); 
+			Info info = restTemplate.postForObject(Constants.url + "masters/deleteTask",map,
+					Info.class); 
+			 System.out.println(info);
+			  
+		} catch (Exception e) {
+
+			System.err.println("Exce in showing add New Form Page " + e.getMessage());
+			e.printStackTrace();
+		}
+
+		return "redirect:/showAddNewForm/"+moduleId;
+
+	}
+	
 	@RequestMapping(value = "/getPlanHoursByvalue", method = RequestMethod.GET)
 	public @ResponseBody CmplxOption getPlanHoursByvalue(HttpServletRequest request,
 			HttpServletResponse response) {

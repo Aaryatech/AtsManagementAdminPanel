@@ -316,10 +316,10 @@
 										         </td>
 										         <td >
 										         <a
-															href="${pageContext.request.contextPath}/editTask/${taskList.taskId}"
+															href="${pageContext.request.contextPath}/editTask/${taskList.taskId}/${modId}"
 															class="btn bnt-primary"> <i class="fa fa-edit"></i></a>
 														<a
-															href="${pageContext.request.contextPath}/deleteTask/${taskList.taskId}"
+															href="${pageContext.request.contextPath}/deleteTask/${taskList.taskId}/${modId}"
 															class="btn bnt-primary"> <i class="fa fa-trash-o"></i></a>
 												</td>
 											</tr>

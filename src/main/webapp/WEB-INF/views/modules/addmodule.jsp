@@ -69,7 +69,7 @@
 															<option value="${projList.projectId}" selected><c:out value="${projList.projectName}"/></option>
 														</c:when>
 														<c:otherwise>
-															<option value="${projList.projectId}"><c:out value="${projList.projectName}"/></option>
+															<option value="${projList.projectId}" disabled><c:out value="${projList.projectName}"/></option>
 														</c:otherwise>
 													</c:choose>
 												
@@ -105,7 +105,7 @@
 															<option value="${techList.techId}" selected><c:out value="${techList.techName}"/></option>
 														</c:when>
 														<c:otherwise>
-															<option value="${techList.techId}"><c:out value="${techList.techName}"/></option>
+															<option value="${techList.techId}" disabled><c:out value="${techList.techName}"/></option>
 														</c:otherwise>
 													</c:choose>
 												
@@ -126,7 +126,7 @@
 															<option value="${phaseTypeList.mPhaseId}" selected><c:out value="${phaseTypeList.phaseName}"/></option>
 														</c:when>
 														<c:otherwise>
-															<option value="${phaseTypeList.mPhaseId}"><c:out value="${phaseTypeList.phaseName}"/></option>
+															<option value="${phaseTypeList.mPhaseId}" disabled><c:out value="${phaseTypeList.phaseName}"/></option>
 														</c:otherwise>
 													</c:choose>
 												
