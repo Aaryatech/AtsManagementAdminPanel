@@ -6,7 +6,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -25,11 +24,10 @@ import org.springframework.web.servlet.ModelAndView;
 import com.ats.adminpanel.common.Constants;
 import com.ats.adminpanel.model.Employee;
 import com.ats.adminpanel.model.LoginResponse;
-import com.ats.adminpanel.model.PhaseType;
 import com.ats.adminpanel.model.leave.ApplyLeave;
 import com.ats.adminpanel.model.leave.GetApplyLeave;
-import com.ats.adminpanel.model.tx.GetTech;
-import com.sun.org.apache.xerces.internal.impl.xpath.regex.ParseException;
+import com.ats.adminpanel.model.leave.GetShortLeave;
+import com.ats.adminpanel.model.leave.ShortLeave;
 
 @Controller
 @Scope("session")
@@ -38,6 +36,8 @@ public class LeaveController {
 	MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
 	List<Employee> empList;
 	List<GetApplyLeave> leaveList;
+
+	List<GetShortLeave> shortLeaveList;
 
 	@RequestMapping(value = "/showAddLeave", method = RequestMethod.GET)
 	public ModelAndView showAddLeave(HttpServletRequest request, HttpServletResponse response) {
@@ -117,8 +117,7 @@ public class LeaveController {
 			leave.setType(type);
 			leave.setNoOfDays(totalNoOfDays);
 
-			ApplyLeave info = restTemplate.postForObject(com.ats.adminpanel.common.Constants.url + "/saveLeave", leave,
-					ApplyLeave.class);
+			ApplyLeave info = restTemplate.postForObject(Constants.url + "/saveLeave", leave, ApplyLeave.class);
 
 			System.err.println("Project Insert Response " + info.toString());
 		} catch (Exception e) {
@@ -205,6 +204,7 @@ public class LeaveController {
 			String empRemark = request.getParameter("empRemark");
 			String appRemark = request.getParameter("appRemark");
 			int payLeave = Integer.parseInt(request.getParameter("payLeave"));
+			int status = Integer.parseInt(request.getParameter("status"));
 
 			int type = Integer.parseInt(request.getParameter("type"));
 
@@ -223,14 +223,13 @@ public class LeaveController {
 			leave.setFromDate(fromDate);
 			leave.setToDate(toDate);
 			leave.setPayLeave(payLeave);
-			leave.setStatus(1);
+			leave.setStatus(status);
 			leave.setEmpId(Integer.parseInt(empId));
 			leave.setSendTo(login.getEmployee().getEmpId());
 			leave.setType(type);
 			leave.setNoOfDays(totalNoOfDays);
 
-			ApplyLeave info = restTemplate.postForObject(com.ats.adminpanel.common.Constants.url + "/saveLeave", leave,
-					ApplyLeave.class);
+			ApplyLeave info = restTemplate.postForObject(Constants.url + "/saveLeave", leave, ApplyLeave.class);
 
 			System.err.println("Project Insert Response " + info.toString());
 		} catch (Exception e) {
@@ -240,6 +239,199 @@ public class LeaveController {
 		}
 
 		return "redirect:/showApproveLeave";
+	}
+
+	@RequestMapping(value = "/showShortLeave", method = RequestMethod.GET)
+	public ModelAndView showShortLeave(HttpServletRequest request, HttpServletResponse response) {
+
+		ModelAndView model = new ModelAndView("masters/addShortLeave");
+		try {
+			HttpSession session = request.getSession();
+			LoginResponse login = (LoginResponse) session.getAttribute("UserDetail");
+
+			System.out.println("user Id " + login.getEmployee().getEmpId());
+
+			model.addObject("login", login.getEmployee());
+
+			Employee[] empArray = restTemplate.getForObject(Constants.url + "masters/getAllEmpListByType",
+					Employee[].class);
+
+			empList = new ArrayList<Employee>(Arrays.asList(empArray));
+			model.addObject("empList", empList);
+
+			map.add("empId", login.getEmployee().getEmpId());
+
+			GetShortLeave[] leaveArray = restTemplate.postForObject(Constants.url + "/getAllShortLeaveByEmpId", map,
+					GetShortLeave[].class);
+
+			shortLeaveList = new ArrayList<GetShortLeave>(Arrays.asList(leaveArray));
+			model.addObject("shortLeaveList", shortLeaveList);
+
+			System.out.println("shortLeaveList" + shortLeaveList.toString());
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return model;
+	}
+
+	@RequestMapping(value = "/insertShortLeave", method = RequestMethod.POST)
+	public String insertShortLeave(HttpServletRequest request, HttpServletResponse response) {
+
+		try {
+
+			HttpSession session = request.getSession();
+			LoginResponse login = (LoginResponse) session.getAttribute("UserDetail");
+			System.out.println("user Id " + login.getEmployee().getEmpId());
+
+			String shortLeaveId = request.getParameter("shortLeaveId");
+			int sendTo = Integer.parseInt(request.getParameter("sendTo"));
+			float hours = Float.parseFloat(request.getParameter("hours"));
+			// int empId = Integer.parseInt(request.getParameter("empId"));
+
+			String empRemark = request.getParameter("empRemark");
+			String date = request.getParameter("date");
+
+			ShortLeave leave = new ShortLeave();
+
+			if (shortLeaveId == "" || shortLeaveId == null)
+				leave.setShortLeaveId(0);
+			else
+				leave.setShortLeaveId(Integer.parseInt(shortLeaveId));
+
+			leave.setDate(date);
+
+			leave.setIsUsed(1);
+			leave.setApproveRemark(null);
+			leave.setEmpRemark(empRemark);
+			leave.setHours(hours);
+			leave.setStatus(0);
+			leave.setEmpId(login.getEmployee().getEmpId());
+			leave.setSendTo(sendTo);
+
+			ShortLeave info = restTemplate.postForObject(Constants.url + "/saveShortLeave", leave, ShortLeave.class);
+
+			System.err.println("Project Insert Response " + info.toString());
+		} catch (Exception e) {
+			System.err.println("Exc in Proj Insert " + e.getMessage());
+			e.printStackTrace();
+
+		}
+
+		return "redirect:/showShortLeave";
+	}
+
+	@RequestMapping(value = "/showApproveShortLeave", method = RequestMethod.GET)
+	public ModelAndView showApproveShortLeave(HttpServletRequest request, HttpServletResponse response) {
+
+		ModelAndView model = new ModelAndView("masters/approveShortLeave");
+		try {
+			HttpSession session = request.getSession();
+			LoginResponse login = (LoginResponse) session.getAttribute("UserDetail");
+
+			System.out.println("user Id " + login.getEmployee().getEmpId());
+
+			Employee[] empArray = restTemplate.getForObject(Constants.url + "masters/getAllEmpListByType",
+					Employee[].class);
+
+			empList = new ArrayList<Employee>(Arrays.asList(empArray));
+			model.addObject("empList", empList);
+
+			map.add("empId", login.getEmployee().getEmpId());
+
+			GetShortLeave[] leaveArray = restTemplate.postForObject(Constants.url + "/getAllShortLeaveListBySendTo",
+					map, GetShortLeave[].class);
+
+			shortLeaveList = new ArrayList<GetShortLeave>(Arrays.asList(leaveArray));
+			model.addObject("shortLeaveList", shortLeaveList);
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return model;
+	}
+
+	@RequestMapping(value = "/shortLeaveDetails/{shortLeaveId}", method = RequestMethod.GET)
+	public ModelAndView shortLeaveDetails(@PathVariable int shortLeaveId, HttpServletRequest request,
+			HttpServletResponse response) {
+
+		ModelAndView model = new ModelAndView("masters/approveShortLeave");
+		try {
+
+			Employee[] empArray = restTemplate.getForObject(Constants.url + "masters/getAllEmpListByType",
+					Employee[].class);
+
+			empList = new ArrayList<Employee>(Arrays.asList(empArray));
+			model.addObject("empList", empList);
+
+			GetShortLeave[] leaveArray = restTemplate.postForObject(Constants.url + "/getAllShortLeaveListBySendTo",
+					map, GetShortLeave[].class);
+
+			shortLeaveList = new ArrayList<GetShortLeave>(Arrays.asList(leaveArray));
+			model.addObject("shortLeaveList", shortLeaveList);
+
+			map.add("shortLeaveId", shortLeaveId);
+			GetShortLeave leaveDetail = new GetShortLeave();
+			leaveDetail = restTemplate.postForObject(Constants.url + "/getShortLeaveByLeaveId", map,
+					GetShortLeave.class);
+			model.addObject("leaveDetail", leaveDetail);
+			System.out.println("leaveDetail" + leaveDetail.toString());
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return model;
+	}
+
+	@RequestMapping(value = "/approveShortLeave", method = RequestMethod.POST)
+	public String approveShortLeave(HttpServletRequest request, HttpServletResponse response) {
+
+		try {
+			HttpSession session = request.getSession();
+			LoginResponse login = (LoginResponse) session.getAttribute("UserDetail");
+			System.out.println("user Id " + login.getEmployee().getEmpId());
+
+			String shortLeaveId = request.getParameter("shortLeaveId");
+			int sendTo = Integer.parseInt(request.getParameter("sendTo"));
+			float hours = Float.parseFloat(request.getParameter("hours"));
+			int status = Integer.parseInt(request.getParameter("status"));
+
+			String empRemark = request.getParameter("empRemark");
+			String appRemark = request.getParameter("appRemark");
+			String date = request.getParameter("date");
+
+			ShortLeave leave = new ShortLeave();
+
+			if (shortLeaveId == "" || shortLeaveId == null)
+				leave.setShortLeaveId(0);
+			else
+				leave.setShortLeaveId(Integer.parseInt(shortLeaveId));
+
+			leave.setDate(date);
+
+			leave.setIsUsed(1);
+
+			leave.setEmpRemark(empRemark);
+			leave.setHours(hours);
+			leave.setStatus(status);
+			leave.setEmpId(login.getEmployee().getEmpId());
+			leave.setSendTo(sendTo);
+			leave.setApproveRemark(appRemark);
+
+			ShortLeave info = restTemplate.postForObject(Constants.url + "/saveShortLeave", leave, ShortLeave.class);
+
+			System.err.println("Project Insert Response " + info.toString());
+
+		} catch (Exception e) {
+			System.err.println("Exc in Proj Insert " + e.getMessage());
+			e.printStackTrace();
+
+		}
+
+		return "redirect:/showShortLeave";
 	}
 
 }

@@ -36,7 +36,6 @@
 				</div>
 				<!-- END Page Title -->
 
-
 				<!-- BEGIN Main Content -->
 				<div class="row">
 					<div class="col-md-12">
@@ -51,132 +50,90 @@
 								</div>
 
 							</div>
-
 							<div>
+
 								<div class="box-content">
-									<form action="${pageContext.request.contextPath}/approveLeave"
+									<form
+										action="${pageContext.request.contextPath}/approveShortLeave"
 										method="post" class="form-horizontal" id="validation-form"
 										method="post">
 
 										<div class="form-group">
-											<label class="col-sm-3 col-lg-2 control-label">
-												Employee Name</label>
+											<label class="col-sm-3 col-lg-2 control-label"> User
+												Name</label>
 											<div class="col-sm-4 col-lg-3 controls">
-												<input type="text" name="proj_name" id="empName"
+												<input type="text" name="empName" id="empName"
 													class="form-control" placeholder="Employee Name"
 													data-rule-required="true" value="${leaveDetail.empName}"
-													readonly /> <input type="hidden" name="leaveId"
-													id="leaveId" value="${leaveDetail.leaveId}" /> <input
-													type="hidden" name="empId" id="empId"
-													value="${leaveDetail.empId}" />
+													readonly /> <input type="hidden"
+													value="${leaveDetail.empId}" name="empId" id="empId">
+
+												<input type="hidden" value="${leaveDetail.shortLeaveId}"
+													name="shortLeaveId" id="shortLeaveId">
+
 											</div>
 
-
-											<label class="col-sm-3 col-lg-2 control-label">Total
-												No of Days</label>
+											<label class="col-sm-3 col-lg-2 control-label">Request
+												To</label>
 											<div class="col-sm-4 col-lg-3 controls">
-												<input type="text" name="totalNoOfDays" id="totalNoOfDays"
-													value="${leaveDetail.noOfDays}" class="form-control"
-													placeholder="Total Leaves " required />
+												<select name="sendTo" id="sendTo"
+													class="form-control chosen" placeholder="Send To" required>
+													<option value="">Select</option>
+													<c:forEach items="${empList}" var="empList"
+														varStatus="count">
+														<c:choose>
+															<c:when test="${empList.empId==leaveDetail.sendTo}">
+																<option value="${empList.empId}" selected><c:out
+																		value="${empList.empName}" /></option>
+															</c:when>
+															<c:otherwise>
+																<option value="${empList.empId}"><c:out
+																		value="${empList.empName}" /></option>
+															</c:otherwise>
+														</c:choose>
+
+
+													</c:forEach>
+												</select>
 											</div>
-
-										</div>
-
-										<div class="form-group">
-
-											<label class="col-sm-3 col-lg-2 control-label">From
-												Date </label>
-											<div class="col-sm-4 col-lg-3 controls">
-												<input type="text" name="fromDate"
-													value="${leaveDetail.fromDate}" placeholder="From Date"
-													id="fromDate" class="form-control date-picker" required />
-											</div>
-
-											<label class="col-sm-3 col-lg-2 control-label">To
-												Date </label>
-											<div class="col-sm-4 col-lg-3 controls">
-												<input type="text" name="toDate"
-													value="${leaveDetail.toDate}" placeholder="To Date"
-													id="toDate" class="form-control date-picker" required />
-											</div>
-
 
 										</div>
 
 
 
+
 										<div class="form-group">
-											<label class="col-sm-3 col-lg-2 control-label">Type
-												of Leave </label>
+
+											<label class="col-sm-3 col-lg-2 control-label"> Date
+											</label>
 											<div class="col-sm-4 col-lg-3 controls">
-												<c:choose>
-													<c:when test="${leaveDetail.type==0}">
-														<div class="col-md-6">
+												<input type="text" name="date" placeholder="Date" id="date"
+													class="form-control date-picker"
+													value="${leaveDetail.date}" required />
+											</div>
+											<label class="col-sm-3 col-lg-2 control-label">Select
+												Hours</label>
 
+											<div class="col-sm-4 col-lg-3 controls">
+												<select name="hours" id="hours" class="form-control chosen"
+													placeholder="Select Hours" value="" required>
+													<option value="${leaveDetail.hours}" selected="selected">${leaveDetail.hours}</option>
+													<option value="2">2</option>
 
-															<input type="radio" name="type" id="type" value="0"
-																checked> Sick Leave
-
-
-														</div>
-
-														<div class="col-md-6">
-															<input type="radio" name="type" id="type" value="1">Casual
-															Leave
-														</div>
-													</c:when>
-													<c:otherwise>
-														<div class="col-md-6">
-
-															<input type="radio" name="type" id="type" value="0">
-															Sick Leave
-
-
-														</div>
-
-														<div class="col-md-6">
-															<input type="radio" name="type" id="type" value="1"
-																checked>Casual Leave
-														</div>
-													</c:otherwise>
-												</c:choose>
-
-
+												</select>
 											</div>
 
-											<label class="col-sm-3 col-lg-2 control-label">Pay
-												Leave </label>
-											<div class="col-sm-4 col-lg-3 controls">
-												<c:choose>
-													<c:when test="${leaveDetail.payLeave==0}">
-														<div class="col-md-6">
 
-															<input type="radio" name="payLeave" id="payLeave"
-																value="0" checked> With Pay
+										</div>
 
-														</div>
 
-														<div class="col-md-6">
-															<input type="radio" name="payLeave" id="payLeave"
-																value="1"> Without Pay
-														</div>
-													</c:when>
-													<c:otherwise>
+										<div class="form-group">
+											<label class="col-sm-3 col-lg-2 control-label">Employee
+												Remark</label>
+											<div class="col-sm-12 col-lg-10 controls">
 
-														<div class="col-md-6">
-
-															<input type="radio" name="payLeave" id="payLeave"
-																value="0"> With Pay
-
-														</div>
-
-														<div class="col-md-6">
-															<input type="radio" name="payLeave" id="payLeave"
-																value="1" checked> Without Pay
-														</div>
-													</c:otherwise>
-												</c:choose>
-
+												<textarea name="empRemark" id="empRemark"
+													style="width: 740px; height: 70px;">${leaveDetail.empRemark}</textarea>
 											</div>
 										</div>
 
@@ -204,27 +161,17 @@
 											</div>
 										</div>
 
-
 										<div class="form-group">
-											<label class="col-sm-3 col-lg-2 control-label">Employee
-												Remark</label>
-											<div class="col-sm-12 col-lg-10 controls">
-
-
-												<textarea name="empRemark" id="empRemark"
-													style="width: 733px; height: 36px;">${leaveDetail.empRemark}</textarea>
-											</div>
-										</div>
-
-										<div class="form-group">
-											<label class="col-sm-3 col-lg-2 control-label">Approval
+											<label class="col-sm-3 col-lg-2 control-label">Approve
 												Remark</label>
 											<div class="col-sm-12 col-lg-10 controls">
 
 												<textarea name="appRemark" id="appRemark"
-													style="width: 740px; height: 70px;">${leaveDetail.approveRemark}</textarea>
+													style="width: 740px; height: 70px;"></textarea>
 											</div>
 										</div>
+
+
 										<div style="text-align: center;">
 
 											<input type="submit" class="btn btn-info" value="Submit">
@@ -232,24 +179,81 @@
 									</form>
 								</div>
 
+								<div class="box-content">
+
+									<br /> <br />
+									<div class="clearfix"></div>
+									<div class="table-responsive" style="border: 0">
+										<table class="table table-advance" id="table1">
+											<thead>
+												<tr>
+													<th style="width: 18px">Sr No</th>
+													<th>Employee Name</th>
+													<th>Date</th>
+
+													<th>Hours</th>
+													<th>Status</th>
+													<th>Description</th>
+													<th>Action</th>
+
+												</tr>
+											</thead>
+											<tbody>
+												<c:forEach items="${shortLeaveList}" var="shortLeaveList"
+													varStatus="count">
+													<tr class="table-flag-blue">
+														<td>${count.index+1}</td>
+														<td>${shortLeaveList.empName}</td>
+														<td>${shortLeaveList.date}</td>
+
+														<td>${shortLeaveList.hours}</td>
+
+														<c:choose>
+															<c:when test="${shortLeaveList.status==0}">
+																<c:set var="modType" value="Pending"></c:set>
+
+															</c:when>
+															<c:when test="${shortLeaveList.status==1}">
+																<c:set var="modType" value="Approve"></c:set>
+
+															</c:when>
+															<c:when test="${shortLeaveList.status==2}">
+																<c:set var="modType" value="Rejected"></c:set>
+
+															</c:when>
+
+														</c:choose>
+														<td>${modType}</td>
+
+														<td>${shortLeaveList.empRemark}</td>
+
+														<td><a
+															href="${pageContext.request.contextPath}/shortLeaveDetails/${shortLeaveList.shortLeaveId}"><span
+																class="glyphicon glyphicon-edit"></span></a></td>
+													</tr>
+												</c:forEach>
+
+
+											</tbody>
+										</table>
+									</div>
+								</div>
+
 							</div>
-
-
 						</div>
 					</div>
 				</div>
+				<footer>
+					<p>2018 © AARYATECH SOLUTIONS</p>
+				</footer>
 			</div>
-			<footer>
-				<p>2018 © AARYATECH SOLUTIONS</p>
-			</footer>
+			<!-- END Main Content -->
+
+
+			<a id="btn-scrollup" class="btn btn-circle btn-lg" href="#"><i
+				class="fa fa-chevron-up"></i></a>
 		</div>
-		<!-- END Main Content -->
-
-
-		<a id="btn-scrollup" class="btn btn-circle btn-lg" href="#"><i
-			class="fa fa-chevron-up"></i></a>
-	</div>
-	<!-- END Content -->
+		<!-- END Content -->
 	</div>
 	<!-- END Container -->
 
