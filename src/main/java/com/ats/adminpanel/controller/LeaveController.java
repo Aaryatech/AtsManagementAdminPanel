@@ -166,17 +166,80 @@ public class LeaveController {
 
 		ModelAndView model = new ModelAndView("masters/detailApprove");
 		try {
-			
+
 			map.add("leaveId", leaveId);
-			GetApplyLeave leaveDetail = restTemplate.postForObject(Constants.url + "/getAllLeaveListByLeaveId", map,
+			GetApplyLeave leaveDetail = restTemplate.postForObject(Constants.url + "/getLeaveByLeaveId", map,
 					GetApplyLeave.class);
 			model.addObject("leaveDetail", leaveDetail);
+			System.out.println("leaveDetail" + leaveDetail.toString());
 
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 
 		return model;
+	}
+
+	@RequestMapping(value = "/approveLeave", method = RequestMethod.POST)
+	public String approveLeave(HttpServletRequest request, HttpServletResponse response) {
+
+		// ModelAndView model = new ModelAndView("masters/addLeave");
+
+		try {
+
+			HttpSession session = request.getSession();
+			LoginResponse login = (LoginResponse) session.getAttribute("UserDetail");
+			System.out.println("user Id " + login.getEmployee().getEmpId());
+			Date now = new Date();
+
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+			String leaveId = request.getParameter("leaveId");
+
+			String empId = request.getParameter("empId");
+			/*
+			 * int sendTo = Integer.parseInt(request.getParameter("sendTo"));
+			 */ String fromDate = request.getParameter("fromDate");
+			String toDate = request.getParameter("toDate");
+			float totalNoOfDays = Float.parseFloat(request.getParameter("totalNoOfDays"));
+
+			String empRemark = request.getParameter("empRemark");
+			String appRemark = request.getParameter("appRemark");
+			int payLeave = Integer.parseInt(request.getParameter("payLeave"));
+
+			int type = Integer.parseInt(request.getParameter("type"));
+
+			ApplyLeave leave = new ApplyLeave();
+
+			if (leaveId == "" || leaveId == null)
+				leave.setLeaveId(0);
+			else
+				leave.setLeaveId(Integer.parseInt(leaveId));
+
+			leave.setDate(sdf.format(now));
+
+			leave.setIsUsed(1);
+			leave.setApproveRemark(appRemark);
+			leave.setEmpRemark(empRemark);
+			leave.setFromDate(fromDate);
+			leave.setToDate(toDate);
+			leave.setPayLeave(payLeave);
+			leave.setStatus(1);
+			leave.setEmpId(Integer.parseInt(empId));
+			leave.setSendTo(login.getEmployee().getEmpId());
+			leave.setType(type);
+			leave.setNoOfDays(totalNoOfDays);
+
+			ApplyLeave info = restTemplate.postForObject(com.ats.adminpanel.common.Constants.url + "/saveLeave", leave,
+					ApplyLeave.class);
+
+			System.err.println("Project Insert Response " + info.toString());
+		} catch (Exception e) {
+			System.err.println("Exc in Proj Insert " + e.getMessage());
+			e.printStackTrace();
+
+		}
+
+		return "redirect:/showApproveLeave";
 	}
 
 }

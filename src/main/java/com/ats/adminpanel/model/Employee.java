@@ -27,6 +27,9 @@ public class Employee {
 	private int techId;
 
 	private int mPhaseId;
+	
+	private float usedSickLeave;
+	private float usedCasualLeave;
 
 	public int getEmpId() {
 		return empId;
@@ -179,6 +182,24 @@ public class Employee {
 	public void setmPhaseId(int mPhaseId) {
 		this.mPhaseId = mPhaseId;
 	}
+	
+	
+
+	public float getUsedSickLeave() {
+		return usedSickLeave;
+	}
+
+	public void setUsedSickLeave(float usedSickLeave) {
+		this.usedSickLeave = usedSickLeave;
+	}
+
+	public float getUsedCasualLeave() {
+		return usedCasualLeave;
+	}
+
+	public void setUsedCasualLeave(float usedCasualLeave) {
+		this.usedCasualLeave = usedCasualLeave;
+	}
 
 	@Override
 	public String toString() {
@@ -187,7 +208,8 @@ public class Employee {
 				+ ", empPrevExp=" + empPrevExp + ", empJoiningDate=" + empJoiningDate + ", isUsed=" + isUsed
 				+ ", totalLeaves=" + totalLeaves + ", empPerHrRate=" + empPerHrRate + ", empType=" + empType
 				+ ", fromDate=" + fromDate + ", toDate=" + toDate + ", sickLeave=" + sickLeave + ", causalLeave="
-				+ causalLeave + ", techId=" + techId + ", mPhaseId=" + mPhaseId + "]";
+				+ causalLeave + ", techId=" + techId + ", mPhaseId=" + mPhaseId + ", usedSickLeave=" + usedSickLeave
+				+ ", usedCasualLeave=" + usedCasualLeave + "]";
 	}
 
 }

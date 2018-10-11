@@ -54,7 +54,7 @@
 
 							<div>
 								<div class="box-content">
-									<form action="${pageContext.request.contextPath}/insertLeave"
+									<form action="${pageContext.request.contextPath}/approveLeave"
 										method="post" class="form-horizontal" id="validation-form"
 										method="post">
 
@@ -65,8 +65,10 @@
 												<input type="text" name="proj_name" id="empName"
 													class="form-control" placeholder="Employee Name"
 													data-rule-required="true" value="${leaveDetail.empName}"
-													readonly /> <input type="hidden" name="projectId"
-													id="projectId" value="${leaveDetail.leaveId}" />
+													readonly /> <input type="hidden" name="leaveId"
+													id="leaveId" value="${leaveDetail.leaveId}" /> <input
+													type="hidden" name="empId" id="empId"
+													value="${leaveDetail.empId}" />
 											</div>
 
 

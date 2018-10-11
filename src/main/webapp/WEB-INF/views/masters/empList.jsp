@@ -68,6 +68,13 @@
 									<th>Education</th>
 									<th>Mobile No</th>
 									<th>Joining Date</th>
+									<th>Birth Date</th>
+									<th>Sick Leave</th>
+									<th>Causal Leave</th>
+									<th>Rem Sick Leave</th>
+									<th>RemCausal Leave</th>
+									<th>From Date</th>
+									<th>To Date</th>
 									<th>Action</th>
 								</tr>
 							</thead>
@@ -78,7 +85,17 @@
 										<td>${empList.empName}</td>
 										<td>${empList.empEdu}</td>
 										<td>${empList.empMobile}</td>
+
+
 										<td>${empList.empJoiningDate}</td>
+										<td>${empList.empBirthdate}</td>
+										<td>${empList.sickLeave}</td>
+										<td>${empList.causalLeave}</td>
+
+										<td>${empList.usedSickLeave}</td>
+										<td>${empList.usedCasualLeave}</td>
+										<td>${empList.fromDate}</td>
+										<td>${empList.toDate}</td>
 										<td><a
 											href="${pageContext.request.contextPath}/editEmp/${empList.empId}"><span
 												class="glyphicon glyphicon-edit"></span></a> <a
@@ -99,13 +116,13 @@
 
 
 		</div>
-<footer>
-		<p>2018 © AARYATECH SOLUTIONS</p>
-	</footer>
+		<footer>
+			<p>2018 © AARYATECH SOLUTIONS</p>
+		</footer>
 	</div>
 	<!-- END Main Content -->
 
-	
+
 
 	<a id="btn-scrollup" class="btn btn-circle btn-lg" href="#"><i
 		class="fa fa-chevron-up"></i></a>

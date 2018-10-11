@@ -35,6 +35,7 @@ import com.ats.adminpanel.model.PhaseType;
 import com.ats.adminpanel.model.SupportTask;
 import com.ats.adminpanel.model.Task;
 import com.ats.adminpanel.model.TaskType;
+import com.ats.adminpanel.model.leave.GetLeaveCount;
 import com.ats.adminpanel.model.tx.GetTech;
 import com.ats.adminpanel.model.Module;
 
@@ -160,6 +161,42 @@ public class MasterController {
 			Employee[] Employee = rest.getForObject(Constants.url + "/masters/getAllEmpList", Employee[].class);
 			List<Employee> empList = new ArrayList<Employee>(Arrays.asList(Employee));
 
+			GetLeaveCount[] getLeaveCountList = rest.getForObject(Constants.url + "/getCountForSickLeave",
+					GetLeaveCount[].class);
+			List<GetLeaveCount> countSickList = new ArrayList<GetLeaveCount>(Arrays.asList(getLeaveCountList));
+
+			getLeaveCountList = rest.getForObject(Constants.url + "/getCountForCasualLeave", GetLeaveCount[].class);
+			List<GetLeaveCount> countCausalList = new ArrayList<GetLeaveCount>(Arrays.asList(getLeaveCountList));
+
+			for (int j = 0; j < empList.size(); j++) {
+
+				for (int i = 0; i < countSickList.size(); i++) {
+					countSickList.get(i).getLeaveCount();
+					if (countSickList.get(i).getEmpId() == empList.get(j).getEmpId()) {
+						float sickCount = empList.get(j).getSickLeave() - countSickList.get(i).getLeaveCount();
+
+						System.out.println("Sick count--------------" + sickCount);
+						empList.get(j).setUsedSickLeave(sickCount);
+
+					}
+
+				}
+			}
+
+			for (int j = 0; j < empList.size(); j++) {
+
+				for (int i = 0; i < countCausalList.size(); i++) {
+
+					if (countCausalList.get(i).getEmpId() == empList.get(j).getEmpId()) {
+						float casualCount = empList.get(j).getSickLeave() - countCausalList.get(i).getLeaveCount();
+
+						System.out.println("casualCount count--------------" + casualCount);
+						empList.get(j).setUsedCasualLeave(casualCount);
+
+					}
+
+				}
+			}
 			model.addObject("empList", empList);
 
 		} catch (Exception e) {
