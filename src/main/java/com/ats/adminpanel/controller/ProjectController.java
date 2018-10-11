@@ -264,7 +264,7 @@ public class ProjectController {
 		List<Technology> techList = new ArrayList<Technology>(Arrays.asList(techArray));
 
 		model.addObject("techList", techList);
-		
+		model.addObject("isEdit",1);
 		}catch (Exception e) {
 			e.printStackTrace();
 		}

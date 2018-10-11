@@ -61,19 +61,40 @@
 												Project Name</div>
 											<div class="col-md-3">
 												<select name="proj_name" id="proj_name" class="form-control chosen"
-													placeholder="Project" data-rule-required="true">
+													  data-rule-required="true">
 													<option value="">Select Project</option>
-													<c:forEach items="${projList}" var="projList" >
+													
 													<c:choose>
-														<c:when test="${projList.projectId==editModule.projectId}">
-															<option value="${projList.projectId}" selected><c:out value="${projList.projectName}"/></option>
+														<c:when test="${isEdit==1}">
+															<c:forEach items="${projList}" var="projList" >
+																	<c:choose>
+																		<c:when test="${projList.projectId==editModule.projectId}">
+																			<option value="${projList.projectId}" selected><c:out value="${projList.projectName}"/></option>
+																		</c:when>
+																		<c:otherwise>
+																			<option value="${projList.projectId}" disabled><c:out value="${projList.projectName}"/></option>
+																		</c:otherwise>
+																	</c:choose>
+																
+															</c:forEach>
 														</c:when>
 														<c:otherwise>
-															<option value="${projList.projectId}" disabled><c:out value="${projList.projectName}"/></option>
+															<c:forEach items="${projList}" var="projList" >
+																	<c:choose>
+																		<c:when test="${projList.projectId==editModule.projectId}">
+																			<option value="${projList.projectId}" selected><c:out value="${projList.projectName}"/></option>
+																		</c:when>
+																		<c:otherwise>
+																			<option value="${projList.projectId}"  ><c:out value="${projList.projectName}"/></option>
+																		</c:otherwise>
+																	</c:choose>
+																
+															</c:forEach>
+														
 														</c:otherwise>
 													</c:choose>
-												
-											</c:forEach>
+													
+													
 												</select>
 											</div>
 											
@@ -98,18 +119,37 @@
 												<select name="techId" id="techId" class="form-control chosen"
 													  data-rule-required="true">
 													<option value="">Select Technology</option>
-													
-													<c:forEach items="${techList}" var="techList" >
 													<c:choose>
-														<c:when test="${techList.techId==editModule.techId}">
-															<option value="${techList.techId}" selected><c:out value="${techList.techName}"/></option>
+														<c:when test="${isEdit==1}">
+															<c:forEach items="${techList}" var="techList" >
+																	<c:choose>
+																		<c:when test="${techList.techId==editModule.techId}">
+																			<option value="${techList.techId}" selected><c:out value="${techList.techName}"/></option>
+																		</c:when>
+																		<c:otherwise>
+																			<option value="${techList.techId}" disabled><c:out value="${techList.techName}"/></option>
+																		</c:otherwise>
+																	</c:choose>
+																
+															</c:forEach>
 														</c:when>
 														<c:otherwise>
-															<option value="${techList.techId}" disabled><c:out value="${techList.techName}"/></option>
+															<c:forEach items="${techList}" var="techList" >
+																	<c:choose>
+																		<c:when test="${techList.techId==editModule.techId}">
+																			<option value="${techList.techId}" selected><c:out value="${techList.techName}"/></option>
+																		</c:when>
+																		<c:otherwise>
+																			<option value="${techList.techId}"  ><c:out value="${techList.techName}"/></option>
+																		</c:otherwise>
+																	</c:choose>
+																
+															</c:forEach>
+														
 														</c:otherwise>
 													</c:choose>
-												
-											</c:forEach>
+														
+													
 												</select>
 											</div>
 											
@@ -120,17 +160,35 @@
 												<select name="phaseId" id="phaseId" class="form-control chosen"
 													  data-rule-required="true">
 													<option value="">Select Phase</option>
-													<c:forEach items="${phaseTypeList}" var="phaseTypeList" >
 													<c:choose>
-														<c:when test="${phaseTypeList.mPhaseId==editModule.phaseId}">
-															<option value="${phaseTypeList.mPhaseId}" selected><c:out value="${phaseTypeList.phaseName}"/></option>
+														<c:when test="${isEdit==1}">
+															<c:forEach items="${phaseTypeList}" var="phaseTypeList" >
+																<c:choose>
+																	<c:when test="${phaseTypeList.mPhaseId==editModule.phaseId}">
+																		<option value="${phaseTypeList.mPhaseId}" selected><c:out value="${phaseTypeList.phaseName}"/></option>
+																	</c:when>
+																	<c:otherwise>
+																		<option value="${phaseTypeList.mPhaseId}" disabled><c:out value="${phaseTypeList.phaseName}"/></option>
+																	</c:otherwise>
+																</c:choose>
+												
+																</c:forEach>
 														</c:when>
 														<c:otherwise>
-															<option value="${phaseTypeList.mPhaseId}" disabled><c:out value="${phaseTypeList.phaseName}"/></option>
+															<c:forEach items="${phaseTypeList}" var="phaseTypeList" >
+																<c:choose>
+																	<c:when test="${phaseTypeList.mPhaseId==editModule.phaseId}">
+																		<option value="${phaseTypeList.mPhaseId}" selected><c:out value="${phaseTypeList.phaseName}"/></option>
+																	</c:when>
+																	<c:otherwise>
+																		<option value="${phaseTypeList.mPhaseId}" ><c:out value="${phaseTypeList.phaseName}"/></option>
+																	</c:otherwise>
+																</c:choose>
+												
+																</c:forEach> 
 														</c:otherwise>
 													</c:choose>
-												
-											</c:forEach>
+													
 												</select>
 											</div>
 											 
