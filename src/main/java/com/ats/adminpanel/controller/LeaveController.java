@@ -49,9 +49,7 @@ import com.ats.adminpanel.model.tx.GetComplexity;
 @Scope("session")
 public class LeaveController {
 
-	@Autowired
-	private JavaMailSender mailSender;
-
+	
 	RestTemplate restTemplate = new RestTemplate();
 	MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
 	List<Employee> empList;
