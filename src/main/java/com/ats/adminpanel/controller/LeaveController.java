@@ -49,7 +49,24 @@ import com.ats.adminpanel.model.tx.GetComplexity;
 @Scope("session")
 public class LeaveController {
 
-	
+	/*<dependency>
+	<groupId>javax.mail</groupId>
+	<artifactId>javax.mail-api</artifactId>
+	<version>1.5.5</version>
+</dependency>
+<dependency>
+	<groupId>javax.mail</groupId>
+	<artifactId>mail</artifactId>
+	<version>1.4.7</version>
+</dependency>
+
+<dependency>
+<groupId>org.springframework</groupId>
+<artifactId>spring-context-support</artifactId>
+<version>${org.springframework-version}</version>
+</dependency>*/
+
+
 	RestTemplate restTemplate = new RestTemplate();
 	MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
 	List<Employee> empList;
