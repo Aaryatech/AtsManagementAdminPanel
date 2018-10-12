@@ -644,8 +644,8 @@ public class ProjectController {
 	}
 	
 	Task editTask = new Task();
-	@RequestMapping(value = "/editTask/{taskId}/{moduleId}", method = RequestMethod.GET)
-	public ModelAndView editTask(@PathVariable int taskId,@PathVariable int moduleId,HttpServletRequest request, HttpServletResponse response) {
+	@RequestMapping(value = "/editTask/{taskId}/{moduleId}/{formName}", method = RequestMethod.GET)
+	public ModelAndView editTask(@PathVariable int taskId,@PathVariable String formName,@PathVariable int moduleId,HttpServletRequest request, HttpServletResponse response) {
 
 		ModelAndView model = new ModelAndView("form/editTask");
 		
@@ -685,6 +685,7 @@ public class ProjectController {
 			model.addObject("employeeList", employeeList); 
 			model.addObject("task", editTask); 
 			model.addObject("complexityList", complexityList);
+			model.addObject("formName", formName);
 			  
 		} catch (Exception e) {
 
@@ -705,6 +706,8 @@ public class ProjectController {
 
 			 
 			modId = request.getParameter("modId");
+			
+			String formName = request.getParameter("formName");
  
 			List<Task> postTaskList = new ArrayList<Task>();
 			
@@ -719,13 +722,14 @@ public class ProjectController {
 					
 					if(devpId!=0) {
 						
-						String allocationDate = request.getParameter("allocationDate"+complexityList.get(i).getCmplxId());
+						String allocationDate = request.getParameter("allocationDate");
 						
 						
 						for(int j=0 ; j<complexityList.get(i).getCmplxOptionList().size() ; j++) {
 							
 							if(complexityList.get(i).getCmplxOptionList().get(j).getCmplxOptId()==workType) {
- 
+								
+								editTask.setTaskName(formName +" "+ complexityList.get(i).getCmplxName() +" "+ complexityList.get(i).getCmplxOptionList().get(j).getCmplxOptName()); 
 								editTask.setDeveloperId(devpId);
 								editTask.setStartDate(DateConvertor.convertToYMD(allocationDate));
 								editTask.setTaskTypeId(workType); 
@@ -744,6 +748,7 @@ public class ProjectController {
 						for(int j=0 ; j<complexityList.get(i).getCmplxOptionList().size() ; j++) {
 							
 							if(complexityList.get(i).getCmplxOptionList().get(j).getCmplxOptId()==workType) {
+								editTask.setTaskName(formName +" "+ complexityList.get(i).getCmplxName() +" "+ complexityList.get(i).getCmplxOptionList().get(j).getCmplxOptName()); 
 								editTask.setTaskTypeId(workType); 
 								editTask.setTaskPlannedHrs(requiredHours);
 								editTask.setDevStatus(0);

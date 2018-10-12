@@ -235,20 +235,25 @@
 									
 									<c:set var="totalAllocatedHours" value="0"> </c:set>
 									<c:set var="totalRequredHours" value="0"> </c:set>
+									<c:set var="totalAssignHours" value="0"> </c:set>
 									<c:forEach items="${formListWTaskList.taskList}" var="taskList" varStatus="countt">
 											 <c:set var="totalAllocatedHours" value="${taskList.taskPlannedHrs+totalAllocatedHours}"> </c:set>
 											 <c:choose>
 											 	<c:when test="${taskList.devStatus==3}">
 											 	 <c:set var="totalRequredHours" value="${taskList.actualReqHrs+totalRequredHours}"> </c:set>
 											 	</c:when>
+											 	<c:when test="${taskList.devStatus>0}">
+											 	 <c:set var="totalAssignHours" value="${taskList.taskPlannedHrs+totalAssignHours}"> </c:set>
+											 	</c:when>
 											 </c:choose>
 											
-										</c:forEach> 
+										</c:forEach>  
 										
-									<div class="col-md-2"><b>Allocated Hours : </b> ${totalAllocatedHours}</div>
-									 <div class="col-md-2"></div>
+										
+									<div class="col-md-2"><b>Plan Hours : </b> ${totalAllocatedHours}</div> 
+									<div class="col-md-2"><b>Assign Hours : </b> ${totalAssignHours}</div> 
 									<div class="col-md-3"><b>Actual Required Hours : </b> ${totalRequredHours}</div>
-									 
+									 <div class="col-md-3"><b>Pending Hours : </b> ${totalAllocatedHours-totalAssignHours}</div>
 									  
 									 <div class="box-tool">
 												  <a data-action="collapse" href="#"><i
@@ -315,12 +320,17 @@
  												</c:choose>
 										         </td>
 										         <td >
-										         <a
-															href="${pageContext.request.contextPath}/editTask/${taskList.taskId}/${modId}"
+										         <c:choose>
+										         	<c:when test="${taskList.devStatus!=3}">
+										         	<a href="${pageContext.request.contextPath}/editTask/${taskList.taskId}/${modId}/${formListWTaskList.formName}"
 															class="btn bnt-primary"> <i class="fa fa-edit"></i></a>
-														<a
+													<a
 															href="${pageContext.request.contextPath}/deleteTask/${taskList.taskId}/${modId}"
 															class="btn bnt-primary"> <i class="fa fa-trash-o"></i></a>
+										         	</c:when>
+										         </c:choose>
+										          
+														
 												</td>
 											</tr>
 										</c:forEach>  
