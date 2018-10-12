@@ -110,7 +110,7 @@
 								<input type="hidden" name="projId" value="${projId}">
 										<input type="hidden" name="modId" value="${task.moduleId}"> 
 										<input type="hidden" name="projName" value="${projName}"> 
-										<input	type="hidden" name="modName" value="${modName}">
+										<input	type="hidden" name="formName" value="${formName}">
   
 										<div class="box-content">
 											<div class="col-md-2">Task Description</div>
@@ -152,12 +152,12 @@
 															<div class="col-md-2">
 															<c:choose>
 																<c:when test="${task.devStatus==0}">
-																<input type="text" name="allocationDate${complexityList.cmplxId}"
-															 placeholder="Assign Date" value="${task.startDate}" onblur="getAllocatedWorkByDate(${complexityList.cmplxId})" id="allocationDate${complexityList.cmplxId}" class="form-control date-picker"   />
+																<input type="text" name="allocationDate"
+															 placeholder="Assign Date" value="${task.startDate}" onblur="getAllocatedWorkByDate(${complexityList.cmplxId})" id="allocationDate" class="form-control date-picker"   />
 																</c:when>
 																<c:otherwise>
-																<input type="text" name="allocationDate${complexityList.cmplxId}"
-															 placeholder="Assign Date" value="${task.startDate}" onblur="getAllocatedWorkByDate(${complexityList.cmplxId})" id="allocationDate${complexityList.cmplxId}" class="form-control date-picker" required/>
+																<input type="text" name="allocationDate"
+															 placeholder="Assign Date" value="${task.startDate}" onblur="getAllocatedWorkByDate(${complexityList.cmplxId})" id="allocationDate" class="form-control date-picker" required/>
 																</c:otherwise>
 															</c:choose>
 															
@@ -327,9 +327,7 @@
 		else
 			{
 			 
-			document.getElementById("requiredHours").required = true; 
-			alert("cmplxId" + cmplxId);
-			 alert("value" + value);
+			document.getElementById("requiredHours").required = true;  
 			 getPlanHoursByvalue(cmplxId,value);
 			
 			}
@@ -345,8 +343,7 @@
 			ajax : 'true',
 
 		}, function(data) {
-			alert(data.allocatedHrs);
-			alert(cmplxId);
+			 
 			 document.getElementById("requiredHours").value = data.allocatedHrs; 
 
 		});
@@ -354,16 +351,16 @@
 	}
 	function assignDateValidation(cmplxId)
 	{
-		var empId = document.getElementById("empId"+cmplxId).value;
+		var empId = document.getElementById("empId").value;
 		if(empId==0)
 			{
-			document.getElementById("allocationDate"+cmplxId).required = false; 
+			document.getElementById("allocationDate").required = false; 
 			document.getElementById("allocatedHours"+cmplxId).value =0;
 			document.getElementById("allocatedHoursByDate"+cmplxId).value =0;
 			}
 		else
 			{
-			document.getElementById("allocationDate"+cmplxId).required = true; 
+			document.getElementById("allocationDate").required = true; 
 			getAllocatedWork(cmplxId);
 			}
 		 					 	 
@@ -375,7 +372,7 @@
 		function getAllocatedWork(cmplxId) {
 
 			 
-			var empId = document.getElementById("empId"+cmplxId).value; 
+			var empId = document.getElementById("empId").value; 
 			 
 			$.getJSON('${getEmpAllocatedWorkHours}', {
 
@@ -392,8 +389,8 @@
 		function getAllocatedWorkByDate(cmplxId) {
 
 			 
-			var empId = document.getElementById("empId"+cmplxId).value;
-			var date = document.getElementById("allocationDate"+cmplxId).value;
+			var empId = document.getElementById("empId").value;
+			var date = document.getElementById("allocationDate").value;
 			if(date=="" || date==null){
 				alert("Select Date ");
 			} 
