@@ -131,12 +131,13 @@
 												<div class="col-md-4">
 
 													<input type="radio" name="aaplyHalfDay" id="aaplyHalfDay"
-														value="0" onclick="calculateDays()" checked> No
+														value="0" onclick="calculateHalfDayNo()" checked>
+													No
 												</div>
 
 												<div class="col-md-4">
 													<input type="radio" name="aaplyHalfDay" id="aaplyHalfDay"
-														value="1" onclick="calculateDays()"> Yes
+														value="1" onclick="calculateHalfDay()"> Yes
 												</div>
 
 											</div>
@@ -150,7 +151,8 @@
 													required />
 											</div>
 
-
+											<input type="hidden" name="totalNoOfDays1"
+												id="totalNoOfDays1" />
 
 
 
@@ -338,13 +340,29 @@
 			var end = toDate.split(/\-/).reverse().join('-');
 
 			var diff = daysBetween(initial, end);
+			document.getElementById("totalNoOfDays1").value = diff;
+			document.getElementById("totalNoOfDays").value = diff;
 
-			if (aaplyHalfDay == 1) {
-				document.getElementById("totalNoOfDays").value = diff - 0.5;
-			} else if (aaplyHalfDay == 0) {
-				document.getElementById("totalNoOfDays").value = diff;
+			/* if (aaplyHalfDay == 1) {
+					document.getElementById("totalNoOfDays").value = diff - 0.5;
+				} else if (aaplyHalfDay == 0) {
+					document.getElementById("totalNoOfDays").value = diff;
 
-			}
+				} */
+		}
+
+		function calculateHalfDay() {
+
+			var asd = document.getElementById("totalNoOfDays").value;
+			document.getElementById("totalNoOfDays").value = asd - 0.5;
+
+		}
+
+		function calculateHalfDayNo() {
+
+			var asd = document.getElementById("totalNoOfDays").value;
+			document.getElementById("totalNoOfDays").value = asd;
+
 		}
 
 		function treatAsUTC(date) {

@@ -8,7 +8,7 @@
 
 
 <body>
-	<c:url var="getRmSubCategory" value="/getRmSubCategory" />
+	<c:url var="getCheckForShortLeave" value="/getCheckForShortLeave" />
 	<c:url var="getRmCategory" value="/getRmCategory" />
 	<div>
 		<div class="container" id="main-container">
@@ -109,7 +109,8 @@
 											</label>
 											<div class="col-sm-4 col-lg-3 controls">
 												<input type="text" name="date" placeholder="Date" id="date"
-													class="form-control date-picker" required />
+													onblur="getDateTocheck()" class="form-control date-picker"
+													required />
 											</div>
 											<label class="col-sm-3 col-lg-2 control-label">Select
 												Hours</label>
@@ -140,7 +141,7 @@
 
 										<div style="text-align: center;">
 
-											<input type="submit" onclick="validateQty()"
+											<input type="submit" id="submit" name="submit"
 												class="btn btn-info" value="Submit">
 										</div>
 									</form>
@@ -242,41 +243,26 @@
 		src="${pageContext.request.contextPath}/resources/assets/data-tables/bootstrap3/dataTables.bootstrap.js"></script>
 
 
-	<!-- <script type="text/javascript">
-		function calculateDays() {
 
-			var fromDate = $("#fromDate").val();
-			var toDate = $("#toDate").val();
+	<script type="text/javascript">
+		function getDateTocheck() {
+		
+			$.getJSON('${getCheckForShortLeave}', {
 
-			var aaplyHalfDay = $("#aaplyHalfDay").val();
+				ajax : 'true',
 
-			var initial = fromDate.split(/\-/).reverse().join('-');
+			}, function(data) {
+				if (data.error == true) {
+					alert("Not Applicable");
+					document.getElementById("submit").disabled = true;
 
-			var end = toDate.split(/\-/).reverse().join('-');
-
-			var diff = daysBetween(initial, end);
-
-			if (aaplyHalfDay == 1) {
-				document.getElementById("totalNoOfDays").value = diff - 0.5;
-			} else if (aaplyHalfDay == 0) {
-				document.getElementById("totalNoOfDays").value = diff;
-
+				}
 			}
-		}
 
-		function treatAsUTC(date) {
-			var result = new Date(date);
-			result.setMinutes(result.getMinutes() - result.getTimezoneOffset());
-			return result;
-		}
+			);
 
-		function daysBetween(startDate, endDate) {
-			var millisecondsPerDay = 24 * 60 * 60 * 1000;
-			return (treatAsUTC(endDate) - treatAsUTC(startDate))
-					/ millisecondsPerDay;
 		}
 	</script>
- -->
 </body>
 </html>
 
