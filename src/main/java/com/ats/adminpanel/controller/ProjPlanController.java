@@ -19,7 +19,9 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.FileCopyUtils;
 import org.springframework.util.LinkedMultiValueMap;
@@ -35,6 +37,7 @@ import org.springframework.web.servlet.ModelAndView;
 import com.ats.adminpanel.common.Constants;
 import com.ats.adminpanel.model.Employee;
 import com.ats.adminpanel.model.GetPhaseTask;
+import com.ats.adminpanel.model.Info;
 import com.ats.adminpanel.model.proj.ProjList;
 import com.ats.adminpanel.model.proj.ProjTaskDetail;
 import com.ats.adminpanel.model.tx.Technology;
@@ -64,6 +67,7 @@ import javafx.scene.layout.Border;
     <version>4.2.2</version>
 </dependency>
  */
+@Scope("session")
 @Controller
 public class ProjPlanController {
 	RestTemplate restTemplate = new RestTemplate();
@@ -134,6 +138,60 @@ public class ProjPlanController {
 		List<Technology> techList = new ArrayList<Technology>(Arrays.asList(techArray));
 
 		model.addObject("techList", techList);
+		
+		
+
+		// exportToExcel
+
+		
+		List<ExportToExcel> exportToExcelList = new ArrayList<ExportToExcel>();
+
+		ExportToExcel expoExcel = new ExportToExcel();
+		List<String> rowData = new ArrayList<String>();
+		
+		rowData.add("Sr. No.");
+		rowData.add("Start Date");
+		rowData.add("Technology");
+		rowData.add("Module Name");
+		rowData.add("Form Name");
+		rowData.add("Task Name");
+		rowData.add("Employee");
+		rowData.add("Plan Hour");
+		rowData.add("Assign Hr");
+		rowData.add("Req Hr");
+		
+		rowData.add("Task Cost");
+
+		expoExcel.setRowData(rowData);
+		exportToExcelList.add(expoExcel);
+
+		
+		for (int i = 0; i < projTaskDetailList.size(); i++) {
+			expoExcel = new ExportToExcel();
+			rowData = new ArrayList<String>();
+
+			rowData.add("" + (i + 1));
+			rowData.add("" + projTaskDetailList.get(i).getStartDate());
+			rowData.add(projTaskDetailList.get(i).getTechName());
+			rowData.add(projTaskDetailList.get(i).getModuleName());
+			rowData.add(""+projTaskDetailList.get(i).getFormName());
+			rowData.add(projTaskDetailList.get(i).getTaskName());
+			rowData.add(projTaskDetailList.get(i).getEmpName());
+
+			rowData.add(""+projTaskDetailList.get(i).getPlanHr());
+
+			rowData.add(""+projTaskDetailList.get(i).getAssignHr());
+			rowData.add(""+projTaskDetailList.get(i).getActualHr());
+			rowData.add(""+projTaskDetailList.get(i).getEmpTaskCost());
+
+			expoExcel.setRowData(rowData);
+			exportToExcelList.add(expoExcel);
+
+		}
+
+		HttpSession session = request.getSession();
+		session.setAttribute("exportExcelList", exportToExcelList);
+		session.setAttribute("excelName", "projTaskList");
 
 		return model;
 	}
@@ -536,7 +594,54 @@ public class ProjPlanController {
 		}
 	}
 
+	//completeTask
 	
+	@RequestMapping(value = "/completeTask", method = RequestMethod.POST)
+	public String completeTask(HttpServletRequest request, HttpServletResponse response) {
+
+		ModelAndView model = null;
+		try {
+
+			String[] selecTasks = request.getParameterValues("task");
+			
+				List<CompleteTaskBean> taskList=new ArrayList<>()	;
+				
+				DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+				
+				DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+				Calendar cal = Calendar.getInstance();
+
+				String timeStamp=dateFormat.format(cal.getTime());
+				
+			for (int i = 0; i < selecTasks.length; i++) {
+
+				CompleteTaskBean task=new CompleteTaskBean();
+				
+				task.setDevStatus(3);
+				task.setTaskId(Integer.parseInt(selecTasks[i]));
+				
+				String reqHrs=request.getParameter("req_hrs"+task.getTaskId());
+				task.setEndDate(df.format(new Date()));
+				task.setEndTimeStamp(timeStamp);
+				task.setActualReqHrs(reqHrs);
+				if(Float.parseFloat(reqHrs)>0)
+				taskList.add(task);
+				
+			}//end of for loop
+			
+			
+			System.err.println("Ar list task  " +taskList.toString());
+			Info inserRes=restTemplate.postForObject(Constants.url + "completeTask", taskList,
+ 					Info.class);
+ 			
+		} catch (Exception e) {
+
+			e.printStackTrace();
+
+		}
+
+		return "redirect:/homePage";
+	}
 	
 	
 }

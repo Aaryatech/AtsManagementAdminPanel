@@ -38,7 +38,8 @@
 <script>
 	window.jQuery
 			|| document
-					.write('<script src="${pageContext.request.contextPath}/resources/assets/jquery/jquery-2.0.3.min.js"><\/script>')
+					.write(
+							'<script src="${pageContext.request.contextPath}/resources/assets/jquery/jquery-2.0.3.min.js"><\/script>')
 </script>
 <script
 	src="${pageContext.request.contextPath}/resources/assets/bootstrap/js/bootstrap.min.js"></script>
@@ -62,12 +63,12 @@
 
 
 	<div class="container" id="main-container">
-<jsp:include page="/WEB-INF/views/include/header.jsp"></jsp:include>
+		<jsp:include page="/WEB-INF/views/include/header.jsp"></jsp:include>
 
 		<!-- BEGIN Sidebar -->
 		<div id="sidebar" class="navbar-collapse collapse">
 
-<jsp:include page="/WEB-INF/views/include/navigation.jsp"></jsp:include>
+			<jsp:include page="/WEB-INF/views/include/navigation.jsp"></jsp:include>
 			<div id="sidebar-collapse" class="visible-lg">
 				<i class="fa fa-angle-double-left"></i>
 			</div>
@@ -101,46 +102,59 @@
 						</div>
 
 
+						<form action="${pageContext.request.contextPath}/completeTask"
+							id="start_dist_form" method="post">
+							<div class="box-content">
 
-						<div class="box-content">
+								<br /> <br />
+								<div class="clearfix"></div>
+								<div class="table-responsive" style="border: 0">
+									<table class="table table-advance" id="table1">
+										<thead>
+											<tr>
+											
+												<th style="width: 2%"></th>
+												<th style="width: 2%">Sr No.</th>
+												<th class="col-md-1" style="text-align: center;">Start Date</th>
+												<th class="col-md-2" style="text-align: center;">Project Name</th>
+												<th class="col-md-2" style="text-align: center;">Module Name</th>
+												<th class="col-md-1" style="text-align: center;">Form Name</th>
+												<th class="col-md-2" style="text-align: center;">Task Name</th>
+												<th class="col-md-1" style="text-align: center;">Req Hours</th>
 
-							<br /> <br />
-							<div class="clearfix"></div>
-							<div class="table-responsive" style="border: 0">
-								<table class="table table-advance" id="table1">
-									<thead>
-										<tr>
-											<th style="width: 18px"><input type="checkbox" /></th>
-											<th>Sr No.</th>
-											<th>Project Name</th>
-											<th>Module Name</th>
-											<th>Form Name</th>
-											<th class="text-center">Task Name</th>
-											<th>Action</th>
-										</tr>
-									</thead>
-									<tbody>
-
-										<c:forEach items="${assignedTask}" var="assignTask"
-											varStatus="count">
-											<tr class="table-flag-blue">
-												<td><input type="checkbox" /></td>
-												<td>${count.index+1}</td>
-												<td>${assignTask.projectName}</td>
-												<td>${assignTask.moduleName}</td>
-												<td>${assignTask.formName}</td>
-												<td>${assignTask.taskName}</td>
-												<td><a
-													href="${pageContext.request.contextPath}/assignedTaskDetails/${assignTask.taskId}">
-														<input type="button" class="btn btn-info" value="Details"
-														id="submit">
-												</a></td>
 											</tr>
-										</c:forEach>
-									</tbody>
-								</table>
+										</thead>
+										<tbody>
+
+											<c:forEach items="${assignedTask}" var="assignTask"
+												varStatus="count">
+												<tr class="table-flag-blue">
+													<td style="width: 2%"><input type="checkbox"
+														value="${assignTask.taskId}" id='task${assignTask.taskId}'
+														name='task' onchange="callReq(this.value)" /></td>
+													<td style="width: 2%">${count.index+1}</td>
+
+													<td class="col-md-1" style="text-align: center;">${assignTask.startDate}</td>
+													<td class="col-md-2" style="text-align: left;">${assignTask.projectName}</td>
+													<td class="col-md-2" style="text-align: left;">${assignTask.moduleName}</td>
+													<td class="col-md-1" style="text-align: left;">${assignTask.formName}</td>
+													<td class="col-md-2" style="text-align: left;">${assignTask.taskName}</td>
+
+													<td class="col-md-1" style="text-align: center;"><input type="text" style="text-align: center;" class="form-control"
+														id='req_hrs${assignTask.taskId}'
+														name='req_hrs${assignTask.taskId}' value="0"></td>
+
+												</tr>
+											</c:forEach>
+										</tbody>
+									</table>
+								</div>
+
 							</div>
-						</div>
+							<input type="button" class="btn btn-info" value="Submit"
+								id="submitButton" onclick="valthisform()" disabled>
+
+						</form>
 					</div>
 				</div>
 			</div>
@@ -155,6 +169,76 @@
 		</div>
 		<!-- END Content -->
 	</div>
+	<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+	<script>
+		function callReq(taskId) {
+			//alert("Hi" + taskId);
+
+			var checkboxs = document.getElementById("task" + taskId);
+//alert(checkboxs);
+			var okay = false;
+
+			if (checkboxs.checked) {
+				okay = true;
+		
+			}
+
+			if (okay) {
+				document.getElementById("req_hrs" + taskId).required = true;
+				//var form=document.getElementById("start_dist_form");
+//alert("req =true");
+				//form.submit();
+				 
+				//document.getElementById('submitButton').disabled = false;
+			} else{
+				document.getElementById("req_hrs" + taskId).required = false;
+			//document.getElementById('submitButton').disabled = true;
+			}
+			
+			
+			var checkboxs=document.getElementsByName("task");
+		    var okay=false;
+		    for(var i=0,l=checkboxs.length;i<l;i++)
+		    {
+		        if(checkboxs[i].checked)
+		        {
+		            okay=true;
+		            break;
+		        }
+		    }
+		    if(okay){
+		    	document.getElementById('submitButton').disabled = false;
+		    }else{
+		    	document.getElementById('submitButton').disabled = true;
+		    }
+		}
+	</script>
+
+	<script>
+		
+		function valthisform()
+		{
+		    var checkboxs=document.getElementsByName("task");
+		    var okay=false;
+		    for(var i=0,l=checkboxs.length;i<l;i++)
+		    {
+		        if(checkboxs[i].checked)
+		        {
+		            okay=true;
+		            break;
+		        }
+		    }
+		    if(okay){
+		    	
+		    	var form=document.getElementById("start_dist_form");
+		    	
+		    	form.submit();
+		    }
+		    else alert("Please check a checkbox");
+		}
+	</script>
+
+
 
 
 </body>
