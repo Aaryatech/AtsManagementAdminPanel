@@ -204,6 +204,17 @@
 							<a href="${pageContext.request.contextPath}/showAddProject">Add
 								Project</a>
 							</li>
+							
+							<c:choose>
+								<c:when test="${Constants.subAct==44}">
+									<li class="active">
+								</c:when>
+								<c:otherwise>
+									<li>
+								</c:otherwise>
+							</c:choose>
+							<a href="${pageContext.request.contextPath}/getProjList">Proj List</a>
+							</li>
 
 							<c:choose>
 								<c:when test="${Constants.subAct==14}">
