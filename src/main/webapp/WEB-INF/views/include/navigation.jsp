@@ -204,7 +204,7 @@
 							<a href="${pageContext.request.contextPath}/showAddProject">Add
 								Project</a>
 							</li>
-							
+
 							<c:choose>
 								<c:when test="${Constants.subAct==44}">
 									<li class="active">
@@ -213,7 +213,8 @@
 									<li>
 								</c:otherwise>
 							</c:choose>
-							<a href="${pageContext.request.contextPath}/getProjList">Proj List</a>
+							<a href="${pageContext.request.contextPath}/getProjList">Proj
+								List</a>
 							</li>
 
 							<c:choose>
@@ -337,7 +338,8 @@
 									<li>
 								</c:otherwise>
 							</c:choose>
-							<a href="${pageContext.request.contextPath}/showApproveShortLeave">Approve
+							<a
+								href="${pageContext.request.contextPath}/showApproveShortLeave">Approve
 								Short Leave</a>
 							</li>
 
@@ -525,6 +527,18 @@
 							</c:choose>
 							<a href="${pageContext.request.contextPath}/projectCostReport">Project
 								Cost Report</a>
+							</li>
+
+							<c:choose>
+								<c:when test="${Constants.subAct==36}">
+									<li class="active">
+								</c:when>
+								<c:otherwise>
+									<li>
+								</c:otherwise>
+							</c:choose>
+							<a href="${pageContext.request.contextPath}/viewLeaveReport">Leave
+								Report</a>
 							</li>
 
 						</ul>

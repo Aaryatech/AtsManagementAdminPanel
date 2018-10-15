@@ -32,6 +32,7 @@ import com.ats.adminpanel.model.ProjectPhaseTracking;
 import com.ats.adminpanel.model.RemainingTaskGraph;
 import com.ats.adminpanel.model.SupportTask;
 import com.ats.adminpanel.model.SupportTaskReport;
+import com.ats.adminpanel.model.leave.GetApplyLeave;
 
 @Controller
 public class ReportController {
@@ -45,6 +46,7 @@ public class ReportController {
 	List<ProjectPhaseTracking> projectPhaseTrackingList;
 	List<SupportTaskReport> supportTaskList;
 	SupportTaskReport supportTask = new SupportTaskReport();
+	List<GetApplyLeave> leaveList = new ArrayList<GetApplyLeave>();
 
 	@RequestMapping(value = "/viewEmpConsumptionReport", method = RequestMethod.GET)
 	public ModelAndView viewEmpConsumptionReport(HttpServletRequest request, HttpServletResponse response) {
@@ -471,17 +473,14 @@ public class ReportController {
 	}
 
 	@RequestMapping(value = "/getEmployeeProGraph", method = RequestMethod.GET)
-	public @ResponseBody EmployeeGraph getEmployeeProGraph(HttpServletRequest request,
-			HttpServletResponse response) {
-		
+	public @ResponseBody EmployeeGraph getEmployeeProGraph(HttpServletRequest request, HttpServletResponse response) {
+
 		EmployeeGraph employeeGraph = new EmployeeGraph();
 		ModelAndView model = new ModelAndView("project/empGraph");
 
 		try {
 
 			employeeGraph = rest.getForObject(Constants.url + "/getEmployeeProjectGraph", EmployeeGraph.class);
-
-			 
 
 			System.out.println("employeeGraph " + employeeGraph.toString());
 
@@ -491,4 +490,67 @@ public class ReportController {
 
 		return employeeGraph;
 	}
+
+	@RequestMapping(value = "/viewLeaveReport", method = RequestMethod.GET)
+	public ModelAndView viewLeaveReport(HttpServletRequest request, HttpServletResponse response) {
+
+		Constants.mainAct = 3;
+		Constants.subAct = 31;
+
+		ModelAndView model = new ModelAndView("reports/leaveReport");
+
+		RestTemplate restTemplate = new RestTemplate();
+		Employee[] Employee = restTemplate.getForObject(Constants.url + "/masters/getAllEmpList", Employee[].class);
+		List<Employee> empList = new ArrayList<Employee>(Arrays.asList(Employee));
+
+		Project[] project = restTemplate.getForObject(Constants.url + "/masters/getAllProjectList", Project[].class);
+		List<Project> projectList = new ArrayList<Project>(Arrays.asList(project));
+
+		model.addObject("projectList", projectList);
+		model.addObject("empList", empList);
+		return model;
+
+	}
+
+	@RequestMapping(value = "/findByEmpIdList", method = RequestMethod.GET)
+	public @ResponseBody List<GetApplyLeave> findByEmpIdList(HttpServletRequest request, HttpServletResponse response) {
+		try {
+			System.out.println("in method");
+
+			String[] empIdList = request.getParameterValues("empIdList");
+			System.out.println("EmpID" + empIdList);
+			StringBuilder sb = new StringBuilder();
+
+			for (int i = 0; i < empIdList.length; i++) {
+				sb = sb.append(empIdList[i] + ",");
+
+			}
+			String items = sb.toString();
+			items = items.substring(0, items.length() - 1);
+
+			String fromDate = request.getParameter("fromDate");
+			System.out.println("fromDate" + fromDate);
+
+			String toDate = request.getParameter("toDate");
+			System.out.println("toDate" + toDate);
+
+			RestTemplate restTemplate = new RestTemplate();
+
+			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+
+			map.add("fromDate", DateConvertor.convertToYMD(fromDate));
+			map.add("toDate", DateConvertor.convertToYMD(toDate));
+			map.add("empIdList", items);
+
+			leaveList = restTemplate.postForObject(Constants.url + "/getAllLeaveListReport", map, List.class);
+
+			System.out.println("EmpConReport []" + leaveList.toString());
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return leaveList;
+	}
+
 }
