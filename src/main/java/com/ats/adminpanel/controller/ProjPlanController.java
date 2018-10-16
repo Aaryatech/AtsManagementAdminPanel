@@ -1,6 +1,7 @@
 package com.ats.adminpanel.controller;
 
 import java.io.BufferedInputStream;
+
 import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
@@ -56,9 +57,6 @@ import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPCellEvent;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
-
-import javafx.scene.layout.Border;
-
 
 /* Itext Pdf Dependency 
   <dependency>
@@ -138,17 +136,14 @@ public class ProjPlanController {
 		List<Technology> techList = new ArrayList<Technology>(Arrays.asList(techArray));
 
 		model.addObject("techList", techList);
-		
-		
 
 		// exportToExcel
 
-		
 		List<ExportToExcel> exportToExcelList = new ArrayList<ExportToExcel>();
 
 		ExportToExcel expoExcel = new ExportToExcel();
 		List<String> rowData = new ArrayList<String>();
-		
+
 		rowData.add("Sr. No.");
 		rowData.add("Start Date");
 		rowData.add("Technology");
@@ -159,13 +154,12 @@ public class ProjPlanController {
 		rowData.add("Plan Hour");
 		rowData.add("Assign Hr");
 		rowData.add("Req Hr");
-		
+
 		rowData.add("Task Cost");
 
 		expoExcel.setRowData(rowData);
 		exportToExcelList.add(expoExcel);
 
-		
 		for (int i = 0; i < projTaskDetailList.size(); i++) {
 			expoExcel = new ExportToExcel();
 			rowData = new ArrayList<String>();
@@ -174,15 +168,15 @@ public class ProjPlanController {
 			rowData.add("" + projTaskDetailList.get(i).getStartDate());
 			rowData.add(projTaskDetailList.get(i).getTechName());
 			rowData.add(projTaskDetailList.get(i).getModuleName());
-			rowData.add(""+projTaskDetailList.get(i).getFormName());
+			rowData.add("" + projTaskDetailList.get(i).getFormName());
 			rowData.add(projTaskDetailList.get(i).getTaskName());
 			rowData.add(projTaskDetailList.get(i).getEmpName());
 
-			rowData.add(""+projTaskDetailList.get(i).getPlanHr());
+			rowData.add("" + projTaskDetailList.get(i).getPlanHr());
 
-			rowData.add(""+projTaskDetailList.get(i).getAssignHr());
-			rowData.add(""+projTaskDetailList.get(i).getActualHr());
-			rowData.add(""+projTaskDetailList.get(i).getEmpTaskCost());
+			rowData.add("" + projTaskDetailList.get(i).getAssignHr());
+			rowData.add("" + projTaskDetailList.get(i).getActualHr());
+			rowData.add("" + projTaskDetailList.get(i).getEmpTaskCost());
 
 			expoExcel.setRowData(rowData);
 			exportToExcelList.add(expoExcel);
@@ -283,8 +277,8 @@ public class ProjPlanController {
 		try {
 			System.out.println("Inside PDF Table try");
 			table.setWidthPercentage(100);
-			//table.setTotalWidth(120);
-			
+			// table.setTotalWidth(120);
+
 			table.setWidths(new float[] { 0.4f, 1.0f, 0.7f, 1.1f, 1.1f, 1.2f, 1.1f, 0.7f, 0.7f, 0.7f, 0.9f });
 			Font headFont = new Font(FontFamily.TIMES_ROMAN, 10, Font.NORMAL, BaseColor.BLACK);
 			Font headFont1 = new Font(FontFamily.HELVETICA, 12, Font.BOLD, BaseColor.BLACK);
@@ -359,19 +353,19 @@ public class ProjPlanController {
 			float regHrSum = 0.0f;
 
 			int index = 0;
-		
+
 			for (ProjTaskDetail projTask : projTaskDetailList) {
-				
+
 				index++;
-				
+
 				PdfPCell cell;
 
 				totCost = totCost + projTask.getEmpTaskCost();
-				
+
 				planHrSum = planHrSum + projTask.getPlanHr();
 				assHrSum = assHrSum + projTask.getAssignHr();
 				regHrSum = regHrSum + projTask.getActualHr();
-				
+
 				cell = new PdfPCell(new Phrase(String.valueOf(index), headFont));
 				cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
 				cell.setHorizontalAlignment(Element.ALIGN_CENTER);
@@ -450,17 +444,17 @@ public class ProjPlanController {
 
 				// FooterTable footerEvent = new FooterTable(table);
 				// writer.setPageEvent(footerEvent);
-			
+
 			}
 			PdfPCell cell;
 
 			cell = new PdfPCell(new Phrase(""));
 			cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
 			cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-			
+
 			cell.setBorder(Rectangle.BOTTOM | Rectangle.LEFT);
-		//    cell.setCellEvent(new CustomBorder(dotted, null, solid, null));
-		//	cell.setCellEvent(new CustomB);
+			// cell.setCellEvent(new CustomBorder(dotted, null, solid, null));
+			// cell.setCellEvent(new CustomB);
 
 			// cell.setPadding(4);
 			// cell.setRowspan(7);
@@ -469,13 +463,11 @@ public class ProjPlanController {
 			cell = new PdfPCell(new Phrase(""));
 			cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
 			cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-		
 
 			cell.setBorder(Rectangle.BOTTOM);
 			// cell.setPadding(4);
 			// cell.setRowspan(7);
 			table.addCell(cell);
-			
 
 			cell = new PdfPCell(new Phrase(""));
 			cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
@@ -514,27 +506,27 @@ public class ProjPlanController {
 			cell.setHorizontalAlignment(Element.ALIGN_CENTER);
 			// cell.setPadding(4);
 			// cell.setRowspan(7);
-			
+
 			table.addCell(cell);
-			cell = new PdfPCell(new Phrase(""+planHrSum));
+			cell = new PdfPCell(new Phrase("" + planHrSum));
 			cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
 			cell.setHorizontalAlignment(Element.ALIGN_CENTER);
 			// cell.setPadding(4);
 			// cell.setRowspan(7);
 			table.addCell(cell);
-			cell = new PdfPCell(new Phrase(""+assHrSum));
+			cell = new PdfPCell(new Phrase("" + assHrSum));
 			cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
 			cell.setHorizontalAlignment(Element.ALIGN_CENTER);
 			// cell.setPadding(4);
 			// cell.setRowspan(7);
 			table.addCell(cell);
-			cell = new PdfPCell(new Phrase(""+regHrSum));
+			cell = new PdfPCell(new Phrase("" + regHrSum));
 			cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
 			cell.setHorizontalAlignment(Element.ALIGN_CENTER);
 			// cell.setPadding(4);
 			// cell.setRowspan(7);
 			table.addCell(cell);
-			cell = new PdfPCell(new Phrase(""+totCost));
+			cell = new PdfPCell(new Phrase("" + totCost));
 			cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
 			cell.setHorizontalAlignment(Element.ALIGN_CENTER);
 			// cell.setPadding(4);
@@ -546,7 +538,7 @@ public class ProjPlanController {
 			para.setAlignment(Paragraph.ALIGN_RIGHT);
 			document.open();
 			document.add(table);
-			//document.add(para);
+			// document.add(para);
 			document.close();
 
 			// System.out.println("Page no " + totalPages);
@@ -594,8 +586,8 @@ public class ProjPlanController {
 		}
 	}
 
-	//completeTask
-	
+	// completeTask
+
 	@RequestMapping(value = "/completeTask", method = RequestMethod.POST)
 	public String completeTask(HttpServletRequest request, HttpServletResponse response) {
 
@@ -603,37 +595,35 @@ public class ProjPlanController {
 		try {
 
 			String[] selecTasks = request.getParameterValues("task");
-			
-				List<CompleteTaskBean> taskList=new ArrayList<>()	;
-				
-				DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-				
-				DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
-				Calendar cal = Calendar.getInstance();
 
-				String timeStamp=dateFormat.format(cal.getTime());
-				
+			List<CompleteTaskBean> taskList = new ArrayList<>();
+
+			DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
+			DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+			Calendar cal = Calendar.getInstance();
+
+			String timeStamp = dateFormat.format(cal.getTime());
+
 			for (int i = 0; i < selecTasks.length; i++) {
 
-				CompleteTaskBean task=new CompleteTaskBean();
-				
+				CompleteTaskBean task = new CompleteTaskBean();
+
 				task.setDevStatus(3);
 				task.setTaskId(Integer.parseInt(selecTasks[i]));
-				
-				String reqHrs=request.getParameter("req_hrs"+task.getTaskId());
+
+				String reqHrs = request.getParameter("req_hrs" + task.getTaskId());
 				task.setEndDate(df.format(new Date()));
 				task.setEndTimeStamp(timeStamp);
 				task.setActualReqHrs(reqHrs);
-				if(Float.parseFloat(reqHrs)>0)
-				taskList.add(task);
-				
-			}//end of for loop
-			
-			
-			System.err.println("Ar list task  " +taskList.toString());
-			Info inserRes=restTemplate.postForObject(Constants.url + "completeTask", taskList,
- 					Info.class);
- 			
+				if (Float.parseFloat(reqHrs) > 0)
+					taskList.add(task);
+
+			} // end of for loop
+
+			System.err.println("Ar list task  " + taskList.toString());
+			Info inserRes = restTemplate.postForObject(Constants.url + "completeTask", taskList, Info.class);
+
 		} catch (Exception e) {
 
 			e.printStackTrace();
@@ -642,6 +632,5 @@ public class ProjPlanController {
 
 		return "redirect:/homePage";
 	}
-	
-	
+
 }

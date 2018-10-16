@@ -49,26 +49,19 @@ import com.ats.adminpanel.model.tx.GetComplexity;
 @Scope("session")
 public class LeaveController {
 
-	/*<dependency>
-	<groupId>javax.mail</groupId>
-	<artifactId>javax.mail-api</artifactId>
-	<version>1.5.5</version>
-</dependency>
-<dependency>
-	<groupId>javax.mail</groupId>
-	<artifactId>mail</artifactId>
-	<version>1.4.7</version>
-</dependency>
-
-<dependency>
-<groupId>org.springframework</groupId>
-<artifactId>spring-context-support</artifactId>
-<version>${org.springframework-version}</version>
-</dependency>*/
-
+	/*
+	 * <dependency> <groupId>javax.mail</groupId>
+	 * <artifactId>javax.mail-api</artifactId> <version>1.5.5</version>
+	 * </dependency> <dependency> <groupId>javax.mail</groupId>
+	 * <artifactId>mail</artifactId> <version>1.4.7</version> </dependency>
+	 * 
+	 * <dependency> <groupId>org.springframework</groupId>
+	 * <artifactId>spring-context-support</artifactId>
+	 * <version>${org.springframework-version}</version> </dependency>
+	 */
 
 	RestTemplate restTemplate = new RestTemplate();
-	MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+
 	List<Employee> empList;
 	List<GetApplyLeave> leaveList;
 
@@ -91,7 +84,7 @@ public class LeaveController {
 
 			empList = new ArrayList<Employee>(Arrays.asList(empArray));
 			model.addObject("empList", empList);
-
+			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
 			map.add("empId", login.getEmployee().getEmpId());
 
 			GetApplyLeave[] leaveArray = restTemplate.postForObject(Constants.url + "/getAllLeaveListByEmpId", map,
@@ -254,7 +247,7 @@ public class LeaveController {
 
 			empList = new ArrayList<Employee>(Arrays.asList(empArray));
 			model.addObject("empList", empList);
-
+			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
 			map.add("empId", login.getEmployee().getEmpId());
 
 			GetApplyLeave[] leaveArray = restTemplate.postForObject(Constants.url + "/getAllLeaveListBySendTo", map,
@@ -275,7 +268,7 @@ public class LeaveController {
 
 		ModelAndView model = new ModelAndView("masters/detailApprove");
 		try {
-
+			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
 			map.add("leaveId", leaveId);
 			GetApplyLeave leaveDetail = restTemplate.postForObject(Constants.url + "/getLeaveByLeaveId", map,
 					GetApplyLeave.class);
@@ -438,7 +431,7 @@ public class LeaveController {
 
 			empList = new ArrayList<Employee>(Arrays.asList(empArray));
 			model.addObject("empList", empList);
-
+			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
 			map.add("empId", login.getEmployee().getEmpId());
 
 			GetShortLeave[] leaveArray = restTemplate.postForObject(Constants.url + "/getAllShortLeaveByEmpId", map,
@@ -566,7 +559,7 @@ public class LeaveController {
 
 			empList = new ArrayList<Employee>(Arrays.asList(empArray));
 			model.addObject("empList", empList);
-
+			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
 			map.add("empId", login.getEmployee().getEmpId());
 
 			GetShortLeave[] leaveArray = restTemplate.postForObject(Constants.url + "/getAllShortLeaveListBySendTo",
@@ -594,13 +587,13 @@ public class LeaveController {
 
 			empList = new ArrayList<Employee>(Arrays.asList(empArray));
 			model.addObject("empList", empList);
-
+			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
 			GetShortLeave[] leaveArray = restTemplate.postForObject(Constants.url + "/getAllShortLeaveListBySendTo",
 					map, GetShortLeave[].class);
 
 			shortLeaveList = new ArrayList<GetShortLeave>(Arrays.asList(leaveArray));
 			model.addObject("shortLeaveList", shortLeaveList);
-
+			map = new LinkedMultiValueMap<String, Object>();
 			map.add("shortLeaveId", shortLeaveId);
 			GetShortLeave leaveDetail = new GetShortLeave();
 			leaveDetail = restTemplate.postForObject(Constants.url + "/getShortLeaveByLeaveId", map,
@@ -672,7 +665,7 @@ public class LeaveController {
 			LoginResponse login = (LoginResponse) session.getAttribute("UserDetail");
 
 			System.out.println("user Id " + login.getEmployee().getEmpId());
-
+			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
 			map.add("empId", login.getEmployee().getEmpId());
 			info = restTemplate.postForObject(Constants.url + "/checkShortLeave", map, Info.class);
 			System.out.println("info" + info.toString());

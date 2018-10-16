@@ -130,6 +130,7 @@ public class TxController {
 
 			phaseTypeList = new ArrayList<PhaseType>(Arrays.asList(phaseArray));
 			model.addObject("phaseTypeList", phaseTypeList);
+			map = new LinkedMultiValueMap<String, Object>();
 
 			map.add("techId", techId);
 			Technology editTech = restTemplate.postForObject(Constants.url + "/techByTechId", map, Technology.class);
@@ -265,6 +266,7 @@ public class TxController {
 					PhaseType[].class);
 
 			phaseTypeList = new ArrayList<PhaseType>(Arrays.asList(phaseArray));
+
 			model.addObject("phaseTypeList", phaseTypeList);
 
 			FormType[] formArray = restTemplate.getForObject(Constants.url + "masters/getAllFormType",
@@ -286,6 +288,7 @@ public class TxController {
 			compList = new ArrayList<GetComplexity>(Arrays.asList(compArray));
 
 			model.addObject("compList", compList);
+			map = new LinkedMultiValueMap<String, Object>();
 
 			map.add("cmplxId", cmplxId);
 			GetComplexity editCmplx = restTemplate.postForObject(Constants.url + "/compByCmplxId", map,
@@ -303,6 +306,8 @@ public class TxController {
 	public String deleteComp(@PathVariable int cmplxId, HttpServletRequest request, HttpServletResponse response) {
 
 		try {
+
+			map = new LinkedMultiValueMap<String, Object>();
 
 			map.add("cmplxId", cmplxId);
 			Info info = restTemplate.postForObject(Constants.url + "/deleteComplexity", map, Info.class);
@@ -573,6 +578,7 @@ public class TxController {
 			formTypeList = new ArrayList<GetFormType>(Arrays.asList(formTypeArray));
 
 			model.addObject("formTypeList", formTypeList);
+			map = new LinkedMultiValueMap<String, Object>();
 
 			map.add("formTypeId", formTypeId);
 			FormType editFormType = restTemplate.postForObject(Constants.url + "masters/formTypeByFormTypeId", map,
@@ -591,6 +597,7 @@ public class TxController {
 			HttpServletResponse response) {
 
 		try {
+			map = new LinkedMultiValueMap<String, Object>();
 
 			map.add("formTypeId", formTypeId);
 			Info info = restTemplate.postForObject(Constants.url + "masters/deleteFormType", map, Info.class);
@@ -639,6 +646,7 @@ public class TxController {
 			}
 			String items2 = sb.toString();
 			items2 = items2.substring(0, items2.length() - 1);
+			map = new LinkedMultiValueMap<String, Object>();
 
 			map.add("phaseId", items);
 
