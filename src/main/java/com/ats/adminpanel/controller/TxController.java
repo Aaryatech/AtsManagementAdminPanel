@@ -49,7 +49,6 @@ public class TxController {
 	List<GetComplexityOption> compOptionList;
 	List<CmplxOption> optList;
 	RestTemplate restTemplate = new RestTemplate();
-	MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
 
 	@RequestMapping(value = "/showAddTechnology", method = RequestMethod.GET)
 	public ModelAndView showAddTechnology(HttpServletRequest request, HttpServletResponse response) {
@@ -130,8 +129,7 @@ public class TxController {
 
 			phaseTypeList = new ArrayList<PhaseType>(Arrays.asList(phaseArray));
 			model.addObject("phaseTypeList", phaseTypeList);
-			map = new LinkedMultiValueMap<String, Object>();
-
+			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
 			map.add("techId", techId);
 			Technology editTech = restTemplate.postForObject(Constants.url + "/techByTechId", map, Technology.class);
 			model.addObject("editTech", editTech);
@@ -153,6 +151,7 @@ public class TxController {
 	public String deleteEmp(@PathVariable int techId, HttpServletRequest request, HttpServletResponse response) {
 
 		try {
+			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
 
 			map.add("techId", techId);
 			Info info = restTemplate.postForObject(Constants.url + "/deleteTech", map, Info.class);
@@ -288,7 +287,7 @@ public class TxController {
 			compList = new ArrayList<GetComplexity>(Arrays.asList(compArray));
 
 			model.addObject("compList", compList);
-			map = new LinkedMultiValueMap<String, Object>();
+			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
 
 			map.add("cmplxId", cmplxId);
 			GetComplexity editCmplx = restTemplate.postForObject(Constants.url + "/compByCmplxId", map,
@@ -307,7 +306,7 @@ public class TxController {
 
 		try {
 
-			map = new LinkedMultiValueMap<String, Object>();
+			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
 
 			map.add("cmplxId", cmplxId);
 			Info info = restTemplate.postForObject(Constants.url + "/deleteComplexity", map, Info.class);
@@ -578,6 +577,7 @@ public class TxController {
 			formTypeList = new ArrayList<GetFormType>(Arrays.asList(formTypeArray));
 
 			model.addObject("formTypeList", formTypeList);
+			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
 			map = new LinkedMultiValueMap<String, Object>();
 
 			map.add("formTypeId", formTypeId);
@@ -597,6 +597,7 @@ public class TxController {
 			HttpServletResponse response) {
 
 		try {
+			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
 			map = new LinkedMultiValueMap<String, Object>();
 
 			map.add("formTypeId", formTypeId);
@@ -646,7 +647,7 @@ public class TxController {
 			}
 			String items2 = sb.toString();
 			items2 = items2.substring(0, items2.length() - 1);
-			map = new LinkedMultiValueMap<String, Object>();
+			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
 
 			map.add("phaseId", items);
 
