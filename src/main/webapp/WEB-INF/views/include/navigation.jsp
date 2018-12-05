@@ -170,17 +170,7 @@
 								Employee</a>
 							</li>
 
-							<c:choose>
-								<c:when test="${Constants.subAct==11}">
-									<li class="active">
-								</c:when>
-								<c:otherwise>
-									<li>
-								</c:otherwise>
-							</c:choose>
-							<a href="${pageContext.request.contextPath}/insertSupportTask">Add
-								Support Task</a>
-							</li>
+
 							<c:choose>
 								<c:when test="${Constants.subAct==12}">
 									<li class="active">
@@ -419,7 +409,17 @@
 							<a href="${pageContext.request.contextPath}/viewAllSpecialTask">View
 								Special Task</a>
 							</li>
-
+							<c:choose>
+								<c:when test="${Constants.subAct==11}">
+									<li class="active">
+								</c:when>
+								<c:otherwise>
+									<li>
+								</c:otherwise>
+							</c:choose>
+							<a href="${pageContext.request.contextPath}/insertSupportTask">Add
+								Support Task</a>
+							</li>
 
 
 						</ul>
